@@ -1,18 +1,25 @@
 <!DOCTYPE html>
+<html lagn="ko" xmlns:th="http://www.thymeleaf.org",
+      xmlns:layout="http://www.w3.org/1999/xhtml">
 <html lang="ko">
 <head>
     <!-- Required meta tags -->
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <!-- Bootstrap CSS-->
-  <link rel="stylesheet" type="text/css" th:href="@{/bootstrap.min.css}">
-  <!-- Style CSS-->
-  <link rel="stylesheet" type="text/css" th:href="@{/style.css}">
-  <title>Hello, MooTravle!</title>
+    <!-- Stylesheets-->
+    <link href="/assets/css/theme.css" rel="stylesheet"/>
+    <!-- ===============================================-->
+    <title>Hello, MooTravle!</title>
 </head>
 <body>
+<!-- Navigation Start -->
+    <div th:include="fragments/navigation.html"></div>
+
+<!-- Navigation End -->
+
 <!-- 기본 템플릿 안에 삽입될 내용 Start -->
-<th:block layout:fragment="content"></th:block>
+<div class="mt-8 pt-6" layout:fragment="content"></div>
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
+
 </body>
 </html>
