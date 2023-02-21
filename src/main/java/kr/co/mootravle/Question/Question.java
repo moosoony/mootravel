@@ -1,6 +1,7 @@
 package kr.co.mootravle.Question;
 
 import kr.co.mootravle.Answer.Answer;
+import kr.co.mootravle.User.SiteUser;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -25,4 +26,9 @@ public class Question {
 
     @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
     private List<Answer> answerList;
+
+    @ManyToOne
+    private SiteUser author;
+
+    private LocalDateTime modifyDate;
 }

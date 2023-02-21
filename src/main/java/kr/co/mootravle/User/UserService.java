@@ -1,10 +1,13 @@
 package kr.co.mootravle.User;
 
+import kr.co.mootravle.DataNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
+import java.util.Optional;
+import java.util.zip.DataFormatException;
 
 @RequiredArgsConstructor
 @Service
@@ -24,5 +27,14 @@ public class UserService {
     }
 
     public void create(String username, String email, String password1) {
+    }
+
+    public SiteUser getUser(String username){
+        Optional<SiteUser> siteUser = this.userRepository.findByusername(username);
+        if(siteUser.isPresent()){
+            return siteUser.get();
+        } else {
+            throw new DataNotFoundException("siteuser not found");
+        }
     }
 }

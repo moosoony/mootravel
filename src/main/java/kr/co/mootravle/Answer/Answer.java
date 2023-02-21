@@ -1,6 +1,7 @@
 package kr.co.mootravle.Answer;
 
 import kr.co.mootravle.Question.Question;
+import kr.co.mootravle.User.SiteUser;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,4 +21,9 @@ public class Answer {
 
     @ManyToOne
     private Question question;
+
+    @ManyToOne
+    private SiteUser author;
+
+    private LocalDateTime modifyDate;
 }
