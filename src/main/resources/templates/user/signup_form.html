@@ -1,5 +1,6 @@
-<html layout:decorate="~{layout}">
-<html lagn="ko" xmlns:th="http://www.thymeleaf.org">
+<html lang="ko" layout:decorate="~{layout}" xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
 <div layout:fragment="content" class="container my-3 mt-10">
   <div class="my-3 border-bottom">
     <div>
@@ -12,27 +13,27 @@
           <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
       </div>
     <div class="mb-3">
-      <label for="username" class="form-label">*사용자ID</label>
+      <label th:for="username" class="form-label">*사용자ID</label>
       <input type="text" th:field="*{username}" class="form-control">
     </div>
     <div class="mb-3">
-      <label for="password1" class="form-label">*비밀번호</label>
+      <label th:for="password1" class="form-label">*비밀번호</label>
       <input type="password" th:field="*{password1}" class="form-control">
     </div>
     <div class="mb-3">
-      <label for="password2" class="form-label">*비밀번호 확인</label>
+      <label th:for="password2" class="form-label">*비밀번호 확인</label>
       <input type="password" th:field="*{password2}" class="form-control">
     </div>
     <div class="mb-3">
-      <label for="email" class="form-label">*이메일</label>
+      <label th:for="email" class="form-label">*이메일</label>
       <input type="email" th:field="*{email}" class="form-control">
     </div>
     <div class="mb-3">
-      <label for="sex" class="form-label">성별</label>
+      <label th:for="sex" class="form-label">성별</label>
       <input type="text" th:field="*{sex}" class="form-control">
     </div>
     <div class="mb-3">
-      <label for="birthday" class="form-label">생년월일</label>
+      <label th:for="birthday" class="form-label">생년월일</label>
       <input type="date" th:field="*{birthday}" class="form-control">
     </div>
     <button type="submit" class="btn btn-primary">회원가입</button>
