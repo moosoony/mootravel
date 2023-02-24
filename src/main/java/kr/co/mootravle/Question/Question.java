@@ -1,6 +1,7 @@
 package kr.co.mootravle.Question;
 
 import kr.co.mootravle.Answer.Answer;
+import kr.co.mootravle.File.FileEntity;
 import kr.co.mootravle.User.SiteUser;
 import lombok.Data;
 import org.hibernate.annotations.ColumnDefault;
@@ -41,4 +42,6 @@ public class Question {
     @Column(columnDefinition = "integer default 0", nullable = false)
     private Integer viewcnt;
 
+    @OneToMany(mappedBy = "question", cascade = CascadeType.REMOVE)
+    private List<FileEntity> fileList;
 }

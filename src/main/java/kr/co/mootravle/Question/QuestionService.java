@@ -2,6 +2,8 @@ package kr.co.mootravle.Question;
 
 import kr.co.mootravle.Answer.Answer;
 import kr.co.mootravle.DataNotFoundException;
+import kr.co.mootravle.File.FileEntity;
+import kr.co.mootravle.File.FileService;
 import kr.co.mootravle.User.SiteUser;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -24,6 +26,8 @@ import java.util.Optional;
 public class QuestionService {
 
     private final QuestionRepository questionRepository;
+
+    private final FileService fileService;
 
     public Page<Question> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();

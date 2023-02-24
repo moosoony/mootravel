@@ -1,9 +1,11 @@
 package kr.co.mootravle.Question;
 
+import kr.co.mootravle.File.FileEntity;
 import lombok.Data;
 
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.Size;
+import java.util.List;
 
 @Data
 public class QuestionForm {
