@@ -3,13 +3,15 @@ package kr.co.mootravle.Question;
 import kr.co.mootravle.Answer.Answer;
 import kr.co.mootravle.User.SiteUser;
 import lombok.Data;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Set;
 
-@Table(name = "question")
+@DynamicInsert
 @Data
 @Entity
 public class Question {
@@ -35,4 +37,8 @@ public class Question {
 
     @ManyToMany
     Set<SiteUser> voter;
+
+    @Column(columnDefinition = "integer default 0", nullable = false)
+    private Integer viewcnt;
+
 }

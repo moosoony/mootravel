@@ -10,6 +10,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.persistence.criteria.*;
 import java.time.LocalDateTime;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+@Transactional
 @RequiredArgsConstructor
 @Service
 public class QuestionService {
@@ -33,6 +35,7 @@ public class QuestionService {
 
     public Question getQuestion(Integer id) {
         Optional<Question> question = this.questionRepository.findById(id);
+        questionRepository.updateCount(id);
         if (question.isPresent()) {
             return question.get();
         } else {
