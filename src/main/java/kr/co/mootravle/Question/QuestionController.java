@@ -27,7 +27,6 @@ public class QuestionController {
 
     private final QuestionService questionService;
     private final UserService userService;
-
     private final FileService fileService;
 
     @GetMapping("/list")
