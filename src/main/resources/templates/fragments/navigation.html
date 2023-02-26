@@ -16,6 +16,18 @@
             </button>
             <div class="collapse navbar-collapse border-top border-lg-0 mt-4 mt-lg-0" id="navbarSupportedContent">
                 <ul class="navbar-nav ms-auto pt-2 pt-lg-0 font-base align-items-lg-center align-items-start">
+                    <!--                    Translation Function Start-->
+                    <li class="nav-item dropdown px-3 px-lg-0">
+                        <a class="d-inline-block ps-0 py-2 pe-3 text-decoration-none dropdown-toggle fw-medium"
+                           href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                           aria-expanded="false">EN</a>
+                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg" style="border-radius:0.3rem;"
+                            aria-labelledby="navbarDropdown">
+                            <li><a class="dropdown-item" href="#!">EN</a></li>
+                            <li><a class="dropdown-item" href="#!">KO</a></li>
+                        </ul>
+                    </li>
+                    <!--                    Translation Function End-->
                     <li class="nav-item px-3 px-xl-4"><a class="nav-link fw-medium" aria-current="page"
                                                          href="#service">Service</a>
                     </li>
@@ -26,12 +38,15 @@
                     </li>
                     <li class="nav-item px-3 px-xl-4"><a class="nav-link fw-medium" aria-current="page"
                                                          th:href="@{/question/list}">Q&A</a></li>
-                    <!--                    Dropbox Start-->
-                    <li class="nav-item dropdown px-3 px-lg-0">
+
+                    <!--                    Login & Logout Dropbox Start-->
+                    <li class="nav-item px-3 px-xl-4">
+                        <a class="nav-link fw-medium" aria-current="page" sec:authorize="isAnonymous()"
+                           th:href="@{/user/login}">Login</a>
                         <a class="d-inline-block ps-0 py-2 pe-3 text-decoration-none dropdown-toggle fw-medium"
                            sec:authorize="isAuthenticated()"
                            href="#" id="profileDropdown" role="button" data-bs-toggle="dropdown"
-                           aria-expanded="false">Moo</a>
+                           aria-expanded="false" th:text="|${#authentication.name}님|"></a>
                         <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg" style="border-radius:0.3rem;"
                             aria-labelledby="navbarDropdown">
                             <li><a class="dropdown-item" href="#!">프로필</a></li>
@@ -39,37 +54,13 @@
                             <li><a class="dropdown-item" th:href="@{/user/logout}">Logout</a></li>
                         </ul>
                     </li>
-                    <!--                    Dropbox End-->
                     <li class="nav-item px-3 px-xl-4">
-                        <a class="nav-link fw-medium" aria-current="page" sec:authorize="isAnonymous()"
-                           th:href="@{/user/login}">Login</a>
-                    </li>
-                    <li class="nav-item px-3 px-xl-4"><a class="btn btn-outline-dark order-1 order-lg-0 fw-medium"
-                                                         sec:authorize="isAnonymous()"
-                                                         th:href="@{/user/signup}">Sign Up</a></li>
-
-                    <li class="nav-item dropdown px-3 px-lg-0"><a
-                            class="d-inline-block ps-0 py-2 pe-3 text-decoration-none dropdown-toggle fw-medium"
-                            href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">EN</a>
-                        <ul class="dropdown-menu dropdown-menu-end border-0 shadow-lg" style="border-radius:0.3rem;"
-                            aria-labelledby="navbarDropdown">
-                            <li><a class="dropdown-item" href="#!">EN</a></li>
-                            <li><a class="dropdown-item" href="#!">KO</a></li>
-                        </ul>
+                        <a class="btn btn-outline-dark order-1 order-lg-0 fw-medium" sec:authorize="isAnonymous()"
+                           th:href="@{/user/signup}">Sign Up</a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
 </div>
-<!--<script src="/vendors/@popperjs/popper.min.js"></script>-->
-<!--<script src="/vendors/bootstrap/bootstrap.min.js"></script>-->
-<!--<script src="/vendors/is/is.min.js"></script>-->
-<!--<script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>-->
-<!--<script src="/vendors/fontawesome/all.min.js"></script>-->
-<!--<script src="/assets/js/theme.js"></script>-->
-
-<!--<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Volkhov:wght@700&amp;display=swap"-->
-<!--      rel="stylesheet">-->
 </html>
