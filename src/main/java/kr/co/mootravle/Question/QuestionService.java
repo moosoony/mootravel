@@ -2,7 +2,6 @@ package kr.co.mootravle.Question;
 
 import kr.co.mootravle.Answer.Answer;
 import kr.co.mootravle.DataNotFoundException;
-import kr.co.mootravle.File.FileEntity;
 import kr.co.mootravle.File.FileService;
 import kr.co.mootravle.User.SiteUser;
 import lombok.RequiredArgsConstructor;

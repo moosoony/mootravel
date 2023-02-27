@@ -7,80 +7,99 @@
 <!--    Stylesheets Start-->
 <link href="/assets/css/theme.css" rel="stylesheet"/>
 <!--    Stylesheets End-->
-<body>
-<div layout:fragment="content" class="container my-3 mt-10">
-  <div class="row my-3">
-  <div class="col-6">
-    <a th:href="@{/travel/create}" class="btn btn-primary">게시글 등록하기</a>
-  </div>
-  <div class="col-6">
-    <div class="input-group">
-      <input type="text" id="search_kw" class="form-control">
-      <button class="btn btn-outline-primary" type="button" id="btn_search">search</button>
-    </div>
-  </div>
-  </div>
-<section class="pt-5" id="destination">
-  <div class="container">
-    <div class="position-absolute start-100 bottom-0 translate-middle-x d-none d-xl-block ms-xl-n4"><img
-            src="/assets/img/dest/shape.svg" alt="destination"/></div>
-    <div class="mb-7 text-center">
-      <h5 class="text-secondary">Share Travel </h5>
-      <h3 class="fs-xl-10 fs-lg-8 fs-7 fw-bold font-cursive text-capitalize">Top Travel</h3>
-    </div>
-    <div class="row">
-      <div class="col-md-4 mb-4">
-        <div class="card overflow-hidden shadow"><img class="card-img-top" src="/assets/img/dest/dest1.jpg"
-                                                      alt="Rome, Italty"/>
-          <div class="card-body py-4 px-3">
-            <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
-              <h4 class="text-secondary fw-medium"><a
-                      class="link-900 text-decoration-none stretched-link" href="#!">Rome, Italty</a>
-              </h4><span class="fs-1 fw-medium">$5,42k</span>
-            </div>
-            <div class="d-flex align-items-center"><img src="/assets/img/dest/navigation.svg"
-                                                        style="margin-right: 14px" width="20"
-                                                        alt="navigation"/><span class="fs-0 fw-medium">10 Days Trip</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card overflow-hidden shadow"><img class="card-img-top" src="/assets/img/dest/dest2.jpg"
-                                                      alt="London, UK"/>
-          <div class="card-body py-4 px-3">
-            <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
-              <h4 class="text-secondary fw-medium"><a
-                      class="link-900 text-decoration-none stretched-link" href="#!">London, UK</a>
-              </h4><span class="fs-1 fw-medium">$4.2k</span>
-            </div>
-            <div class="d-flex align-items-center"><img src="/assets/img/dest/navigation.svg"
-                                                        style="margin-right: 14px" width="20"
-                                                        alt="navigation"/><span class="fs-0 fw-medium">12 Days Trip</span>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-md-4 mb-4">
-        <div class="card overflow-hidden shadow"><img class="card-img-top" src="/assets/img/dest/dest3.jpg"
-                                                      alt="Full Europe"/>
-          <div class="card-body py-4 px-3">
-            <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
-              <h4 class="text-secondary fw-medium"><a
-                      class="link-900 text-decoration-none stretched-link" href="#!">Full Europe</a>
-              </h4><span class="fs-1 fw-medium">$15k</span>
-            </div>
-            <div class="d-flex align-items-center"><img src="/assets/img/dest/navigation.svg"
-                                                        style="margin-right: 14px" width="20"
-                                                        alt="navigation"/><span class="fs-0 fw-medium">28 Days Trip</span>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div><!-- end of .container-->
 
-</section>
+<!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>-->
+
+<body>
+
+<div layout:fragment="content" class="container my-3 mt-10">
+    <div class="row my-3">
+        <div class="col-6">
+            <a th:href="@{/travel/create}" class="btn btn-primary">게시글 등록하기</a>
+        </div>
+        <div class="col-6">
+            <div class="input-group">
+                <input type="text" id="search_kw" class="form-control" th:value="${kw}">
+                <button class="btn btn-outline-primary" type="button" id="btn_search">Search</button>
+            </div>
+        </div>
+    </div>
+
+    <section class="pt-5" id="destination">
+
+        <div class="container">
+            <div class="position-absolute start-100 bottom-0 translate-middle-x d-none d-xl-block ms-xl-n4">
+                </div>
+            <th:block th:include="fragments/destination.html"></th:block>
+
+
+            <div class="row">
+                    <div class="col-md-4 mb-4" th:each="travel, loop : ${paging}">
+                    <div class="card overflow-hidden shadow">
+                        <img class="card-img-top" src="/assets/img/dest/dest1.jpg" alt="Rome, Italty"/>
+                        <div class="card-body py-4 px-3">
+                            <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
+                                <h4 class="text-secondary fw-medium">
+                                    <a class="link-900 text-decoration-none stretched-link" th:href="@{|/travel/detail/${travel.id}|}" th:text="${travel.subject}" />
+                                </h4><span class="fs-1 fw-medium" th:text="|￦ ${travel.expenses}|"></span>
+                            </div>
+                            <div class="d-flex align-items-center">
+                                <img src="/assets/img/dest/navigation.svg" style="margin-right: 14px" width="20" alt="navigation"/>
+                                <span class="fs-0 fw-medium" th:text="|${travel.travelStart}~${travel.travelEnd}|"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div><!-- end of .container-->
+    </section>
+
+
+<!-- 페이징처리 시작 -->
+<div th:if="${!paging.isEmpty()}">
+    <ul class="pagination justify-content-center">
+        <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+            <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+                <span>이전</span>
+            </a>
+        </li>
+        <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+            th:if="${page >= paging.number-5 and page <= paging.number+5}"
+            th:classappend="${page == paging.number} ? 'active'"
+            class="page-item">
+            <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+        </li>
+        <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+            <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+                <span>다음</span>
+            </a>
+        </li>
+    </ul>
 </div>
+<!-- 페이징처리 끝 -->
+<form th:action="@{/travel/list}" method="get" id="searchForm">
+    <input type="hidden" id="kw" name="kw" th:value="${kw}">
+    <input type="hidden" id="page" name="page" th:value="${paging.number}">
+</form>
+</div>
+<script layout:fragment="script" type='text/javascript'>
+    const page_elements = document.getElementsByClassName("page-link");
+    Array.from(page_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
+            document.getElementById('kw').value = document.getElementById('search_kw').value;
+            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('searchForm').submit();
+        });
+    });
+
+    const btn_search = document.getElementById("btn_searech");
+    console.log(btn_search);
+
+    btn_search.addEventListener('click', function (){
+        document.getElementById('kw').value = document.getElementById('search_kw').value;
+        document.getElementById('page').value = 0;   // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
+        document.getElementById('searchForm').submit();
+    });
+</script>
 </body>
 </html>

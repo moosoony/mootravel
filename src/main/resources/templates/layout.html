@@ -13,6 +13,20 @@
     <link href="/assets/css/theme.css" rel="stylesheet"/>
     <!-- ===============================================-->
 <!--    <title>Hello, MooTravle!</title>-->
+
+    <!--자바스크립트 Start-->
+    <th:block layout:fragment="script"></th:block>
+    <script src="/vendors/@popperjs/popper.min.js"></script>
+    <script src="/vendors/bootstrap/bootstrap.min.js"></script>
+    <script src="/vendors/is/is.min.js"></script>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
+    <script src="/vendors/fontawesome/all.min.js"></script>
+    <script src="/assets/js/theme.js"></script>
+
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Volkhov:wght@700&amp;display=swap"
+          rel="stylesheet">
+    <!--자바스크립트 End-->
+
 </head>
 <body>
 <!-- Navigation Start -->
@@ -22,19 +36,5 @@
 <!-- 기본 템플릿 안에 삽입될 내용 Start -->
 <div class="mt-8 pt-6" layout:fragment="content"></div>
 <!-- 기본 템플릿 안에 삽입될 내용 End -->
-
-<!--자바스크립트 Start-->
-<th:block layout:fragment="script"></th:block>
-<script src="/vendors/@popperjs/popper.min.js"></script>
-<script src="/vendors/bootstrap/bootstrap.min.js"></script>
-<script src="/vendors/is/is.min.js"></script>
-<script src="https://polyfill.io/v3/polyfill.min.js?features=window.scroll"></script>
-<script src="/vendors/fontawesome/all.min.js"></script>
-<script src="/assets/js/theme.js"></script>
-
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&amp;family=Volkhov:wght@700&amp;display=swap"
-      rel="stylesheet">
-</body>
-<!--자바스크립트 End-->
 </body>
 </html>

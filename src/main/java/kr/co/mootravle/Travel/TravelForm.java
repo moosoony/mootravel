@@ -2,8 +2,11 @@ package kr.co.mootravle.Travel;
 
 import lombok.Data;
 
+import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
+
 
 @Data
 public class TravelForm {
@@ -13,4 +16,14 @@ public class TravelForm {
 
     @NotEmpty(message = "내용은 필수항목입니다.")
     private String content;
+
+    @NotEmpty(message = "일정은 필수항목입니다.")
+    private String travelStart;
+
+    @NotEmpty(message = "일정은 필수항목입니다.")
+    private String travelEnd;
+
+    @NotEmpty(message = "경비는 필수항목입니다.")
+    @PositiveOrZero(message = "경비는 숫자 0 이상이어야 합니다.")
+    private String expenses;
 }
