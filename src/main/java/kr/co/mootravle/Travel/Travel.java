@@ -1,11 +1,13 @@
 package kr.co.mootravle.Travel;
 
+import kr.co.mootravle.Reply.Reply;
 import kr.co.mootravle.User.SiteUser;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Set;
 
 
@@ -38,5 +40,11 @@ public class Travel {
 
     @Column(columnDefinition = "integer default 0", nullable = false)
     private String expenses;
+
+    @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE)
+    private List<Reply> replyList;
+
+    @ManyToMany
+    Set<SiteUser> voter;
 
 }

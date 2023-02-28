@@ -14,5 +14,9 @@ public interface TravelRepository extends JpaRepository<Travel, Integer> {
     @Query(value = "update Travel t set t.viewcnt=t.viewcnt+1 where t.id=:id")
     void updateCount(Integer id);
 
+    //    페이징 구현 메서드
+    Page<Travel> findAll(Pageable pageable);
+
+    //    검색 구현 메서드
     Page<Travel> findAll(Specification<Travel> spec, Pageable pageable);
 }

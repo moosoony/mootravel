@@ -3,26 +3,57 @@
       xmlns:th="http://thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml">
 <div layout:fragment="content" class="container my-3 mt-10">
-    <h2 class="border-bottom py-2" th:text="${travel.subject}"/>
+    <h2 class="border-bottom py-2" th:text="${travel.subject}">
+    </h2>
+    <div class="d-flex justify-content-end">
+        <div th:text="${travel.author.username}"></div>
+        <div class=" text-start mx-3" th:text="|view ${travel.viewcnt}|"></div>
+        <div th:if="${travel.modifyDate != null}" class="text-start mx-3">
+            <div th:text="|Modify : ${#temporals.format(travel.modifyDate, 'yyyy-MM-dd HH:mm')}|"></div>
+        </div>
+        <div class=" text-start" th:text="|Create : ${#temporals.format(travel.createDate, 'yyyy-MM-dd HH:mm')}|"></div>
+    </div>
     <div class="card my-3">
         <div class="card-body">
-            <div class="card-text" style="white-space: pre-line;" th:text="${travel.travelStart}"></div>
-            <div class="card-text" style="white-space: pre-line;" th:text="${travel.travelEnd}"></div>
-            <div class="card-text" style="white-space: pre-line;" th:text="${travel.expenses}"></div>
-            <div class="card-text" style="white-space: pre-line;" th:text="${travel.content}"></div>
-            <div class="d-flex justify-content-end">
-                <div th:if="${travel.modifyDate != null}" class="badge bg-light text-dark p-2 text-start mx-3">
-                    <div class="mb-2">modified at</div>
-                    <div th:text="${#temporals.format(travel.modifyDate, 'yyyy-MM-dd HH:mm')}"></div>
-                </div>
-                <div class="badge bg-light text-dark p-2 text-start">
-                    <div class="mb-2">
-                        <span th:if="${travel.author != null}" th:text="${travel.author.username}"></span>
-                    </div>
-                    <div th:text="${#temporals.format(travel.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+            <div class="badge bg-light text-dark">
+                <div class="">
+                    <div class="card-text" style="white-space: pre-line;"
+                         th:text="|${travel.travelStart} ~ ${travel.travelEnd}|"></div>
+                    <div class="card-text" style="white-space: pre-line;" th:text="|￦ ${travel.expenses}|"></div>
                 </div>
             </div>
         </div>
     </div>
+    <span class="text-dark mb-0" th:utext="${travel.content}"/>
+    <h2 class="border-bottom py-2"/>
+    <div class="my-3">
+        <a th:href="@{|/travel/modify/${travel.id}|}" class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+           th:if="${travel.author != null and #authentication.getPrincipal().getUsername() == travel.author.username}"
+           th:text="수정"></a>
+        <a href="javascript:void(0);" th:data-uri="@{|/travel/delete/${travel.id}|}"
+           class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+           th:if="${travel.author != null and #authentication.getPrincipal().getUsername() == travel.author.username}"
+           th:text="삭제"></a>
+    </div>
+    <!--    댓글의 갯수 표시-->
+    <h5 th:text="|${#lists.size(travel.replyList)}개의 답변이 있습니다.|"></h5>
+    <!--    답변 반복 시작-->
+    <div class="card my-3" th:each="reply : ${travel.replyList}">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${reply.content}"></div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div th:text="${#temporals.format(reply.createDate, 'yyyy-MM-dd HH:mm')}"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!--    답변 반복 끝-->
+    <!--    답변 작성-->
+    <form th:action="@{|/reply/create/${travel.id}|}" method="post" class="my-3">
+        <textarea name="content" id="content" rows="10" class="form-control"></textarea>
+        <input type="submit" value="답변등록" class="btn btn-primary my-2">
+    </form>
 </div>
+
 </html>

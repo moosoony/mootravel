@@ -24,6 +24,7 @@ import java.util.Optional;
 public class TravelService {
     private final TravelRepository travelRepository;
 
+//    페이징 구현 서비스
     public Page<Travel> getList(int page, String kw){
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
@@ -71,5 +72,12 @@ public class TravelService {
         }else{
             throw new DataNotFoundException("travel not found");
         }
+    }
+
+    public void modify(Travel travel, String subject, String content){
+        travel.setSubject(subject);
+        travel.setContent(content);
+        travel.setModifyDate(LocalDateTime.now());
+        this.travelRepository.save(travel);
     }
 }

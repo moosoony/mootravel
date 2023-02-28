@@ -29,23 +29,26 @@
 
         <div class="container">
             <div class="position-absolute start-100 bottom-0 translate-middle-x d-none d-xl-block ms-xl-n4">
-                </div>
+            </div>
             <th:block th:include="fragments/destination.html"></th:block>
 
 
             <div class="row">
-                    <div class="col-md-4 mb-4" th:each="travel, loop : ${paging}">
+                <div class="col-md-4 mb-4" th:each="travel, loop : ${paging}">
                     <div class="card overflow-hidden shadow">
                         <img class="card-img-top" src="/assets/img/dest/dest1.jpg" alt="Rome, Italty"/>
                         <div class="card-body py-4 px-3">
                             <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
                                 <h4 class="text-secondary fw-medium">
-                                    <a class="link-900 text-decoration-none stretched-link" th:href="@{|/travel/detail/${travel.id}|}" th:text="${travel.subject}" />
+                                    <a class="link-900 text-decoration-none stretched-link"
+                                       th:href="@{|/travel/detail/${travel.id}|}" th:text="${travel.subject}"/>
                                 </h4><span class="fs-1 fw-medium" th:text="|￦ ${travel.expenses}|"></span>
                             </div>
                             <div class="d-flex align-items-center">
-                                <img src="/assets/img/dest/navigation.svg" style="margin-right: 14px" width="20" alt="navigation"/>
-                                <span class="fs-0 fw-medium" th:text="|${travel.travelStart}~${travel.travelEnd}|"></span>
+                                <img src="/assets/img/dest/navigation.svg" style="margin-right: 14px" width="20"
+                                     alt="navigation"/>
+                                <span class="fs-0 fw-medium"
+                                      th:text="|${travel.travelStart}~${travel.travelEnd}|"></span>
                             </div>
                         </div>
                     </div>
@@ -55,51 +58,47 @@
     </section>
 
 
-<!-- 페이징처리 시작 -->
-<div th:if="${!paging.isEmpty()}">
-    <ul class="pagination justify-content-center">
-        <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
-            <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
-                <span>이전</span>
-            </a>
-        </li>
-        <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
-            th:if="${page >= paging.number-5 and page <= paging.number+5}"
-            th:classappend="${page == paging.number} ? 'active'"
-            class="page-item">
-            <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
-        </li>
-        <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
-            <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
-                <span>다음</span>
-            </a>
-        </li>
-    </ul>
-</div>
-<!-- 페이징처리 끝 -->
-<form th:action="@{/travel/list}" method="get" id="searchForm">
-    <input type="hidden" id="kw" name="kw" th:value="${kw}">
-    <input type="hidden" id="page" name="page" th:value="${paging.number}">
-</form>
-</div>
-<script layout:fragment="script" type='text/javascript'>
-    const page_elements = document.getElementsByClassName("page-link");
-    Array.from(page_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
+    <!-- 페이징처리 시작 -->
+    <div th:if="${!paging.isEmpty()}">
+        <ul class="pagination justify-content-center">
+            <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">
+                    <span>이전</span>
+                </a>
+            </li>
+            <li th:each="page: ${#numbers.sequence(0, paging.totalPages-1)}"
+                th:if="${page >= paging.number-5 and page <= paging.number+5}"
+                th:classappend="${page == paging.number} ? 'active'"
+                class="page-item">
+                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>
+            </li>
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">
+                    <span>다음</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+    <!-- 페이징처리 끝 -->
+    <form th:action="@{/travel/list}" method="get" id="searchForm">
+        <input type="hidden" id="kw" name="kw" th:value="${kw}">
+        <input type="hidden" id="page" name="page" th:value="${paging.number}">
+    </form>
+    <script layout:fragment="script" type='text/javascript'>
+        const page_elements = document.getElementsByClassName("page-link");
+        Array.from(page_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                document.getElementById('page').value = this.dataset.page;
+                document.getElementById('searchForm').submit();
+            });
+        });
+        const btn_search = document.getElementById("btn_search");
+        btn_search.addEventListener('click', function () {
             document.getElementById('kw').value = document.getElementById('search_kw').value;
-            document.getElementById('page').value = this.dataset.page;
+            document.getElementById('page').value = 0;  // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
             document.getElementById('searchForm').submit();
         });
-    });
-
-    const btn_search = document.getElementById("btn_searech");
-    console.log(btn_search);
-
-    btn_search.addEventListener('click', function (){
-        document.getElementById('kw').value = document.getElementById('search_kw').value;
-        document.getElementById('page').value = 0;   // 검색버튼을 클릭할 경우 0페이지부터 조회한다.
-        document.getElementById('searchForm').submit();
-    });
-</script>
+    </script>
+</div>
 </body>
 </html>
