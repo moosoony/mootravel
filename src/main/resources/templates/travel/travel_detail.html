@@ -13,17 +13,19 @@
         </div>
         <div class=" text-start" th:text="|Create : ${#temporals.format(travel.createDate, 'yyyy-MM-dd HH:mm')}|"></div>
     </div>
-    <div class="card my-3">
-        <div class="card-body">
+<!--    <div class="card my-3">-->
+        <h1>
+<!--        <div class="card-body">-->
             <div class="badge bg-light text-dark">
-                <div class="">
+<!--                <div class="">-->
                     <div class="card-text" style="white-space: pre-line;"
                          th:text="|${travel.travelStart} ~ ${travel.travelEnd}|"></div>
                     <div class="card-text" style="white-space: pre-line;" th:text="|￦ ${travel.expenses}|"></div>
-                </div>
+<!--                </div>-->
             </div>
-        </div>
-    </div>
+<!--        </div>-->
+        </h1>
+<!--    </div>-->
     <span class="text-dark mb-0" th:utext="${travel.content}"/>
     <hr>
 

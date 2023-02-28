@@ -94,4 +94,15 @@ public class TravelController {
         this.travelService.vote(travel, siteUser);
         return String.format("redirect:/travel/detail/%s", id);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/delete/{id}")
+    public String travelDelete(Principal principal, @PathVariable ("id") Integer id){
+        Travel travel = this.travelService.getTravel(id);
+        if(!travel.getAuthor().getUsername().equals(principal.getName())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"삭제권한이 없습니다.");
+        }
+        this.travelService.delete(travel);
+        return "redirect:/travel/list";
+    }
 }

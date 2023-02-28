@@ -85,4 +85,7 @@ public class TravelService {
         travel.getVoter().add(siteUser);
         this.travelRepository.save(travel);
     }
+    public void delete(Travel travel){
+        this.travelRepository.delete(travel);
+    }
 }
