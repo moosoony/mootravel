@@ -80,4 +80,9 @@ public class TravelService {
         travel.setModifyDate(LocalDateTime.now());
         this.travelRepository.save(travel);
     }
+
+    public void vote(Travel travel, SiteUser siteUser){
+        travel.getVoter().add(siteUser);
+        this.travelRepository.save(travel);
+    }
 }

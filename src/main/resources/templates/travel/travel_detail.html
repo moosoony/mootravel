@@ -25,18 +25,33 @@
         </div>
     </div>
     <span class="text-dark mb-0" th:utext="${travel.content}"/>
-    <h2 class="border-bottom py-2"/>
+    <hr>
+
     <div class="my-3">
-        <a th:href="@{|/travel/modify/${travel.id}|}" class="btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+        <a href="javascrpt:void(0);" class="recommend btn btn-sm btn-outline-secondary"
+           th:data-uri="@{|/travel/vote/${travel.id}|}">
+            추천
+            <span class="badge rounded-pill bg-success" th:text="${#lists.size(travel.voter)}"></span>
+        </a>
+
+        <a th:href="@{|/travel/modify/${travel.id}|}" class="btn btn-sm btn-outline-secondary"
+           sec:authorize="isAuthenticated()"
            th:if="${travel.author != null and #authentication.getPrincipal().getUsername() == travel.author.username}"
-           th:text="수정"></a>
+           th:text="수정">
+
+        </a>
+
         <a href="javascript:void(0);" th:data-uri="@{|/travel/delete/${travel.id}|}"
            class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
            th:if="${travel.author != null and #authentication.getPrincipal().getUsername() == travel.author.username}"
-           th:text="삭제"></a>
+           th:text="삭제">
+
+        </a>
     </div>
+
     <!--    댓글의 갯수 표시-->
     <h5 th:text="|${#lists.size(travel.replyList)}개의 답변이 있습니다.|"></h5>
+
     <!--    답변 반복 시작-->
     <div class="card my-3" th:each="reply : ${travel.replyList}">
         <div class="card-body">
@@ -49,11 +64,31 @@
         </div>
     </div>
     <!--    답변 반복 끝-->
+
     <!--    답변 작성-->
     <form th:action="@{|/reply/create/${travel.id}|}" method="post" class="my-3">
         <textarea name="content" id="content" rows="10" class="form-control"></textarea>
         <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
-</div>
 
+    <script layout:fragment="script" type="text/javascript">
+        const delete_elements = document.getElementsByClassName("delete");
+        Array.from(delete_elements).forEach(function (element){
+            element.addEventListener('click', function (){
+                if(confirm("정말로 삭제하시겠습니까?")){
+                    location.href=this.dataset.uri;
+                };
+            });
+        });
+
+        const recommend_elements = document.getElementsByClassName("recommend");
+        Array.from(recommend_elements).forEach(function (element){
+            element.addEventListener('click', function (){
+                if(confirm("정말로 추천하시겠습니까?")){
+                    location.href=this.dataset.uri;
+                };
+            });
+        });
+    </script>
+</div>
 </html>

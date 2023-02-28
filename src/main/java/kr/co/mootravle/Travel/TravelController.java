@@ -85,4 +85,13 @@ public class TravelController {
         this.travelService.modify(travel, travelForm.getSubject(), travelForm.getContent());
         return String.format("redirect:/travel/detail/%s", id);
     }
+
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/vote/{id}")
+    public String travelVote(Principal principal, @PathVariable("id") Integer id){
+        Travel travel = this.travelService.getTravel(id);
+        SiteUser siteUser = this.userService.getUser(principal.getName());
+        this.travelService.vote(travel, siteUser);
+        return String.format("redirect:/travel/detail/%s", id);
+    }
 }

@@ -32,11 +32,10 @@ public class UserController {
         if (!userCreateForm.getPassword1().equals(userCreateForm.getPassword2())) {
             bindingResult.rejectValue("password2", "passwordInCorrect",
                     "2개의 패스워드가 일치하지 않습니다.");
-            System.out.println("2개의 패스워드가 일치하지 않습니다.");
             return "user/signup_form";
         }
         try{
-        userService.create(userCreateForm.getUsername(), userCreateForm.getEmail(), userCreateForm.getPassword1(),
+        userService.create(userCreateForm.getUsername(), userCreateForm.getPassword1(), userCreateForm.getEmail(),
                 userCreateForm.getSex(), userCreateForm.getBirthday());
         }catch (DataIntegrityViolationException e){
             e.printStackTrace();
