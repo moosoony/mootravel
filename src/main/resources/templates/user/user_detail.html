@@ -1,0 +1,21 @@
+<!doctype html>
+<html lagn="ko" layout:decorate="~{layout}"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<body>
+
+<div layout:fragment="content" class="container my-3 mt-10">
+    <div class="mb-7 text-center">
+        <h5 class="text-secondary">Settings</h5>
+        <h3 class="fs-xl-10 fs-lg-8 fs-7 fw-bold font-cursive text-capitalize">Account</h3>
+        <hr>
+    </div>
+
+    <div th:text="|${#authentication.name}님|"/>
+    프로필 사진 - 사진변경, 삭제
+    성별
+    생일
+</div>
+</body>
+</html>
