@@ -2,6 +2,7 @@ package kr.co.mootravle.Travel;
 
 import kr.co.mootravle.Reply.Reply;
 import kr.co.mootravle.User.SiteUser;
+import kr.co.mootravle.Voter.Voter;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
 
@@ -44,7 +45,7 @@ public class Travel {
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE)
     private List<Reply> replyList;
 
-    @ManyToMany
-    Set<SiteUser> voter;
+    @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE)
+    private Set<Voter> voter;
 
 }

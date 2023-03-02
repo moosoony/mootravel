@@ -2,6 +2,8 @@ package kr.co.mootravle.Travel;
 
 import kr.co.mootravle.DataNotFoundException;
 import kr.co.mootravle.User.SiteUser;
+import kr.co.mootravle.Voter.Voter;
+import kr.co.mootravle.Voter.VoterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -24,6 +26,8 @@ import java.util.Optional;
 public class TravelService {
     private final TravelRepository travelRepository;
 
+    private final VoterRepository voterRepository;
+
 //    페이징 구현 서비스
     public Page<Travel> getList(int page, String kw){
         List<Sort.Order> sorts = new ArrayList<>();
@@ -41,13 +45,9 @@ public class TravelService {
             public Predicate toPredicate(Root<Travel> t, CriteriaQuery<?> query, CriteriaBuilder cb) {
                 query.distinct(true); // 중복을 제거
                 Join<Travel, SiteUser> u1 = t.join("author", JoinType.LEFT);
-//                Join<Travel, Answer> a = q.join("answerList", JoinType.LEFT);
-//                Join<Travel, SiteUser> u2 = a.join("author", JoinType.LEFT);
-                return cb.or(cb.like(t.get("subject"), "%" + kw + "%"),   //제목
+                return cb.or(cb.like(t.get("subject"), "%" + kw + "%"),   // 제목
                         cb.like(t.get("content"), "%" + kw + "%"),  // 내용
-                        cb.like(u1.get("username"), "%" + kw + "%"));    // 질문 작성자
-//                        cb.like(a.get("content"), "%" + kw + "%"),  // 답변 내용
-//                        cb.like(u2.get("username"), "%" + kw + "%"));   // 답변 작성자
+                        cb.like(u1.get("username"), "%" + kw + "%"));    // 게시글 작성자
             }
         };
     }
@@ -78,11 +78,6 @@ public class TravelService {
         travel.setSubject(subject);
         travel.setContent(content);
         travel.setModifyDate(LocalDateTime.now());
-        this.travelRepository.save(travel);
-    }
-
-    public void vote(Travel travel, SiteUser siteUser){
-        travel.getVoter().add(siteUser);
         this.travelRepository.save(travel);
     }
 

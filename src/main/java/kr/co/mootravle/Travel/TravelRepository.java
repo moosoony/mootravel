@@ -8,6 +8,8 @@ import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.util.List;
+
 @Repository
 public interface TravelRepository extends JpaRepository<Travel, Integer> {
     @Modifying
@@ -19,4 +21,15 @@ public interface TravelRepository extends JpaRepository<Travel, Integer> {
 
     //    검색 구현 메서드
     Page<Travel> findAll(Specification<Travel> spec, Pageable pageable);
+
+    // Top3 구현 메서드
+//    @Query("select "
+//            + "t.travel "
+//            + "from TravelVoter t "
+//            + "group by t.travel "
+//            + "order by count(t.id) desc "
+//            + "limit 3")
+//    List<Travel> top3();
+
+
 }

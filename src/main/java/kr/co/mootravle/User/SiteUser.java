@@ -1,5 +1,6 @@
 package kr.co.mootravle.User;
 
+import kr.co.mootravle.Voter.Voter;
 import lombok.Data;
 
 import javax.persistence.*;
