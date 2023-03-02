@@ -4,7 +4,6 @@ import kr.co.mootravle.Answer.Answer;
 import kr.co.mootravle.File.FileEntity;
 import kr.co.mootravle.User.SiteUser;
 import lombok.Data;
-import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
