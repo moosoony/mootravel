@@ -11,6 +11,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.validation.Valid;
+import java.security.Principal;
+import java.time.LocalDate;
 
 @RequiredArgsConstructor
 @Controller
@@ -58,11 +60,14 @@ public class UserController {
         return "/user/login_form";
     }
 
-//    사용자 정보 수정 페이지
-    @GetMapping("/detail/{id}")
-    public String account(Model model, @PathVariable("id") Long id) {
-        SiteUser user = this.userService.getUser(id);
-        model.addAttribute("user",user);
+    //    사용자 정보 수정 페이지
+    @GetMapping("/detail")
+    public String account(Model model, Principal principal) {
+        SiteUser user = this.userService.getUser(principal.getName());
+
+        System.out.println(user);
+
+        model.addAttribute("user", user);
         return "/user/user_detail";
     }
 }
