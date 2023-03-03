@@ -36,4 +36,7 @@ public class UserService {
             throw new DataNotFoundException("siteuser not found");
         }
     }
+
+    // 사용자 계정 삭제
+    public void delete(SiteUser siteUser){this.userRepository.delete(siteUser);}
 }
