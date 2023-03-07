@@ -3,7 +3,9 @@
       xmlns:th="http://thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml">
 <th:block layout:fragment="script">
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+            crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.js"></script>
 </th:block>
@@ -13,22 +15,24 @@
     <form th:object="${travelForm}" method="post">
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
         <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-            <div th:each="err : ${#fields.allErrors()}" th:text="${err}" />
+            <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
         </div>
         <div class="mb-3">
-            <label th:for="subject" class="form-label" >Subject</label>
+            <label th:for="subject" class="form-label">Subject</label>
             <input type="text" th:field="*{subject}" class="form-control">
         </div>
-        <div class="mb-3">
-            <label th:for="travelStart" class="form-label" >journey</label>
-            <input type="date" th:field="*{travelStart}" class="form-control">
+        <div class="row">
+            <div class="mb-3 col-md-6">
+                <label th:for="travelStart" class="form-label">Travel Start</label>
+                <input type="date" th:field="*{travelStart}" class="form-control">
+            </div>
+            <div class="mb-3 col-md-6">
+                <label th:for="travelEnd" class="form-label">Travel End</label>
+                <input type="date" th:field="*{travelEnd}" class="form-control">
+            </div>
         </div>
         <div class="mb-3">
-            <label th:for="travelEnd" class="form-label" ></label>
-            <input type="date" th:field="*{travelEnd}" class="form-control">
-        </div>
-        <div class="mb-3">
-            <label th:for="subject" class="form-label" >Travel expenses</label>
+            <label th:for="subject" class="form-label">Travel expenses</label>
             <input type="text" th:field="*{expenses}" class="form-control">
         </div>
 
@@ -46,16 +50,16 @@
                     // [groupName, [list of button]]
                     ['fontname', ['fontname']],
                     ['fontsize', ['fontsize']],
-                    ['style', ['bold', 'italic', 'underline','strikethrough', 'clear']],
-                    ['color', ['forecolor','color']],
+                    ['style', ['bold', 'italic', 'underline', 'strikethrough', 'clear']],
+                    ['color', ['forecolor', 'color']],
                     ['table', ['table']],
                     ['para', ['ul', 'ol', 'paragraph']],
                     ['height', ['height']],
-                    ['insert',['picture','link','video']],
+                    ['insert', ['picture', 'link', 'video']],
                     ['view', ['fullscreen', 'help']]
                 ],
 
-                fontSizes: ['8','9','10','11','12','14','16','18','20','22','24','28','30','36','50','72'],
+                fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '30', '36', '50', '72'],
             });
         </script>
         <input type="submit" value="Submit" class="btn btn-primary my-2">
