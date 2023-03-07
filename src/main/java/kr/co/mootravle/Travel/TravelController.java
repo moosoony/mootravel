@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 
 @RequestMapping("/travel")
@@ -28,17 +29,18 @@ public class TravelController {
                        @RequestParam(value = "kw", defaultValue = "") String kw) {
         Page<Travel> paging = this.travelService.getList(page, kw);
         model.addAttribute("paging", paging);
-        model.addAttribute("kw",kw);
+        model.addAttribute("kw", kw);
         return "travel/travel_list";
     }
 
+    //    상세보기
     @GetMapping(value = "/detail/{id}")
-        public String detail(Model model, @PathVariable("id") Integer id){
-        Travel travel=this.travelService.getTravel(id);
+    public String detail(Model model, @PathVariable("id") Integer id) {
+        Travel travel = this.travelService.getTravel(id);
         model.addAttribute("travel", travel);
-            return "travel/travel_detail";
-        }
-
+        System.out.println(travel);
+        return "travel/travel_detail";
+    }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
@@ -48,19 +50,19 @@ public class TravelController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String travelCreate(@Valid TravelForm travelForm, BindingResult bindingResult, Principal principal) {
+    public String travelCreate(@Valid TravelForm travelForm, BindingResult bindingResult, Principal principal) throws IOException {
         if (bindingResult.hasErrors()) {
             return "travel/travel_form";
         }
         SiteUser siteUser = this.userService.getUser(principal.getName());
-        this.travelService.create(travelForm.getSubject(), travelForm.getContent(), siteUser, travelForm.getTravelStart(), travelForm.getTravelEnd(), travelForm.getExpenses());
+        this.travelService.create(travelForm.getSubject(), travelForm.getFile(), travelForm.getContent(), siteUser, travelForm.getTravelStart(), travelForm.getTravelEnd(), travelForm.getExpenses());
         return "redirect:/travel/list";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
     public String travelModify(TravelForm travelForm, @PathVariable("id")
-                               Integer id, Principal principal){
+    Integer id, Principal principal) {
         Travel travel = this.travelService.getTravel(id);
         if (!travel.getAuthor().getUsername().equals(principal.getName())) {
 
@@ -74,12 +76,12 @@ public class TravelController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String travelModify(@Valid TravelForm travelForm, BindingResult bindingResult,
-                               Principal principal, @PathVariable("id") Integer id){
-        if(bindingResult.hasErrors()){
+                               Principal principal, @PathVariable("id") Integer id) {
+        if (bindingResult.hasErrors()) {
             return "travel/travel_form";
         }
         Travel travel = this.travelService.getTravel(id);
-        if(!travel.getAuthor().getUsername().equals(principal.getName())){
+        if (!travel.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
         this.travelService.modify(travel, travelForm.getSubject(), travelForm.getContent());
@@ -89,10 +91,10 @@ public class TravelController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
-    public String travelDelete(Principal principal, @PathVariable ("id") Integer id){
+    public String travelDelete(Principal principal, @PathVariable("id") Integer id) {
         Travel travel = this.travelService.getTravel(id);
-        if(!travel.getAuthor().getUsername().equals(principal.getName())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"삭제권한이 없습니다.");
+        if (!travel.getAuthor().getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
         this.travelService.delete(travel);
         return "redirect:/travel/list";

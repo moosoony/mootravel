@@ -80,7 +80,7 @@ public class UserController {
         return "/user/user_detail";
     }
 
-    //    사용자 정보 수정하기
+    // 사용자 정보 수정하기
     @PreAuthorize("isAuthenticated()")
     @PostMapping("detail")
     public String accountModify(@Valid UserModifyForm userModifyForm, BindingResult bindingResult, Principal principal){
@@ -98,7 +98,7 @@ public class UserController {
 
     // 사용자 정보 삭제
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/delete/{id}")
+    @GetMapping("/delete")
     public String deleteuser(Principal principal) {
         SiteUser siteuser = this.userService.getUser(principal.getName());
         if (!siteuser.getUsername().equals(principal.getName())) {

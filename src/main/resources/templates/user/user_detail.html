@@ -62,9 +62,9 @@
                             </div>
                             <div class="row">
                                 <div class="mb-3 col-md-6">
-                                    <label for="username" class="form-label">*ID</label>
+                                    <label for="username" class="form-label">ID</label>
                                     <input class="form-control" type="text" id="username" name="username"
-                                           th:field="*{username}">
+                                           th:field="*{username}" readonly>
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="email" class="form-label">*E-mail</label>
@@ -155,10 +155,10 @@
                                 <label class="form-check-label" for="accountActivation">I confirm my account
                                     deactivation</label>
                             </div>
-                            <a href="javascript:void(0);" th:data-uri="@{|/user/delete/${user.id}|}"
-                               class="delete btn btn-sm btn-outline-danger" sec:authorize="isAuthenticated()"
-                               th:if="${user.username != null and #authentication.getPrincipal().getUsername() == user.username}"
-                            >Deactivate Account</a>
+                            <a href="javascript:void(0);" th:data-uri="@{/user/delete}"
+                               class="delete btn btn-sm btn-outline-danger" sec:authorize="isAuthenticated()">
+<!--                               th:if="${username != null and username == #authentication.getPrincipal().getUsername()}"-->
+                           Deactivate Account</a>
                         </form>
                         <!--                        계정 삭제 버튼 영역 End-->
                     </div>
