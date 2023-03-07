@@ -1,11 +1,13 @@
 package kr.co.mootravle.User;
 
 import kr.co.mootravle.DataNotFoundException;
+import kr.co.mootravle.Travel.Travel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @RequiredArgsConstructor
@@ -37,6 +39,16 @@ public class UserService {
         }
     }
 
+    //  사용자 계정 수정
+    public void modify(SiteUser user, String email, String sex, String birthday){
+        user.setEmail(email);
+        user.setSex(sex);
+        user.setBirthday(birthday);
+        this.userRepository.save(user);
+    }
+
     // 사용자 계정 삭제
-    public void delete(SiteUser siteUser){this.userRepository.delete(siteUser);}
+    public void delete(SiteUser siteUser) {
+        this.userRepository.delete(siteUser);
+    }
 }

@@ -1,5 +1,7 @@
 package kr.co.mootravle.User;
 
+import kr.co.mootravle.Travel.Travel;
+import kr.co.mootravle.Travel.TravelForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -8,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
@@ -61,23 +64,45 @@ public class UserController {
     }
 
     //    사용자 정보 수정 페이지
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail")
-    public String account(Model model, Principal principal) {
+    public String account(UserModifyForm userModifyForm, Principal principal) {
         SiteUser user = this.userService.getUser(principal.getName());
+        if (!user.getUsername().equals(principal.getName())) {
 
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
         System.out.println(user);
-
-        model.addAttribute("user", user);
+        userModifyForm.setUsername(user.getUsername());
+        userModifyForm.setEmail(user.getEmail());
+        userModifyForm.setSex(user.getSex());
+        userModifyForm.setBirthday(user.getBirthday());
         return "/user/user_detail";
     }
+
+    //    사용자 정보 수정하기
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("detail")
+    public String accountModify(@Valid UserModifyForm userModifyForm, BindingResult bindingResult, Principal principal){
+        if(bindingResult.hasErrors()){
+            return "/user/user_detail";
+        }
+        SiteUser user = this.userService.getUser(principal.getName());
+        if(!user.getUsername().equals(principal.getName())){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+        this.userService.modify(user, userModifyForm.getEmail(), userModifyForm.getSex(), userModifyForm.getBirthday());
+        return String.format("redirect:/");
+    }
+
 
     // 사용자 정보 삭제
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
-    public String deleteuser(Principal principal){
+    public String deleteuser(Principal principal) {
         SiteUser siteuser = this.userService.getUser(principal.getName());
-        if(!siteuser.getUsername().equals(principal.getName())){
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST,"삭제권한이 없습니다.");
+        if (!siteuser.getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
         this.userService.delete(siteuser);
 

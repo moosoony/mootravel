@@ -35,7 +35,7 @@
                     <!-- Account -->
                     <div class="card-body">
                         <div class="d-flex align-items-start align-items-sm-center gap-4">
-                            <img src="../assets/img/avatars/1.png" alt="user-avatar" class="d-block rounded"
+                            <img src="/assets/img/avatars/1.png" alt="user-avatar" class="d-block rounded"
                                  height="100" width="100" id="uploadedAvatar">
                             <div class="button-wrapper">
                                 <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
@@ -55,17 +55,21 @@
                     </div>
                     <hr class="my-0">
                     <div class="card-body">
-                        <form id="formAccountSettings" method="POST" onsubmit="return false">
+                        <form th:object="${userModifyForm}" method="POST">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                            <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                                <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+                            </div>
                             <div class="row">
                                 <div class="mb-3 col-md-6">
-                                    <label for="firstName" class="form-label">*ID</label>
-                                    <input class="form-control" type="text" id="firstName" name="firstName"
-                                           th:value="${#authentication.name}" autofocus="">
+                                    <label for="username" class="form-label">*ID</label>
+                                    <input class="form-control" type="text" id="username" name="username"
+                                           th:field="*{username}">
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="email" class="form-label">*E-mail</label>
                                     <input class="form-control" type="text" id="email" name="email"
-                                           th:field="*{user.email}" placeholder="john.doe@example.com">
+                                           th:field="*{email}" placeholder="john.doe@example.com">
                                 </div>
                                 <!--                                <div class="mb-3 col-md-6">-->
                                 <!--                                    <label for="password1" class="form-label">*Password</label>-->
@@ -77,13 +81,13 @@
                                 <!--                                </div>-->
                                 <div class="mb-3 col-md-6">
                                     <label class="form-label" for="sex">Sex</label>
-                                    <select id="sex" class="select2 form-select">
+                                    <select th:field="*{sex}" id="sex" class="select2 form-select">
                                         <option value="">Select</option>
-                                        <th:block th:if="${user.sex} == woman">
+                                        <th:block th:if="${sex} == woman">
                                             <option value="woman" selected>woman</option>
                                             <option value="man">man</option>
                                         </th:block>
-                                        <th:block th:unless="${user.sex} == woman">
+                                        <th:block th:unless="${sex} == woman">
                                             <option value="woman">woman</option>
                                             <option value="man" selected>man</option>
                                         </th:block>
@@ -91,7 +95,7 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="BirthDay" class="form-label">BirthDay</label>
-                                    <input type="date" class="form-control" id="BirthDay" name="BirthDay" value='0-0-0'>
+                                    <input type="date" class="form-control" id="BirthDay" name="BirthDay" th:field="*{birthday}">
                                 </div>
                                 <!--                                <div class="mb-3 col-md-6">-->
                                 <!--                                    <label class="form-label" for="country">Country</label>-->
@@ -154,7 +158,7 @@
                             <a href="javascript:void(0);" th:data-uri="@{|/user/delete/${user.id}|}"
                                class="delete btn btn-sm btn-outline-danger" sec:authorize="isAuthenticated()"
                                th:if="${user.username != null and #authentication.getPrincipal().getUsername() == user.username}"
-                               >Deactivate Account</a>
+                            >Deactivate Account</a>
                         </form>
                         <!--                        계정 삭제 버튼 영역 End-->
                     </div>
