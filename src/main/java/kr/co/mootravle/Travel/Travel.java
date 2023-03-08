@@ -23,15 +23,15 @@ public class Travel {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-//    작성자
+    //    작성자
     @ManyToOne
     private SiteUser author;
 
-//    제목
+    //    제목
     @Column(length = 200)
     private String subject;
 
-//    썸네일
+    //    썸네일
     private String orgNm;
     private String savedNm;
     private String savedPath;
@@ -43,35 +43,35 @@ public class Travel {
         this.savedPath = savedPath;
     }
 
-//    내용
+    //    내용
     @Column(columnDefinition = "LONGTEXT")
     private String content;
 
-//    작성일
+    //    작성일
     private LocalDateTime createDate;
 
-//    수정일
+    //    수정일
     private LocalDateTime modifyDate;
 
-//    조회수
+    //    조회수
     @Column(columnDefinition = "integer default 0", nullable = false)
     private Integer viewcnt;
 
-//    여행 시작일
+    //    여행 시작일
     private String travelStart;
 
-//    여행 종료일
+    //    여행 종료일
     private String travelEnd;
 
-//    여행 경비
+    //    여행 경비
     @Column(columnDefinition = "integer default 0", nullable = false)
     private String expenses;
 
-//    댓글
+    //    댓글
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE)
     private List<Reply> replyList;
 
-//    좋아요
+    //    좋아요
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE)
     private Set<Voter> voter;
 
