@@ -23,6 +23,7 @@ public class TravelController {
 
     private final UserService userService;
     private final TravelService travelService;
+    private final TravelRepository travelRepository;
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
@@ -37,6 +38,7 @@ public class TravelController {
     @GetMapping(value = "/detail/{id}")
     public String detail(Model model, @PathVariable("id") Integer id) {
         Travel travel = this.travelService.getTravel(id);
+        travelService.updateviewcnt(id);
         model.addAttribute("travel", travel);
         System.out.println(travel);
         return "travel/travel_detail";

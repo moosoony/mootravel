@@ -28,7 +28,7 @@ public class QuestionService {
 
     private final FileService fileService;
 
-//  페이징 구현 서비스
+    //  페이징 구현 서비스
     public Page<Question> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
@@ -46,7 +46,8 @@ public class QuestionService {
         }
     }
 
-    public void updateviewcnt(Integer id){
+    // 조회수 구현 서비스
+    public void updateviewcnt(Integer id) {
         questionRepository.updateCount(id);
     }
 

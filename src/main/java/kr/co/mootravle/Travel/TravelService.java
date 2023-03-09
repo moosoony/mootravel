@@ -2,8 +2,6 @@ package kr.co.mootravle.Travel;
 
 import kr.co.mootravle.DataNotFoundException;
 import kr.co.mootravle.User.SiteUser;
-import kr.co.mootravle.Voter.Voter;
-import kr.co.mootravle.Voter.VoterRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -33,8 +31,8 @@ public class TravelService {
     @Value("${file.dir}")
     private String fileDir;
 
-//    페이징 구현 서비스
-    public Page<Travel> getList(int page, String kw){
+    //    페이징 구현 서비스
+    public Page<Travel> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 9, Sort.by(sorts));
@@ -90,24 +88,28 @@ public class TravelService {
         this.travelRepository.save(t);
     }
 
-    public Travel getTravel(Integer id){
+    public Travel getTravel(Integer id) {
         Optional<Travel> travel = this.travelRepository.findById(id);
-        travelRepository.updateCount(id);
-        if(travel.isPresent()){
+        if (travel.isPresent()) {
             return travel.get();
-        }else{
+        } else {
             throw new DataNotFoundException("travel not found");
         }
     }
 
-    public void modify(Travel travel, String subject, String content){
+    //    조회수 구현 서비스
+    public void updateviewcnt(Integer id) {
+        travelRepository.updateCount(id);
+    }
+
+    public void modify(Travel travel, String subject, String content) {
         travel.setSubject(subject);
         travel.setContent(content);
         travel.setModifyDate(LocalDateTime.now());
         this.travelRepository.save(travel);
     }
 
-    public void delete(Travel travel){
+    public void delete(Travel travel) {
         this.travelRepository.delete(travel);
     }
 }
