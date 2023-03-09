@@ -29,8 +29,18 @@
       <input type="email" th:field="*{email}" class="form-control">
     </div>
     <div class="mb-3">
-      <label th:for="sex" class="form-label">성별</label>
-      <input type="text" th:field="*{sex}" class="form-control">
+      <label class="form-label" th:for="sex">성별</label>
+      <select th:field="*{sex}" id="sex" class="select2 form-select">
+        <option value="">Select</option>
+        <th:block th:if="${sex} == woman">
+          <option value="woman" selected>woman</option>
+          <option value="man">man</option>
+        </th:block>
+        <th:block th:unless="${sex} == woman">
+          <option value="woman">woman</option>
+          <option value="man" selected>man</option>
+        </th:block>
+      </select>
     </div>
     <div class="mb-3">
       <label th:for="birthday" class="form-label">생년월일</label>

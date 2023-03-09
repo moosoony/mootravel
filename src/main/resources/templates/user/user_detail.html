@@ -31,37 +31,42 @@
                     </li>
                 </ul>
                 <div class="card mb-4">
-                    <h5 class="card-header">Profile Details</h5>
-                    <!-- Account -->
-                    <div class="card-body">
-                        <div class="d-flex align-items-start align-items-sm-center gap-4">
-                            <img th:if="${savedNm} == null" alt="user-avatar" class="d-block rounded" height="100" width="100"
-                                 src="/images/NoPhoto.jpg"/>
-                            <img th:if="${savedNm} != null" alt="user-avatar" class="d-block rounded" height="100" width="100"
-                                 th:src="|/img/${savedNm}|"/>
-                            <div class="button-wrapper">
-                                <label for="upload" class="btn btn-primary me-2 mb-4" tabindex="0">
-                                    <span class="d-none d-sm-block">Upload new photo</span>
-                                    <i class="bx bx-upload d-block d-sm-none"></i>
-                                    <input type="file" id="upload" class="account-file-input" hidden=""
-                                           accept="image/png, image/jpeg">
-                                </label>
-                                <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
-                                    <i class="bx bx-reset d-block d-sm-none"></i>
-                                    <span class="d-none d-sm-block">Reset</span>
-                                </button>
+                    <form th:object="${userModifyForm}" method="POST" enctype="multipart/form-data">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
+                            <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+                        </div>
+                        <h5 class="card-header">Profile Details</h5>
+                        <!-- Account -->
+                        <div class="card-body">
+                            <div class="d-flex align-items-start align-items-sm-center gap-4">
+                                <img th:if="${savedNm} == null" alt="user-avatar" class="preview1 d-block rounded"
+                                     height="100" width="100"
+                                     src="/images/NoPhoto.jpg"/>
+                                <img th:if="${savedNm} != null" alt="user-avatar" class="preview1 d-block rounded"
+                                     height="100" width="100"
+                                     th:src="|/img/${savedNm}|"/>
+                                <div class="button-wrapper">
+                                    <label th:for="file" class="btn btn-primary me-2 mb-4" tabindex="0">
+                                        <span class="d-none d-sm-block">Upload new photo</span>
+                                        <i class="bx bx-upload d-block d-sm-none"></i>
+                                        <input onchange="readURL(this);" type="file" id="file" class="account-file-input"
+                                               th:field="*{file}" accept="image/png, image/jpeg"
+                                               hidden=""/>
+                                    </label>
 
-                                <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+                                    <button type="button" class="btn btn-outline-secondary account-image-reset mb-4">
+                                        <i class="bx bx-reset d-block d-sm-none"></i>
+                                        <span class="d-none d-sm-block">Reset</span>
+                                    </button>
+
+                                    <p class="text-muted mb-0">Allowed JPG, GIF or PNG. Max size of 800K</p>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <hr class="my-0">
-                    <div class="card-body">
-                        <form th:object="${userModifyForm}" method="POST">
-                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
-                            <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
-                                <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
-                            </div>
+                        <hr class="my-0">
+                        <div class="card-body">
+
                             <div class="row">
                                 <div class="mb-3 col-md-6">
                                     <label for="username" class="form-label">ID</label>
@@ -97,7 +102,8 @@
                                 </div>
                                 <div class="mb-3 col-md-6">
                                     <label for="BirthDay" class="form-label">BirthDay</label>
-                                    <input type="date" class="form-control" id="BirthDay" name="BirthDay" th:field="*{birthday}">
+                                    <input type="date" class="form-control" id="BirthDay" name="BirthDay"
+                                           th:field="*{birthday}">
                                 </div>
                                 <!--                                <div class="mb-3 col-md-6">-->
                                 <!--                                    <label class="form-label" for="country">Country</label>-->
@@ -134,51 +140,66 @@
                                 <button type="submit" class="btn btn-primary me-2">Save changes</button>
                                 <button type="reset" class="btn btn-outline-secondary">Cancel</button>
                             </div>
-                        </form>
-                    </div>
-                    <!-- /Account -->
-                </div>
-                <div class="card">
-                    <h5 class="card-header">Delete Account</h5>
-                    <div class="card-body">
-                        <div class="mb-3 col-12 mb-0">
-                            <div class="alert alert-warning">
-                                <h6 class="alert-heading fw-bold mb-1">Are you sure you want to delete your
-                                    account?</h6>
-                                <p class="mb-0">Once you delete your account, there is no going back. Please be
-                                    certain.</p>
-                            </div>
                         </div>
-                        <!--                        계정 삭제 버튼 영역 Start-->
-                        <form id="formAccountDeactivation" onsubmit="return false">
-                            <div class="form-check mb-3">
-                                <input class="form-check-input" type="checkbox" name="accountActivation"
-                                       id="accountActivation">
-                                <label class="form-check-label" for="accountActivation">I confirm my account
-                                    deactivation</label>
-                            </div>
-                            <a href="javascript:void(0);" th:data-uri="@{/user/delete}"
-                               class="delete btn btn-sm btn-outline-danger" sec:authorize="isAuthenticated()">
-<!--                               th:if="${username != null and username == #authentication.getPrincipal().getUsername()}"-->
-                           Deactivate Account</a>
-                        </form>
-                        <!--                        계정 삭제 버튼 영역 End-->
+                    </form>
+                </div>
+                <!-- /Account -->
+            </div>
+            <div class="card">
+                <h5 class="card-header">Delete Account</h5>
+                <div class="card-body">
+                    <div class="mb-3 col-12 mb-0">
+                        <div class="alert alert-warning">
+                            <h6 class="alert-heading fw-bold mb-1">Are you sure you want to delete your
+                                account?</h6>
+                            <p class="mb-0">Once you delete your account, there is no going back. Please be
+                                certain.</p>
+                        </div>
                     </div>
+                    <!--                        계정 삭제 버튼 영역 Start-->
+                    <form id="formAccountDeactivation" onsubmit="return false">
+                        <div class="form-check mb-3">
+                            <input class="form-check-input" type="checkbox" name="accountActivation"
+                                   id="accountActivation">
+                            <label class="form-check-label" for="accountActivation">I confirm my account
+                                deactivation</label>
+                        </div>
+                        <a href="javascript:void(0);" th:data-uri="@{/user/delete}"
+                           class="delete btn btn-sm btn-outline-danger" sec:authorize="isAuthenticated()">
+                            <!--                               th:if="${username != null and username == #authentication.getPrincipal().getUsername()}"-->
+                            Deactivate Account</a>
+                    </form>
+                    <!--                        계정 삭제 버튼 영역 End-->
                 </div>
             </div>
         </div>
     </div>
-    <script layout:fragment="script" type="text/javascript">
-        const delete_elements = document.getElementsByClassName("delete");
-        Array.from(delete_elements).forEach(function (element) {
-            element.addEventListener('click', function () {
-                if (confirm("정말로 삭제하시겠습니까?")) {
-                    location.href = this.dataset.uri;
-                }
-                ;
-            });
+</div>
+<script layout:fragment="script" type="text/javascript">
+    const delete_elements = document.getElementsByClassName("delete");
+    Array.from(delete_elements).forEach(function (element) {
+        element.addEventListener('click', function () {
+            if (confirm("정말로 삭제하시겠습니까?")) {
+                location.href = this.dataset.uri;
+            }
+            ;
         });
-    </script>
+    });
+
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                document.querySelector('.preview1').src = e.target.result;
+            };
+            reader.readAsDataURL(input.files[0]);
+        } else {
+            document.querySelector('.preview1').src = "";
+
+        }
+    }
+
+</script>
 </div>
 </body>
 </html>

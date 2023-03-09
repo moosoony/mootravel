@@ -1,7 +1,5 @@
 package kr.co.mootravle.User;
 
-import kr.co.mootravle.Travel.Travel;
-import kr.co.mootravle.Travel.TravelForm;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -10,12 +8,12 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
+import java.io.IOException;
 import java.security.Principal;
 
 @RequiredArgsConstructor
@@ -66,24 +64,29 @@ public class UserController {
     //    사용자 정보 수정 페이지
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/detail")
-    public String account(UserModifyForm userModifyForm, Principal principal) {
+    public String account(Model model, UserModifyForm userModifyForm, Principal principal) {
         SiteUser user = this.userService.getUser(principal.getName());
         if (!user.getUsername().equals(principal.getName())) {
 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
+
         System.out.println(user);
+
+        String savedNm = user.getSavedNm();
         userModifyForm.setUsername(user.getUsername());
         userModifyForm.setEmail(user.getEmail());
         userModifyForm.setSex(user.getSex());
         userModifyForm.setBirthday(user.getBirthday());
+        model.addAttribute("savedNm", savedNm);
+
         return "/user/user_detail";
     }
 
     // 사용자 정보 수정하기
     @PreAuthorize("isAuthenticated()")
     @PostMapping("detail")
-    public String accountModify(@Valid UserModifyForm userModifyForm, BindingResult bindingResult, Principal principal){
+    public String accountModify(@Valid UserModifyForm userModifyForm, BindingResult bindingResult, Principal principal) throws IOException {
         if(bindingResult.hasErrors()){
             return "/user/user_detail";
         }
@@ -91,7 +94,7 @@ public class UserController {
         if(!user.getUsername().equals(principal.getName())){
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-        this.userService.modify(user, userModifyForm.getEmail(), userModifyForm.getSex(), userModifyForm.getBirthday());
+        this.userService.modify(user, userModifyForm.getFile(), userModifyForm.getEmail(), userModifyForm.getSex(), userModifyForm.getBirthday());
         return String.format("redirect:/");
     }
 
