@@ -1,5 +1,8 @@
 package kr.co.mootravle.User;
 
+import kr.co.mootravle.Answer.AnswerService;
+import kr.co.mootravle.Question.QuestionRepository;
+import kr.co.mootravle.Question.QuestionService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -22,6 +25,9 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
+    private final AnswerService answerService;
+    private final QuestionService questionService;
+    private final QuestionRepository questionRepository;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
@@ -107,6 +113,10 @@ public class UserController {
         if (!siteuser.getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
+
+
+//        questionService.getQuestion()
+//        this.questionRepository.delete(qu);
         this.userService.delete(siteuser);
 
         return "redirect:/user/logout";

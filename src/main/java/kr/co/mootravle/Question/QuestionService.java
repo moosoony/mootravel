@@ -38,12 +38,16 @@ public class QuestionService {
 
     public Question getQuestion(Integer id) {
         Optional<Question> question = this.questionRepository.findById(id);
-        questionRepository.updateCount(id);
+//        questionRepository.updateCount(id);
         if (question.isPresent()) {
             return question.get();
         } else {
             throw new DataNotFoundException("question not found");
         }
+    }
+
+    public void updateviewcnt(Integer id){
+        questionRepository.updateCount(id);
     }
 
     public void create(String subject, String content, SiteUser user) {
