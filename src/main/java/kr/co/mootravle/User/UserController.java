@@ -1,8 +1,7 @@
 package kr.co.mootravle.User;
 
-import kr.co.mootravle.Answer.AnswerService;
-import kr.co.mootravle.Question.QuestionRepository;
-import kr.co.mootravle.Question.QuestionService;
+import kr.co.mootravle.Answer.AnswerRepository;
+import kr.co.mootravle.Travel.TravelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -25,13 +24,22 @@ import java.security.Principal;
 public class UserController {
 
     private final UserService userService;
-    private final AnswerService answerService;
-    private final QuestionService questionService;
-    private final QuestionRepository questionRepository;
+    private final AnswerRepository answerRepository;
+    private final TravelRepository travelRepository;
 
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
         return "user/signup_form";
+    }
+
+    @GetMapping("/connections")
+    public String connections() {
+        return "pages-account-settings-connections";
+    }
+
+    @GetMapping("/password")
+    public String password() {
+        return "user/user_password";
     }
 
     @PostMapping("/signup")
@@ -69,7 +77,7 @@ public class UserController {
 
     //    사용자 정보 수정 페이지
     @PreAuthorize("isAuthenticated()")
-    @GetMapping("/detail")
+    @GetMapping("/account")
     public String account(Model model, UserModifyForm userModifyForm, Principal principal) {
         SiteUser user = this.userService.getUser(principal.getName());
         if (!user.getUsername().equals(principal.getName())) {
@@ -86,18 +94,18 @@ public class UserController {
         userModifyForm.setBirthday(user.getBirthday());
         model.addAttribute("savedNm", savedNm);
 
-        return "/user/user_detail";
+        return "/user/user_account";
     }
 
     // 사용자 정보 수정하기
     @PreAuthorize("isAuthenticated()")
     @PostMapping("detail")
     public String accountModify(@Valid UserModifyForm userModifyForm, BindingResult bindingResult, Principal principal) throws IOException {
-        if(bindingResult.hasErrors()){
-            return "/user/user_detail";
+        if (bindingResult.hasErrors()) {
+            return "user_account";
         }
         SiteUser user = this.userService.getUser(principal.getName());
-        if(!user.getUsername().equals(principal.getName())){
+        if (!user.getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
         this.userService.modify(user, userModifyForm.getFile(), userModifyForm.getEmail(), userModifyForm.getSex(), userModifyForm.getBirthday());
@@ -113,10 +121,10 @@ public class UserController {
         if (!siteuser.getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
+        Integer id = Math.toIntExact(siteuser.getId());
 
-
-//        questionService.getQuestion()
-//        this.questionRepository.delete(qu);
+//        this.answerRepository.deleteById(id);
+//        this.travelRepository.deleteById(id);
         this.userService.delete(siteuser);
 
         return "redirect:/user/logout";

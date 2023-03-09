@@ -26,8 +26,6 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    private final FileService fileService;
-
     //  페이징 구현 서비스
     public Page<Question> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
@@ -36,9 +34,9 @@ public class QuestionService {
         return this.questionRepository.findAllByKeyword(kw, pageable);
     }
 
+    //    상세보기 서비스
     public Question getQuestion(Integer id) {
         Optional<Question> question = this.questionRepository.findById(id);
-//        questionRepository.updateCount(id);
         if (question.isPresent()) {
             return question.get();
         } else {
@@ -51,6 +49,7 @@ public class QuestionService {
         questionRepository.updateCount(id);
     }
 
+    //    작성하기 서비스
     public void create(String subject, String content, SiteUser user) {
         Question q = new Question();
         q.setSubject(subject);
@@ -60,6 +59,7 @@ public class QuestionService {
         this.questionRepository.save(q);
     }
 
+    // 수정하기 서비스
     public void modify(Question question, String subject, String content) {
         question.setSubject(subject);
         question.setContent(content);
@@ -67,6 +67,7 @@ public class QuestionService {
         this.questionRepository.save(question);
     }
 
+    //    삭제하기 서비스
     public void delete(Question question) {
         this.questionRepository.delete(question);
     }

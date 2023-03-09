@@ -95,6 +95,7 @@ public class QuestionController {
         return String.format("redirect:/question/detail/%s", id);
     }
 
+   // 게시글 삭제
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")
     public String questionDelete(Principal principal, @PathVariable("id") Integer id) {

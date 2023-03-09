@@ -23,7 +23,6 @@ public class TravelController {
 
     private final UserService userService;
     private final TravelService travelService;
-    private final TravelRepository travelRepository;
 
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,

@@ -18,16 +18,16 @@
             <div class="col-md-12">
                 <ul class="nav nav-pills flex-column flex-md-row mb-3">
                     <li class="nav-item">
-                        <a class="nav-link active" href="javascript:void(0);"><i class="bx bx-user me-1"></i>
-                            Account</a>
+                        <a class="nav-link active" href="javascript:void(0);">
+                            <i class="bx bx-user me-1"></i>Account</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#!"><i
-                                class="bx bx-bell me-1"></i> Password</a>
+                        <a class="nav-link" th:href="@{/user/password}">
+                            <i class="bx bx-bell me-1"></i> Password</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="pages-account-settings-connections.html"><i
-                                class="bx bx-link-alt me-1"></i> Connections</a>
+                        <a class="nav-link" th:href="@{/user/connections}">
+                            <i class="bx bx-link-alt me-1"></i> Connections</a>
                     </li>
                 </ul>
                 <div class="card mb-4">
@@ -36,7 +36,7 @@
                         <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()}">
                             <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
                         </div>
-                        <h5 class="card-header">Profile Details</h5>
+                        <h5 class="card-header">Account Details</h5>
                         <!-- Account -->
                         <div class="card-body">
                             <div class="d-flex align-items-start align-items-sm-center gap-4">
@@ -174,32 +174,33 @@
             </div>
         </div>
     </div>
-</div>
-<script layout:fragment="script" type="text/javascript">
-    const delete_elements = document.getElementsByClassName("delete");
-    Array.from(delete_elements).forEach(function (element) {
-        element.addEventListener('click', function () {
-            if (confirm("정말로 삭제하시겠습니까?")) {
-                location.href = this.dataset.uri;
-            }
-            ;
+    <script layout:fragment="script" type="text/javascript">
+        const delete_elements = document.getElementsByClassName("delete");
+        Array.from(delete_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                if (confirm("정말로 삭제하시겠습니까?")) {
+                    location.href = this.dataset.uri;
+                }
+                ;
+            });
         });
-    });
 
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                document.querySelector('.preview1').src = e.target.result;
-            };
-            reader.readAsDataURL(input.files[0]);
-        } else {
-            document.querySelector('.preview1').src = "";
+        function readURL(input) {
+            if (input.files && input.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.querySelector('.preview1').src = e.target.result;
+                };
+                reader.readAsDataURL(input.files[0]);
+            } else {
+                document.querySelector('.preview1').src = "";
 
-        }
-    }
+            }
+        };
 
-</script>
+    </script>
+</div>
+
 </div>
 </body>
 </html>

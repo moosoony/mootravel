@@ -40,6 +40,7 @@ public class TravelService {
         return this.travelRepository.findAll(spec, pageable);
     }
 
+    //    검색 구현 서비스
     public Specification<Travel> search(String kw) {
         return new Specification<>() {
             private static final long serialVersionUID = 1L;
@@ -55,6 +56,7 @@ public class TravelService {
         };
     }
 
+    //   작성하기 서비스
     public void create(String subject, MultipartFile file, String content, SiteUser user, String travelStart, String travelEnd, String expenses) throws IOException {
         // 원래 파일 이름 추출
         String origName = file.getOriginalFilename();
@@ -88,6 +90,7 @@ public class TravelService {
         this.travelRepository.save(t);
     }
 
+    //    상세보기 서비스
     public Travel getTravel(Integer id) {
         Optional<Travel> travel = this.travelRepository.findById(id);
         if (travel.isPresent()) {
@@ -102,6 +105,7 @@ public class TravelService {
         travelRepository.updateCount(id);
     }
 
+    //    수정 서비스
     public void modify(Travel travel, String subject, String content) {
         travel.setSubject(subject);
         travel.setContent(content);
@@ -109,6 +113,7 @@ public class TravelService {
         this.travelRepository.save(travel);
     }
 
+    //    삭제 서비스
     public void delete(Travel travel) {
         this.travelRepository.delete(travel);
     }
