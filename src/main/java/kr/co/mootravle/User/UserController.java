@@ -37,11 +37,6 @@ public class UserController {
         return "pages-account-settings-connections";
     }
 
-    @GetMapping("/password")
-    public String password() {
-        return "user/user_password";
-    }
-
     @PostMapping("/signup")
     public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
 
@@ -75,7 +70,7 @@ public class UserController {
         return "/user/login_form";
     }
 
-    //    사용자 정보 수정 페이지
+    //    사용자 정보 페이지
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/account")
     public String account(Model model, UserModifyForm userModifyForm, Principal principal) {
@@ -97,12 +92,13 @@ public class UserController {
         return "/user/user_account";
     }
 
-    // 사용자 정보 수정하기
+    // 사용자 정보 수정
     @PreAuthorize("isAuthenticated()")
-    @PostMapping("detail")
-    public String accountModify(@Valid UserModifyForm userModifyForm, BindingResult bindingResult, Principal principal) throws IOException {
+    @PostMapping("/account")
+    public String accountModify(
+                                @Valid UserModifyForm userModifyForm, BindingResult bindingResult, Principal principal) throws IOException {
         if (bindingResult.hasErrors()) {
-            return "user_account";
+            return "user/user_account";
         }
         SiteUser user = this.userService.getUser(principal.getName());
         if (!user.getUsername().equals(principal.getName())) {
@@ -129,4 +125,33 @@ public class UserController {
 
         return "redirect:/user/logout";
     }
+
+    // 사용자 비밀번호 페이지
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/password")
+    public String password(Model model) {
+        model.addAttribute("userPasswordForm", new UserPasswordForm());
+        return "user/user_password";
+    }
+
+    // 사용자 비밀번호 수정
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/password")
+    public String accountModify(@Valid UserPasswordForm userPasswordForm, BindingResult bindingResult, Principal principal) {
+        if (bindingResult.hasErrors()) {
+            return "user/user_password";
+        }
+        if (!userPasswordForm.getPassword1().equals(userPasswordForm.getPassword2())) {
+            bindingResult.rejectValue("password2", "passwordInCorrect",
+                    "2개의 패스워드가 일치하지 않습니다.");
+            return "user/user_password";
+        }
+        SiteUser user = this.userService.getUser(principal.getName());
+        if (!user.getUsername().equals(principal.getName())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+        }
+        this.userService.password(user, userPasswordForm.getPassword1());
+        return String.format("redirect:/user/logout");
+    }
+
 }

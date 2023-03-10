@@ -79,4 +79,11 @@ public class UserService {
     public void delete(SiteUser siteUser) {
         this.userRepository.delete(siteUser);
     }
+
+    // 사용자 비밀번호 수정
+    public void password(SiteUser user, String password) {
+        user.setPassword(passwordEncoder.encode(password));
+        this.userRepository.save(user);
+    }
+
 }
