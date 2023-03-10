@@ -1,4 +1,4 @@
-package kr.co.mootravle.Voter;
+package kr.co.mootravle.Like;
 
 import kr.co.mootravle.Travel.Travel;
 import kr.co.mootravle.User.SiteUser;
@@ -7,18 +7,19 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-@Table(name = "travel_voter")
+@Table(name = "travel_Like")
 @Getter
 @Setter
 @Entity
-public class Voter {
+public class Like {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @ManyToOne
     private Travel travel;
 
     @ManyToOne
+
     private SiteUser author;
 }

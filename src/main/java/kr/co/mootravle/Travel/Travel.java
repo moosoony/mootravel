@@ -2,7 +2,7 @@ package kr.co.mootravle.Travel;
 
 import kr.co.mootravle.Reply.Reply;
 import kr.co.mootravle.User.SiteUser;
-import kr.co.mootravle.Voter.Voter;
+import kr.co.mootravle.Like.Like;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -73,6 +73,6 @@ public class Travel {
 
     //    좋아요
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE)
-    private Set<Voter> voter;
+    private Set<Like> voter;
 
 }
