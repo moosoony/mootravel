@@ -22,5 +22,13 @@ public class LikeService {
         this.likeRepository.save(like);
     }
 
+    // 좋아요 조회 서비스
+    public boolean getLike(Long aid, Integer tid) {
+        if (this.likeRepository.like(aid, tid)==null) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
 }

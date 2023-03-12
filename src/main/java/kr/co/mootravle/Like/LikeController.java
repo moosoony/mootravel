@@ -32,18 +32,26 @@ public class LikeController {
     @GetMapping("/create/{id}")
     public String createlike(@PathVariable("id") Integer id,
                              @Valid Principal principal) {
-        // 게시글의 id
+
         Travel travel = this.travelService.getTravel(id);
+        Integer tid = travel.getId();
 
         SiteUser siteUser = this.userService.getUser(principal.getName());
         System.out.println(siteUser);
 
         // 사용자의 id
         Long aid = (long) Math.toIntExact(siteUser.getId());
-
+        if (likeService.getLike(aid, tid) == true) {
             this.likeService.create(travel, siteUser);
-            return String.format("redirect:/travel/detail/%s", id);
-//        }
+        } else {
+            System.out.println("좋아요 취소");
+            Integer likeId = Integer.valueOf(this.likeRepository.like(aid, tid));
+            likeRepository.deleteById(likeId);
+            System.out.println(likeId);
+//            this.likeRepository.deleteById();
+        }
+
+        return String.format("redirect:/travel/detail/%s", id);
     }
 
 }
