@@ -1,0 +1,42 @@
+<html layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<body>
+
+<div layout:fragment="content" class="container my-3 mt-10">
+    <div class="mb-7 text-center">
+        <h5 class="text-secondary">Account Settings</h5>
+        <h3 class="fs-xl-10 fs-lg-8 fs-7 fw-bold font-cursive text-capitalize">Account</h3>
+        <hr>
+    </div>
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Account Settings /</span> Activity</h4>
+
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/account}">
+                            <i class="bx bx-user me-1"></i>Account</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link " th:href="@{/user/password}">
+                            <i class="bx bx-bell me-1"></i> Password</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/user/activity}">
+                            <i class="bx bx-link-alt me-1"></i> Activity</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+            <h5 class="card-header"> Activity</h5>
+    </div>
+</div>
+</body>
+</html>

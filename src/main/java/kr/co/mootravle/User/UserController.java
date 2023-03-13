@@ -27,16 +27,13 @@ public class UserController {
     private final AnswerRepository answerRepository;
     private final TravelRepository travelRepository;
 
+    //    회원가입 페이지
     @GetMapping("/signup")
     public String signup(UserCreateForm userCreateForm) {
         return "user/signup_form";
     }
 
-    @GetMapping("/connections")
-    public String connections() {
-        return "pages-account-settings-connections";
-    }
-
+    //    회원가입
     @PostMapping("/signup")
     public String signup(@Valid UserCreateForm userCreateForm, BindingResult bindingResult) {
 
@@ -49,6 +46,7 @@ public class UserController {
                     "2개의 패스워드가 일치하지 않습니다.");
             return "user/signup_form";
         }
+
         try {
             userService.create(userCreateForm.getUsername(), userCreateForm.getPassword1(), userCreateForm.getEmail(),
                     userCreateForm.getSex(), userCreateForm.getBirthday());
@@ -65,6 +63,7 @@ public class UserController {
         return "redirect:/";
     }
 
+    //    로그인 페이지
     @GetMapping("/login")
     public String login() {
         return "/user/login_form";
@@ -80,8 +79,6 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
 
-        System.out.println(user);
-
         String savedNm = user.getSavedNm();
         userModifyForm.setUsername(user.getUsername());
         userModifyForm.setEmail(user.getEmail());
@@ -96,7 +93,7 @@ public class UserController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/account")
     public String accountModify(
-                                @Valid UserModifyForm userModifyForm, BindingResult bindingResult, Principal principal) throws IOException {
+            @Valid UserModifyForm userModifyForm, BindingResult bindingResult, Principal principal) throws IOException {
         if (bindingResult.hasErrors()) {
             return "user/user_account";
         }
@@ -152,6 +149,12 @@ public class UserController {
         }
         this.userService.password(user, userPasswordForm.getPassword1());
         return String.format("redirect:/user/logout");
+    }
+
+    // 사용자 활동 페이지
+    @GetMapping("/activity")
+    public String connections() {
+        return "/user/user_activity";
     }
 
 }
