@@ -2,6 +2,7 @@
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 <div layout:fragment="content" class="container my-3 mt-10">
     <h2 class="border-bottom py-2" th:text="${travel.subject}">
     </h2>
@@ -13,41 +14,42 @@
         </div>
         <div class=" text-start" th:text="|Create : ${#temporals.format(travel.createDate, 'yyyy-MM-dd HH:mm')}|"></div>
     </div>
-<!--    <div class="card my-3">-->
         <h1>
-<!--        <div class="card-body">-->
             <div class="badge bg-light text-dark">
-<!--                <div class="">-->
                     <div class="card-text" style="white-space: pre-line;"
                          th:text="|${travel.travelStart} ~ ${travel.travelEnd}|"></div>
-                    <div class="card-text" style="white-space: pre-line;" th:text="|￦ ${travel.expenses}|"></div>
-<!--                </div>-->
             </div>
-<!--        </div>-->
         </h1>
-<!--    </div>-->
     <span class="text-dark mb-0" th:utext="${travel.content}"/>
     <hr>
 
     <div class="my-3">
-        <a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-primary"
-           th:data-uri="@{|/vote/create/${travel.id}|}">
+
+        <!--    추천 버튼 시작-->
+        <a href="javascript:void(0);" th:data-uri="@{|/vote/create/${travel.id}|}"
+           class="recommend btn btn-sm btn-outline-primary" sec:authorize="isAuthenticated()"
+           >
             추천
             <span class="badge rounded-pill bg-success" th:text="${#lists.size(travel.voter)}"></span>
         </a>
+        <!--    추천 버튼 끝-->
 
-        <a th:href="@{|/travel/modify/${travel.id}|}" class="btn btn-sm btn-outline-secondary"
-           sec:authorize="isAuthenticated()"
+        <!--    수정 버튼 시작-->
+        <a href="javascript:void(0);" th:data-uri="@{|/travel/modify/${travel.id}|}"
+           class="modify btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
            th:if="${travel.author != null and #authentication.getPrincipal().getUsername() == travel.author.username}"
            th:text="수정">
         </a>
+        <!--    수정 버튼 끝-->
 
+        <!--    삭제 버튼 시작-->
         <a href="javascript:void(0);" th:data-uri="@{|/travel/delete/${travel.id}|}"
            class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
            th:if="${travel.author != null and #authentication.getPrincipal().getUsername() == travel.author.username}"
            th:text="삭제">
-
         </a>
+        <!--    삭제 버튼 끝-->
+
     </div>
 
     <!--    댓글의 갯수 표시-->
@@ -66,26 +68,37 @@
     </div>
     <!--    답변 반복 끝-->
 
-    <!--    답변 작성-->
+    <!--    답변 작성 시작-->
     <form th:action="@{|/reply/create/${travel.id}|}" method="post" class="my-3">
         <textarea name="content" id="content" rows="10" class="form-control"></textarea>
         <input type="submit" value="답변등록" class="btn btn-primary my-2">
     </form>
+    <!--    답변 작성 끝-->
 
     <script layout:fragment="script" type="text/javascript">
-        const delete_elements = document.getElementsByClassName("delete");
-        Array.from(delete_elements).forEach(function (element){
+
+        const recommend_elements = document.getElementsByClassName("recommend");
+        Array.from(recommend_elements).forEach(function (element){
             element.addEventListener('click', function (){
-                if(confirm("정말로 삭제하시겠습니까?")){
+                if(confirm("[[${message}]]")){
                     location.href=this.dataset.uri;
                 };
             });
         });
 
-        const recommend_elements = document.getElementsByClassName("recommend");
-        Array.from(recommend_elements).forEach(function (element){
+        const modify_elements = document.getElementsByClassName("modify");
+        Array.from(modify_elements).forEach(function (element){
             element.addEventListener('click', function (){
-                if(confirm("정말로 추천하시겠습니까?")){
+                if(confirm("정말로 수정하시겠습니까?")){
+                    location.href=this.dataset.uri;
+                };
+            });
+        });
+
+        const delete_elements = document.getElementsByClassName("delete");
+        Array.from(delete_elements).forEach(function (element){
+            element.addEventListener('click', function (){
+                if(confirm("정말로 삭제하시겠습니까?")){
                     location.href=this.dataset.uri;
                 };
             });

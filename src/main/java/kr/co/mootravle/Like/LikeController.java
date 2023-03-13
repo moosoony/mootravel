@@ -8,6 +8,7 @@ import kr.co.mootravle.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -30,28 +31,30 @@ public class LikeController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create/{id}")
-    public String createlike(@PathVariable("id") Integer id,
+    public String createlike(Model model, @PathVariable("id") Integer id,
                              @Valid Principal principal) {
+        // 사용자의 아이디
+        SiteUser siteUser = this.userService.getUser(principal.getName());
+        Long aid = (long) Math.toIntExact(siteUser.getId());
 
+        // Travel 게시글의 아이디
         Travel travel = this.travelService.getTravel(id);
         Integer tid = travel.getId();
 
-        SiteUser siteUser = this.userService.getUser(principal.getName());
-        System.out.println(siteUser);
-
-        // 사용자의 id
-        Long aid = (long) Math.toIntExact(siteUser.getId());
+        // 좋아요 내역이 없으면
         if (likeService.getLike(aid, tid) == true) {
+
+            // 좋아요
             this.likeService.create(travel, siteUser);
-        } else {
-            System.out.println("좋아요 취소");
+        }
+
+        // 좋아요 내역이 있으면
+        else {
+            // 좋아요 취소
             Integer likeId = Integer.valueOf(this.likeRepository.like(aid, tid));
             likeRepository.deleteById(likeId);
-            System.out.println(likeId);
-//            this.likeRepository.deleteById();
         }
 
         return String.format("redirect:/travel/detail/%s", id);
     }
-
 }
