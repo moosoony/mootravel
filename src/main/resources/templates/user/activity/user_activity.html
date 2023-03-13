@@ -1,0 +1,203 @@
+<html layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+      xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://thymeleaf.org"
+      xmlns:layout="http://www.w3.org/1999/xhtml">
+<body>
+
+<div layout:fragment="content" class="container my-3 mt-10">
+    <div class="mb-7 text-center">
+        <h5 class="text-secondary">Account Settings</h5>
+        <h3 class="fs-xl-10 fs-lg-8 fs-7 fw-bold font-cursive text-capitalize">Account</h3>
+        <hr>
+    </div>
+
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <h4 class="fw-bold py-3 mb-4"><span class="text-muted fw-light">Account Settings /</span> Activity</h4>
+
+        <div class="row">
+            <div class="col-md-12">
+                <ul class="nav nav-pills flex-column flex-md-row mb-3">
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/user/account}">
+                            <i class="bx bx-user me-1"></i>Account</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a class="nav-link " th:href="@{/user/password}">
+                            <i class="bx bx-bell me-1"></i> Password</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link active" th:href="@{/user/activity}">
+                            <i class="bx bx-link-alt me-1"></i> Activity</a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-4">
+        <h5 class="mb-5 card-header">Account Activity</h5>
+        <div class="d-flex align-items-start">
+            <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+                <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-post" type="button" role="tab" aria-controls="v-pills-post"
+                        aria-selected="true">Post
+                </button>
+                <button class="nav-link" id="v-pills-reply-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-reply" type="button" role="tab" aria-controls="v-pills-reply"
+                        aria-selected="false">Reply
+                </button>
+                <button class="nav-link" id="v-pills-replyonpost-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-replyonpost" type="button" role="tab" aria-controls="v-pills-replyonpost"
+                        aria-selected="false">Reply on Post
+                </button>
+                <button class="nav-link" id="v-pills-like-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-like" type="button" role="tab" aria-controls="v-pills-like"
+                        aria-selected="false">Like
+                </button>
+                <button class="nav-link" id="v-pills-question-tab" data-bs-toggle="pill"
+                        data-bs-target="#v-pills-question" type="button" role="tab" aria-controls="v-pills-question"
+                        aria-selected="false">Question
+                </button>
+            </div>
+
+            <!--            Post 시작-->
+            <div class="tab-content" id="v-pills-tabContent" style="width: 100%">
+                <div class="tab-pane fade show active" id="v-pills-post" role="tabpanel"
+                     aria-labelledby="v-pills-post-tab" tabindex="0">
+
+                    <!--테이블 시작-->
+                    <table class="table">
+                        <thead class="table-warning">
+                        <tr class="text-center">
+                            <th>No</th>
+                            <th style="width:50%">Subject</th>
+                            <th>Date</th>
+                            <th>View</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        <tr>
+                            <td>1</td>
+                            <td>Post</td>
+                            <td></td>
+                            <td>1</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!--테이블 끝-->
+
+                </div>
+                <!--                Post 끝-->
+
+                <!--                Reply 시작-->
+                <div class="tab-pane fade" id="v-pills-reply" role="tabpanel" aria-labelledby="v-pills-reply-tab"
+                     tabindex="0">
+                    <!--테이블 시작-->
+                    <table class="table">
+                        <thead class="table-warning">
+                        <tr class="text-center">
+                            <th>번호</th>
+                            <th style="width:50%">제목</th>
+                            <th>작성일시</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        <tr>
+                            <td>1</td>
+                            <td>Reply</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!--테이블 끝-->
+                </div>
+                <!--                Reply 끝-->
+
+                <!--                Reply on Post 시작-->
+                <div class="tab-pane fade" id="v-pills-replyonpost" role="tabpanel" aria-labelledby="v-pills-replyonpost-tab"
+                     tabindex="0">
+                    <!--테이블 시작-->
+                    <table class="table">
+                        <thead class="table-warning">
+                        <tr class="text-center">
+                            <th>No</th>
+                            <th style="width:50%">Subject</th>
+                            <th>Id</th>
+                            <th>Date</th>
+                            <th>View</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        <tr>
+                            <td>1</td>
+                            <td>Reply on Post</td>
+                            <td>moo</td>
+                            <td></td>
+                            <td>1</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!--테이블 끝-->
+                </div>
+                <!--                Reply on Post 끝-->
+
+                <!--                Like 시작-->
+                <div class="tab-pane fade" id="v-pills-like" role="tabpanel" aria-labelledby="v-pills-like-tab"
+                     tabindex="0">
+                    <!--테이블 시작-->
+                    <table class="table">
+                        <thead class="table-warning">
+                        <tr class="text-center">
+                            <th>No</th>
+                            <th style="width:50%">Subject</th>
+                            <th>Id</th>
+                            <th>Date</th>
+                            <th>View</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        <tr>
+                            <td>1</td>
+                            <td>Like</td>
+                            <td>moo</td>
+                            <td></td>
+                            <td>1</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!--테이블 끝-->
+                </div>
+                <!--                Like 끝-->
+
+                <!--                Question 시작-->
+                <div class="tab-pane fade" id="v-pills-question" role="tabpanel" aria-labelledby="v-pills-question-tab"
+                     tabindex="0">
+                    <!--테이블 시작-->
+                    <table class="table">
+                        <thead class="table-warning">
+                        <tr class="text-center">
+                            <th>No</th>
+                            <th style="width:50%">Subject</th>
+                            <th>Date</th>
+                            <th>View</th>
+                        </tr>
+                        </thead>
+                        <tbody class="text-center">
+                        <tr>
+                            <td>1</td>
+                            <td>Question</td>
+                            <td></td>
+                            <td>1</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                    <!--테이블 끝-->
+                </div>
+                <!--                Question 끝-->
+
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -2,16 +2,23 @@ package kr.co.mootravle.User;
 
 import kr.co.mootravle.DataNotFoundException;
 import kr.co.mootravle.Travel.Travel;
+import kr.co.mootravle.Travel.TravelRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.criteria.*;
 import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -19,9 +26,19 @@ import java.util.UUID;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final TravelRepository travelRepository;
     private final PasswordEncoder passwordEncoder;
     @Value("${file.dir}")
     private String fileDir;
+
+    public Page<Travel> getList(int page, Integer id) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page, 9, Sort.by(sorts));
+//        Specification<Travel> spec = findById(id);
+        return this.travelRepository.findAll(pageable);
+    }
+
 
     public SiteUser create(String username, String password, String email, String sex, String birthday) {
         SiteUser user = new SiteUser();
@@ -47,7 +64,7 @@ public class UserService {
     }
 
     //  사용자 계정 수정
-    public void modify(SiteUser user, MultipartFile file, String email, String sex, String birthday)throws IOException {
+    public void modify(SiteUser user, MultipartFile file, String email, String sex, String birthday) throws IOException {
         // 원래 파일 이름 추출
         String origName = file.getOriginalFilename();
 

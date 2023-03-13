@@ -153,8 +153,11 @@ public class UserController {
 
     // 사용자 활동 페이지
     @GetMapping("/activity")
-    public String connections() {
-        return "/user/user_activity";
+    public String connections(Model model) {
+
+        return "/user/activity/user_activity";
     }
+
+
 
 }
