@@ -13,6 +13,10 @@ import java.util.List;
 
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
+    // 사용자가 작성한 문의글
+    @Query("select q from Question q where q.author.id=:id")
+    List<Question> findByAuthorId(Long id);
+
     Question findBySubject(String subject);
 
     Question findBySubjectAndContent(String subject, String content);

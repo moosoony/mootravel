@@ -24,6 +24,8 @@ public class Reply {
 
     private LocalDateTime modifyDate;
 
+    private String TravelSubject;
+
     @ManyToOne
     private Travel travel;
 

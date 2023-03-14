@@ -1,6 +1,10 @@
 package kr.co.mootravle.User;
 
 import kr.co.mootravle.DataNotFoundException;
+import kr.co.mootravle.Question.Question;
+import kr.co.mootravle.Question.QuestionRepository;
+import kr.co.mootravle.Reply.Reply;
+import kr.co.mootravle.Reply.ReplyRepository;
 import kr.co.mootravle.Travel.Travel;
 import kr.co.mootravle.Travel.TravelRepository;
 import lombok.RequiredArgsConstructor;
@@ -26,19 +30,32 @@ import java.util.UUID;
 @Service
 public class UserService {
     private final UserRepository userRepository;
+    private final ReplyRepository replyRepository;
+    private final QuestionRepository questionRepository;
     private final TravelRepository travelRepository;
     private final PasswordEncoder passwordEncoder;
     @Value("${file.dir}")
     private String fileDir;
 
-    public Page<Travel> getList(int page, Integer id) {
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page, 9, Sort.by(sorts));
-//        Specification<Travel> spec = findById(id);
-        return this.travelRepository.findAll(pageable);
+    // 사용자가 작성한 글
+    public List<Travel> getTravelList(Long id) {
+        return this.userRepository.findByAuthorId(id);
     }
 
+    // 사용자가 작성한 댓글
+    public List<Reply> getReplyList(Long id) {
+        return this.replyRepository.findByAuthorId(id);
+    }
+
+    // 사용자가 작성한 댓글의 글
+    public List<Integer> getTravelId(Long id){
+        return this.replyRepository.findByTravelId(id);
+    }
+
+    // 사용자가 문의한 글
+    public List<Question> getQuestionList(Long id){
+        return this.questionRepository.findByAuthorId(id);
+    }
 
     public SiteUser create(String username, String password, String email, String sex, String birthday) {
         SiteUser user = new SiteUser();

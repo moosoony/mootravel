@@ -65,6 +65,10 @@
                 <div class="tab-pane fade show active" id="v-pills-post" role="tabpanel"
                      aria-labelledby="v-pills-post-tab" tabindex="0">
 
+                    <!-- 작성글 갯수 표시 -->
+                    <h5 class="border-bottom my-3 py-2"
+                        th:text="|${#lists.size(travel)}개의 게시글이 있습니다.|"></h5>
+
                     <!--테이블 시작-->
                     <table class="table">
                         <thead class="table-warning">
@@ -75,12 +79,12 @@
                             <th>View</th>
                         </tr>
                         </thead>
-                        <tbody class="text-center">
+                        <tbody class="text-center" th:each="travel : ${travel}">
                         <tr>
                             <td>1</td>
-                            <td>Post</td>
-                            <td></td>
-                            <td>1</td>
+                            <td><a th:href="@{|/travel/detail/${travel.id}|}" th:text="${travel.subject}"/></td>
+                            <td th:text="${#temporals.format(travel.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                            <td th:text="${travel.viewcnt}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -92,20 +96,24 @@
                 <!--                Reply 시작-->
                 <div class="tab-pane fade" id="v-pills-reply" role="tabpanel" aria-labelledby="v-pills-reply-tab"
                      tabindex="0">
+
+                    <!-- 댓글 갯수 표시 -->
+                    <h5 class="border-bottom my-3 py-2"
+                        th:text="|${#lists.size(reply)}개의 댓글이 있습니다.|"></h5>
+
+
                     <!--테이블 시작-->
                     <table class="table">
                         <thead class="table-warning">
                         <tr class="text-center">
-                            <th>번호</th>
                             <th style="width:50%">제목</th>
                             <th>작성일시</th>
                         </tr>
                         </thead>
                         <tbody class="text-center">
-                        <tr>
-                            <td>1</td>
-                            <td>Reply</td>
-                            <td></td>
+                        <tr th:each="reply : ${reply}">
+                            <td th:text="${reply.content}" ></td>
+                            <td th:text="${#temporals.format(reply.createDate, 'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -116,6 +124,7 @@
                 <!--                Reply on Post 시작-->
                 <div class="tab-pane fade" id="v-pills-replyonpost" role="tabpanel" aria-labelledby="v-pills-replyonpost-tab"
                      tabindex="0">
+
                     <!--테이블 시작-->
                     <table class="table">
                         <thead class="table-warning">
@@ -128,12 +137,12 @@
                         </tr>
                         </thead>
                         <tbody class="text-center">
-                        <tr>
+                        <tr th:each="replyonpost : ${replyonpost}">
                             <td>1</td>
-                            <td>Reply on Post</td>
-                            <td>moo</td>
-                            <td></td>
-                            <td>1</td>
+                            <td th:text="${replyonpost.subject}"></td>
+                            <td th:text="${replyonpost.author.username}"></td>
+                            <td th:text="${#temporals.format(replyonpost.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                            <td th:text="${replyonpost.viewcnt}"></td>
                         </tr>
                         </tbody>
                     </table>
@@ -157,7 +166,7 @@
                         </thead>
                         <tbody class="text-center">
                         <tr>
-                            <td>1</td>
+                            <td></td>
                             <td>Like</td>
                             <td>moo</td>
                             <td></td>
@@ -172,6 +181,11 @@
                 <!--                Question 시작-->
                 <div class="tab-pane fade" id="v-pills-question" role="tabpanel" aria-labelledby="v-pills-question-tab"
                      tabindex="0">
+
+                    <h5 class="border-bottom my-3 py-2"
+                        th:text="|${#lists.size(question)}개의 게시글이 있습니다.|"></h5>
+
+
                     <!--테이블 시작-->
                     <table class="table">
                         <thead class="table-warning">
@@ -183,11 +197,11 @@
                         </tr>
                         </thead>
                         <tbody class="text-center">
-                        <tr>
+                        <tr th:each="question : ${question}">
                             <td>1</td>
-                            <td>Question</td>
-                            <td></td>
-                            <td>1</td>
+                            <td ><a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"/></td>
+                            <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                            <td th:text="${question.viewcnt}"></td>
                         </tr>
                         </tbody>
                     </table>

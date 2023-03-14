@@ -1,7 +1,11 @@
 package kr.co.mootravle.User;
 
 import kr.co.mootravle.Answer.AnswerRepository;
+import kr.co.mootravle.Question.Question;
+import kr.co.mootravle.Reply.Reply;
+import kr.co.mootravle.Travel.Travel;
 import kr.co.mootravle.Travel.TravelRepository;
+import kr.co.mootravle.Travel.TravelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
@@ -17,6 +21,9 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @RequiredArgsConstructor
 @Controller
@@ -26,6 +33,8 @@ public class UserController {
     private final UserService userService;
     private final AnswerRepository answerRepository;
     private final TravelRepository travelRepository;
+
+    private final TravelService travelService;
 
     //    회원가입 페이지
     @GetMapping("/signup")
@@ -152,12 +161,50 @@ public class UserController {
     }
 
     // 사용자 활동 페이지
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/activity")
-    public String connections(Model model) {
+    public String connections(Principal principal, Model model) {
+        SiteUser siteuser = this.userService.getUser(principal.getName());
+        Long id = siteuser.getId();
+
+        // 사용자가 작성한 글 가져오기
+        List<Travel> travel = userService.getTravelList(id);
+
+        // 사용자가 작성한 댓글 가져오기
+        List<Reply> reply = userService.getReplyList(id);
+
+        // 사용자가 작성한 댓글의 글 가져오기
+        List<Integer> travelId = userService.getTravelId(id);
+        System.out.println("travelId 리스트 = " + travelId);
+        System.out.println("travelId 사이즈 = " + travelId.size());
+
+//        System.out.println("첫번째 게시글 " + travelRepository.findAllById(Collections.singleton(travelId.get(0))));
+
+        List<Travel> replyonpost = new ArrayList<>();
+
+        for (int i = 0; i < travelId.size(); i++) {
+            replyonpost.add(travelRepository.findAllById(travelId.get(i)));
+
+        }
+        System.out.println("replyonpost 보기" + replyonpost);
+
+
+        // 사용자가 좋아요 한 글 가져오기
+
+
+
+        // 사용자가 문의한 글 가져오기
+        List<Question> question = userService.getQuestionList(id);
+
+
+        model.addAttribute("travel", travel);
+        model.addAttribute("reply", reply);
+        model.addAttribute("replyonpost", replyonpost);
+        model.addAttribute("question", question);
+
 
         return "/user/activity/user_activity";
     }
-
 
 
 }
