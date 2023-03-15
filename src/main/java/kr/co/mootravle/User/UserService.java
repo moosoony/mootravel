@@ -37,24 +37,20 @@ public class UserService {
     @Value("${file.dir}")
     private String fileDir;
 
-    // 사용자가 작성한 글
-    public List<Travel> getTravelList(Long id) {
-        return this.userRepository.findByAuthorId(id);
-    }
 
     // 사용자가 작성한 댓글
-    public List<Reply> getReplyList(Long id) {
-        return this.replyRepository.findByAuthorId(id);
-    }
+//    public List<Reply> getReplyList(Long id) {
+//        return this.replyRepository.findByAuthorId(id);
+//    }
 
     // 사용자가 작성한 댓글의 글
-    public List<Integer> getTravelId(Long id){
+    public List<Travel> getTravelId(Long id){
         return this.replyRepository.findByTravelId(id);
     }
 
     // 사용자가 문의한 글
-    public List<Question> getQuestionList(Long id){
-        return this.questionRepository.findByAuthorId(id);
+    public Page<Question> getQuestionList(Pageable pageable, Long id){
+        return this.questionRepository.findByAuthorId(pageable, id);
     }
 
     public SiteUser create(String username, String password, String email, String sex, String birthday) {

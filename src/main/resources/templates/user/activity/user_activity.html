@@ -47,7 +47,8 @@
                         aria-selected="false">Reply
                 </button>
                 <button class="nav-link" id="v-pills-replyonpost-tab" data-bs-toggle="pill"
-                        data-bs-target="#v-pills-replyonpost" type="button" role="tab" aria-controls="v-pills-replyonpost"
+                        data-bs-target="#v-pills-replyonpost" type="button" role="tab"
+                        aria-controls="v-pills-replyonpost"
                         aria-selected="false">Reply on Post
                 </button>
                 <button class="nav-link" id="v-pills-like-tab" data-bs-toggle="pill"
@@ -81,7 +82,7 @@
                         </thead>
                         <tbody class="text-center" th:each="travel : ${travel}">
                         <tr>
-                            <td>1</td>
+                            <td th:text="${travel.id}"></td>
                             <td><a th:href="@{|/travel/detail/${travel.id}|}" th:text="${travel.subject}"/></td>
                             <td th:text="${#temporals.format(travel.createDate, 'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${travel.viewcnt}"></td>
@@ -89,6 +90,30 @@
                         </tbody>
                     </table>
                     <!--테이블 끝-->
+
+                    <!-- 페이징처리 시작 -->
+                    <div th:if="${!travel.isEmpty()}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!travel.hasPrevious} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{|?page=${travel.number-1}|}">
+                                    <span>이전</span>
+                                </a>
+                            </li>
+                            <li th:each="page: ${#numbers.sequence(0, travel.totalPages-1)}"
+                                th:if="${page >= travel.number-5 and page <= travel.number+5}"
+                                th:classappend="${page == travel.number} ? 'active'"
+                                class="page-item">
+                                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${!travel.hasNext} ? 'disabled'">
+                                <a class="page-link" th:href="@{|?page=${travel.number+1}|}">
+                                    <span>다음</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 페이징처리 끝 -->
 
                 </div>
                 <!--                Post 끝-->
@@ -98,31 +123,69 @@
                      tabindex="0">
 
                     <!-- 댓글 갯수 표시 -->
-                    <h5 class="border-bottom my-3 py-2"
-                        th:text="|${#lists.size(reply)}개의 댓글이 있습니다.|"></h5>
+                    <div>
+                        <h5 class="border-bottom my-3 py-2"
+                            th:text="|${#lists.size(reply)}개의 댓글이 있습니다.|">
+
+                        </h5>
+                        <div class="btn btn-primary mb-3">삭제하기</div>
+                    </div>
 
 
                     <!--테이블 시작-->
                     <table class="table">
                         <thead class="table-warning">
                         <tr class="text-center">
-                            <th style="width:50%">제목</th>
-                            <th>작성일시</th>
+                            <th style="width:10%"><label class="checkbox-inline">
+                                <input type="checkbox" name="chk" class="chk" onclick="allChecked()" value="">
+                            </label></th>
+                            <th>No</th>
+                            <th style="width:50%">Subject</th>
+                            <th>Date</th>
                         </tr>
                         </thead>
                         <tbody class="text-center">
                         <tr th:each="reply : ${reply}">
-                            <td th:text="${reply.content}" ></td>
+                            <td><label class="checkbox-inline">
+                                <input type="checkbox" name="chk" class="chk" onclick="chkClicked()" value="">
+                            </label></td>
+                            <td th:text="${reply.id}"></td>
+                            <td th:text="${reply.content}"></td>
                             <td th:text="${#temporals.format(reply.createDate, 'yyyy-MM-dd HH:mm')}"></td>
                         </tr>
                         </tbody>
                     </table>
                     <!--테이블 끝-->
+
+                    <!-- 페이징처리 시작 -->
+                    <div th:if="${!reply.isEmpty()}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!reply.hasPrevious} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{|?page=${reply.number-1}|}">
+                                    <span>이전</span>
+                                </a>
+                            </li>
+                            <li th:each="page: ${#numbers.sequence(0, reply.totalPages-1)}"
+                                th:if="${page >= reply.number-5 and page <= reply.number+5}"
+                                th:classappend="${page == reply.number} ? 'active'"
+                                class="page-item">
+                                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${!reply.hasNext} ? 'disabled'">
+                                <a class="page-link" th:href="@{|?page=${reply.number+1}|}">
+                                    <span>다음</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 페이징처리 끝 -->
                 </div>
                 <!--                Reply 끝-->
 
                 <!--                Reply on Post 시작-->
-                <div class="tab-pane fade" id="v-pills-replyonpost" role="tabpanel" aria-labelledby="v-pills-replyonpost-tab"
+                <div class="tab-pane fade" id="v-pills-replyonpost" role="tabpanel"
+                     aria-labelledby="v-pills-replyonpost-tab"
                      tabindex="0">
 
                     <!--테이블 시작-->
@@ -138,8 +201,9 @@
                         </thead>
                         <tbody class="text-center">
                         <tr th:each="replyonpost : ${replyonpost}">
-                            <td>1</td>
-                            <td th:text="${replyonpost.subject}"></td>
+                            <td th:text="${replyonpost.id}"></td>
+                            <td><a th:href="@{|/travel/detail/${replyonpost.id}|}" th:text="${replyonpost.subject}"></a>
+                            </td>
                             <td th:text="${replyonpost.author.username}"></td>
                             <td th:text="${#temporals.format(replyonpost.createDate, 'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${replyonpost.viewcnt}"></td>
@@ -147,6 +211,8 @@
                         </tbody>
                     </table>
                     <!--테이블 끝-->
+
+
                 </div>
                 <!--                Reply on Post 끝-->
 
@@ -165,13 +231,13 @@
                         </tr>
                         </thead>
                         <tbody class="text-center">
-                        <tr>
-                            <td></td>
-                            <td>Like</td>
-                            <td>moo</td>
-                            <td></td>
-                            <td>1</td>
-                        </tr>
+<!--                                                <tr th:text="like : ${like}">-->
+<!--                                                    <td th:text="${like.id}"></td>-->
+<!--                                                    <td>Like</td>-->
+<!--                                                    <td>moo</td>-->
+<!--                                                    <td></td>-->
+<!--                                                    <td>1</td>-->
+<!--                                                </tr>-->
                         </tbody>
                     </table>
                     <!--테이블 끝-->
@@ -198,20 +264,46 @@
                         </thead>
                         <tbody class="text-center">
                         <tr th:each="question : ${question}">
-                            <td>1</td>
-                            <td ><a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"/></td>
+                            <td th:text="${question.id}"></td>
+                            <td><a th:href="@{|/question/detail/${question.id}|}" th:text="${question.subject}"/></td>
                             <td th:text="${#temporals.format(question.createDate, 'yyyy-MM-dd HH:mm')}"></td>
                             <td th:text="${question.viewcnt}"></td>
                         </tr>
                         </tbody>
                     </table>
                     <!--테이블 끝-->
+
+                    <!-- 페이징처리 시작 -->
+                    <div th:if="${!question.isEmpty()}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!question.hasPrevious} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{|?page=${question.number-1}|}">
+                                    <span>이전</span>
+                                </a>
+                            </li>
+                            <li th:each="page: ${#numbers.sequence(0, question.totalPages-1)}"
+                                th:if="${page >= question.number-5 and page <= question.number+5}"
+                                th:classappend="${page == question.number} ? 'active'"
+                                class="page-item">
+                                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${!question.hasNext} ? 'disabled'">
+                                <a class="page-link" th:href="@{|?page=${question.number+1}|}">
+                                    <span>다음</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 페이징처리 끝 -->
+
                 </div>
                 <!--                Question 끝-->
 
             </div>
         </div>
     </div>
+
 </div>
 </body>
 </html>

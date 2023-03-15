@@ -4,9 +4,12 @@ import kr.co.mootravle.Travel.Travel;
 import kr.co.mootravle.User.SiteUser;
 import lombok.Getter;
 import lombok.Setter;
+import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
+@DynamicInsert
 @Table(name = "travel_Like")
 @Getter
 @Setter
@@ -22,4 +25,6 @@ public class Like {
     @ManyToOne
 
     private SiteUser author;
+
+    private LocalDateTime createDate;
 }

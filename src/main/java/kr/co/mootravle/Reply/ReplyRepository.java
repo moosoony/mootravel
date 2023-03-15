@@ -1,14 +1,23 @@
 package kr.co.mootravle.Reply;
 
+import kr.co.mootravle.Travel.Travel;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
 public interface ReplyRepository extends JpaRepository<Reply, Integer> {
-    @Query("Select r from Reply r where r.author.id=:id")
-    public List<Reply> findByAuthorId(Long id);
 
-    @Query("Select distinct r.travel.id from Reply r where r.author.id=:id")
-    public List<Integer> findByTravelId(Long id);
+    //    페이징 구현 메서드
+    Page<Reply> findAll(Pageable pageable);
+
+    // 사용자가 작성한 댓글
+    @Query("Select r from Reply r where r.author.id=:id")
+    Page<Reply> findByAuthorId(Pageable pageable,Long id);
+
+    // 사용자가 작성한 댓글의 글 페이징
+    @Query("Select distinct r.travel from Reply r where r.author.id=:id")
+    List<Travel> findByTravelId(Long id);
 }

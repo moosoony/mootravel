@@ -1,13 +1,18 @@
 package kr.co.mootravle.User;
 
 import kr.co.mootravle.Answer.AnswerRepository;
+import kr.co.mootravle.Like.LikeService;
 import kr.co.mootravle.Question.Question;
+import kr.co.mootravle.Question.QuestionService;
 import kr.co.mootravle.Reply.Reply;
+import kr.co.mootravle.Reply.ReplyRepository;
+import kr.co.mootravle.Reply.ReplyService;
 import kr.co.mootravle.Travel.Travel;
 import kr.co.mootravle.Travel.TravelRepository;
 import kr.co.mootravle.Travel.TravelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -16,6 +21,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -33,8 +39,13 @@ public class UserController {
     private final UserService userService;
     private final AnswerRepository answerRepository;
     private final TravelRepository travelRepository;
+    private final ReplyRepository replyRepository;
 
     private final TravelService travelService;
+    private final ReplyService replyService;
+    private final LikeService likeService;
+    private final QuestionService questionService;
+
 
     //    회원가입 페이지
     @GetMapping("/signup")
@@ -163,44 +174,54 @@ public class UserController {
     // 사용자 활동 페이지
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/activity")
-    public String connections(Principal principal, Model model) {
+    public String activity(Principal principal, Model model,
+                           @RequestParam(value = "page", defaultValue = "0") int page) {
         SiteUser siteuser = this.userService.getUser(principal.getName());
         Long id = siteuser.getId();
 
         // 사용자가 작성한 글 가져오기
-        List<Travel> travel = userService.getTravelList(id);
+//        List<Travel> travel = userService.getTravelList(id);
+        Page<Travel> travelPaging = travelService.getList(page, id);
 
         // 사용자가 작성한 댓글 가져오기
-        List<Reply> reply = userService.getReplyList(id);
+        Page<Reply> replyPaging = this.replyService.getList(page, id);
 
-        // 사용자가 작성한 댓글의 글 가져오기
-        List<Integer> travelId = userService.getTravelId(id);
-        System.out.println("travelId 리스트 = " + travelId);
-        System.out.println("travelId 사이즈 = " + travelId.size());
+        System.out.println("***********사용자가 작성한 댓글 : " + replyPaging);
 
-//        System.out.println("첫번째 게시글 " + travelRepository.findAllById(Collections.singleton(travelId.get(0))));
+//         사용자가 작성한 댓글의 글 가져오기
+
+        List<Travel> travelId = userService.getTravelId(id);
+//        System.out.println("travelId 리스트 = " + travelId);
+//        System.out.println("travelId 사이즈 = " + travelId.size());
+
+//        System.out.println("첫번째 게시글 " + travelRepository.findAllById(Collections.singleton((travelId.get(0).getId()))));
 
         List<Travel> replyonpost = new ArrayList<>();
 
         for (int i = 0; i < travelId.size(); i++) {
-            replyonpost.add(travelRepository.findAllById(travelId.get(i)));
-
+            replyonpost.add(travelRepository.findAllById(travelId.get(i).getId()));
         }
-        System.out.println("replyonpost 보기" + replyonpost);
+//        System.out.println("replyonpost 보기" + replyonpost);
+
+//        List<Travel> replyServiceTravelId= this.replyService.getTravelId(id);
+//        System.out.println("@@@@@@사용자가 작성한 댓글의 글 가져오기@@@@"+replyServiceTravelId);
 
 
         // 사용자가 좋아요 한 글 가져오기
-
+//        Page<Integer> likePaging = this.likeService.getList(page, id);
+        List<Travel> likePaging = this.likeService.getLikeByTravel(id);
+        System.out.println("사용자가 좋아요 한 글 ---------" + likePaging);
 
 
         // 사용자가 문의한 글 가져오기
-        List<Question> question = userService.getQuestionList(id);
+        Page<Question> questionPaging = questionService.getList(page, id);
 
 
-        model.addAttribute("travel", travel);
-        model.addAttribute("reply", reply);
+        model.addAttribute("travel", travelPaging);
+        model.addAttribute("reply", replyPaging);
         model.addAttribute("replyonpost", replyonpost);
-        model.addAttribute("question", question);
+        model.addAttribute("like", likePaging);
+        model.addAttribute("question", questionPaging);
 
 
         return "/user/activity/user_activity";

@@ -2,6 +2,7 @@ package kr.co.mootravle.Travel;
 
 import kr.co.mootravle.DataNotFoundException;
 import kr.co.mootravle.User.SiteUser;
+import kr.co.mootravle.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -28,10 +29,34 @@ import java.util.UUID;
 @Service
 public class TravelService {
     private final TravelRepository travelRepository;
+    private final UserService userService;
     @Value("${file.dir}")
     private String fileDir;
 
-    //    페이징 구현 서비스
+    //    Account/Activity/Post 페이징 구현 서비스
+    public Page<Travel> getList(int page, Long id){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page,10, Sort.by(sorts));
+        return this.travelRepository.findByAuthorId(pageable,id);
+    }
+
+    //    Account/Activity/Reply on Post 페이징 구현 서비스
+//    public Page<Travel> getReplyonPostList(int page, Long id){
+//        List<Travel> travelId = userService.getTravelId(id);
+//        Page<Travel> replyonpost = null;
+//        for (int i = 0; i < travelId.size(); i++) {
+//            replyonpost= (Page<Travel>) travelRepository.findAllById(travelId.get(i).getId());
+//        }
+//
+//        List<Sort.Order> sorts = new ArrayList<>();
+//        sorts.add(Sort.Order.desc("createDate"));
+//        Pageable pageable = PageRequest.of(page,10, Sort.by(sorts));
+//        return this.travelRepository.findByAuthorId(pageable,id);
+//    }
+
+
+    //    페이징, 검색 키워드 구현 서비스
     public Page<Travel> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));

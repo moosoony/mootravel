@@ -15,7 +15,7 @@ import java.util.List;
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
     // 사용자가 작성한 문의글
     @Query("select q from Question q where q.author.id=:id")
-    List<Question> findByAuthorId(Long id);
+    Page<Question> findByAuthorId(Pageable pageable,Long id);
 
     Question findBySubject(String subject);
 
