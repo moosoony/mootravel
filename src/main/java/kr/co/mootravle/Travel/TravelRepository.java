@@ -12,27 +12,21 @@ import java.util.List;
 
 @Repository
 public interface TravelRepository extends JpaRepository<Travel, Integer> {
-    
+
     // 조회수 증가 메서드
     @Modifying
     @Query(value = "update Travel t set t.viewcnt=t.viewcnt+1 where t.id=:id")
     void updateCount(Integer id);
 
-    // 사용자가 작성한 게시글
+    // 사용자가 작성한 게시글 페이징
     @Query("select t from Travel t where t.author.id =:id")
-    Page<Travel> findByAuthorId(Pageable pageable,Long id);
-
-    // 사용자가 작성한 게시글
-    @Query("select t from Travel t where t.author.id =:id")
-    List<Travel> findByTravel(Long id);
+    Page<Travel> findByTravel(Pageable pageable, Long id);
 
     //    페이징 구현 메서드
     Page<Travel> findAll(Pageable pageable);
 
     //    검색 구현 메서드
     Page<Travel> findAll(Specification<Travel> spec, Pageable pageable);
-
-//    List<Travel> findAllByUserId(Pageable pageable, Integer id);
 
 
     Travel findAllById(Integer id);

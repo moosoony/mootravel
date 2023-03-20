@@ -26,17 +26,12 @@ public class LikeService {
 
     private final TravelRepository travelRepository;
 
-    //    좋아요한 게시글 조회
-    public List<Travel> getLikeByTravel(Long id) {
-        return travelRepository.findByTravel(id);
-    }
-
-    //    Account/Activity/Like 페이징 구현 서비스
-    public Page<Integer> getList(int page, Long id) {
+    //    좋아요한 게시글 페이징 구현 서비스
+    public Page<Travel> getLikeByTravel(int page, Long id) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
-        return this.likeRepository.LikeByTravelId(pageable, id);
+        return travelRepository.findByTravel(pageable, id);
     }
 
     public void create(Travel travel, SiteUser author) {
@@ -55,13 +50,5 @@ public class LikeService {
             return false;
         }
     }
-
-    //    사용자가 좋아요 한 글
-//    public Page<Travel> getLikeByTravelId(int page){
-//        List<Sort.Order> sorts = new ArrayList<>();
-//        sorts.add(Sort.Order.desc("createDate"));
-//        Pageable pageable = PageRequest.of(page,10, Sort.by(sorts));
-//        return this.likeRepository.findByTravelId(id);
-//    }
 
 }

@@ -29,7 +29,6 @@ import java.util.UUID;
 @Service
 public class TravelService {
     private final TravelRepository travelRepository;
-    private final UserService userService;
     @Value("${file.dir}")
     private String fileDir;
 
@@ -38,7 +37,7 @@ public class TravelService {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page,10, Sort.by(sorts));
-        return this.travelRepository.findByAuthorId(pageable,id);
+        return this.travelRepository.findByTravel(pageable,id);
     }
 
     //    Account/Activity/Reply on Post 페이징 구현 서비스

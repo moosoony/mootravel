@@ -231,16 +231,41 @@
                         </tr>
                         </thead>
                         <tbody class="text-center">
-<!--                                                <tr th:text="like : ${like}">-->
-<!--                                                    <td th:text="${like.id}"></td>-->
-<!--                                                    <td>Like</td>-->
-<!--                                                    <td>moo</td>-->
-<!--                                                    <td></td>-->
-<!--                                                    <td>1</td>-->
-<!--                                                </tr>-->
+                                                <tr th:each="like : ${like}">
+                                                    <td th:text="${like.id}"></td>
+                                                    <td><a th:href="@{|/travel/detail/${like.id}|}" th:text="${like.subject}"></a></td>
+                                                    <td th:text="${like.author.username}"></td>
+                                                    <td th:text="${#temporals.format(like.createDate, 'yyyy-MM-dd HH:mm')}"></td>
+                                                    <td th:text="${like.viewcnt}"></td>
+                                                </tr>
                         </tbody>
                     </table>
                     <!--테이블 끝-->
+
+                    <!-- 페이징처리 시작 -->
+                    <div th:if="${!like.isEmpty()}">
+                        <ul class="pagination justify-content-center">
+                            <li class="page-item" th:classappend="${!like.hasPrevious} ? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{|?page=${like.number-1}|}">
+                                    <span>이전</span>
+                                </a>
+                            </li>
+                            <li th:each="page: ${#numbers.sequence(0, like.totalPages-1)}"
+                                th:if="${page >= like.number-5 and page <= like.number+5}"
+                                th:classappend="${page == like.number} ? 'active'"
+                                class="page-item">
+                                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                            </li>
+                            <li class="page-item" th:classappend="${!like.hasNext} ? 'disabled'">
+                                <a class="page-link" th:href="@{|?page=${like.number+1}|}">
+                                    <span>다음</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                    <!-- 페이징처리 끝 -->
+
                 </div>
                 <!--                Like 끝-->
 

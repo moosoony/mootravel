@@ -180,7 +180,6 @@ public class UserController {
         Long id = siteuser.getId();
 
         // 사용자가 작성한 글 가져오기
-//        List<Travel> travel = userService.getTravelList(id);
         Page<Travel> travelPaging = travelService.getList(page, id);
 
         // 사용자가 작성한 댓글 가져오기
@@ -201,17 +200,9 @@ public class UserController {
         for (int i = 0; i < travelId.size(); i++) {
             replyonpost.add(travelRepository.findAllById(travelId.get(i).getId()));
         }
-//        System.out.println("replyonpost 보기" + replyonpost);
-
-//        List<Travel> replyServiceTravelId= this.replyService.getTravelId(id);
-//        System.out.println("@@@@@@사용자가 작성한 댓글의 글 가져오기@@@@"+replyServiceTravelId);
-
 
         // 사용자가 좋아요 한 글 가져오기
-//        Page<Integer> likePaging = this.likeService.getList(page, id);
-        List<Travel> likePaging = this.likeService.getLikeByTravel(id);
-        System.out.println("사용자가 좋아요 한 글 ---------" + likePaging);
-
+        Page<Travel> likePaging = this.likeService.getLikeByTravel(page, id);
 
         // 사용자가 문의한 글 가져오기
         Page<Question> questionPaging = questionService.getList(page, id);
