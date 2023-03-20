@@ -128,9 +128,13 @@
                             th:text="|${#lists.size(reply)}개의 댓글이 있습니다.|">
 
                         </h5>
-                        <div class="btn btn-primary mb-3">삭제하기</div>
+
                     </div>
 
+                    <form th:action method="POST">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                        <div> <a href='javascript:boardDelete();' class="btn btn-primary mb-3">삭제하기</a></div>
 
                     <!--테이블 시작-->
                     <table class="table">
@@ -180,6 +184,7 @@
                         </ul>
                     </div>
                     <!-- 페이징처리 끝 -->
+                    </form>
                 </div>
                 <!--                Reply 끝-->
 
