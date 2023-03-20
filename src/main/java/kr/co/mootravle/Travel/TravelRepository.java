@@ -29,7 +29,16 @@ public interface TravelRepository extends JpaRepository<Travel, Integer> {
     Page<Travel> findAll(Specification<Travel> spec, Pageable pageable);
 
 
+//    Travel findAllById(Integer id);
+
+    // 사용자가 작성한 댓글의 글 (페이징 안하고 성공)
     Travel findAllById(Integer id);
+
+
+//     사용자가 작성한 댓글의 글 페이징 처리 중
+    List<Travel>findAllById(Pageable pageable, Integer id);
+
+
 
     // Top3 구현 메서드
 //    @Query("select "

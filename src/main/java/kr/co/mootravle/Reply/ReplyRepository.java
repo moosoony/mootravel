@@ -21,3 +21,4 @@ public interface ReplyRepository extends JpaRepository<Reply, Integer> {
     @Query("Select distinct r.travel from Reply r where r.author.id=:id")
     List<Travel> findByTravelId(Long id);
 }
+

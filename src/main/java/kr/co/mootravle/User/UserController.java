@@ -18,17 +18,12 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -37,10 +32,6 @@ import java.util.List;
 public class UserController {
 
     private final UserService userService;
-    private final AnswerRepository answerRepository;
-    private final TravelRepository travelRepository;
-    private final ReplyRepository replyRepository;
-
     private final TravelService travelService;
     private final ReplyService replyService;
     private final LikeService likeService;
@@ -189,17 +180,23 @@ public class UserController {
 
 //         사용자가 작성한 댓글의 글 가져오기
 
-        List<Travel> travelId = userService.getTravelId(id);
-//        System.out.println("travelId 리스트 = " + travelId);
-//        System.out.println("travelId 사이즈 = " + travelId.size());
+//        List<Travel> travelId = userService.getTravelId(id);
+////        System.out.println("travelId 리스트 = " + travelId);
+////        System.out.println("travelId 사이즈 = " + travelId.size());
+//
+////        System.out.println("첫번째 게시글 " + travelRepository.findAllById(Collections.singleton((travelId.get(0).getId()))));
+//
 
-//        System.out.println("첫번째 게시글 " + travelRepository.findAllById(Collections.singleton((travelId.get(0).getId()))));
+//        System.out.println("******사용자가 작성한 댓글의 글 가져오기" + replyonpost);
 
-        List<Travel> replyonpost = new ArrayList<>();
+        // 사용자가 작성한 댓글의 글 (페이징 안하고 성공)
+        List<Travel> replyonpost = this.userService.getTravelId(page, id);
+        System.out.println("@@@@@@@@@@@사용자가 작성한 댓글의 글 가져오기" + replyonpost);
 
-        for (int i = 0; i < travelId.size(); i++) {
-            replyonpost.add(travelRepository.findAllById(travelId.get(i).getId()));
-        }
+
+//        for (int i = 0; i < travelId.size(); i++) {
+//            replyonpost.add(travelRepository.findAllById(travelId.get(i).getId()));
+//        }
 
         // 사용자가 좋아요 한 글 가져오기
         Page<Travel> likePaging = this.likeService.getLikeByTravel(page, id);
@@ -218,5 +215,15 @@ public class UserController {
         return "/user/activity/user_activity";
     }
 
-
+    //    Account/Reply On Post 체크박스 삭제
+    @PreAuthorize("isAuthenticated()")
+    @CrossOrigin(origins = "*", allowedHeaders = "*")
+    @PostMapping("/delete")
+    public String delete(@RequestParam List<String> replyIds) {
+        for (int i = 0; i < replyIds.size(); i++) {
+            Integer id = Integer.valueOf(replyIds.get(i));
+            replyService.delete(id);
+        }
+        return "redirect:/user/activity";
+    }
 }

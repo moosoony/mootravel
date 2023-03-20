@@ -1,4 +1,4 @@
-<html layout:decorate="~{layout}" xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5"
+<html lagn="ko" layout:decorate="~{layout}"
       xmlns="http://www.w3.org/1999/xhtml"
       xmlns:th="http://thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml">
@@ -137,7 +137,7 @@
                         <thead class="table-warning">
                         <tr class="text-center">
                             <th style="width:10%"><label class="checkbox-inline">
-                                <input type="checkbox" name="chk" class="chk" onclick="allChecked()" value="">
+                                <input type="checkbox" id="allCheckBox" onclick="allChecked()">
                             </label></th>
                             <th>No</th>
                             <th style="width:50%">Subject</th>
@@ -147,7 +147,7 @@
                         <tbody class="text-center">
                         <tr th:each="reply : ${reply}">
                             <td><label class="checkbox-inline">
-                                <input type="checkbox" name="chk" class="chk" onclick="chkClicked()" value="">
+                                <input type="checkbox" name="chk" class="chk" onclick="chkClicked()" th:value="${reply.id}">
                             </label></td>
                             <td th:text="${reply.id}"></td>
                             <td th:text="${reply.content}"></td>
@@ -212,6 +212,29 @@
                     </table>
                     <!--테이블 끝-->
 
+                    <!-- 페이징처리 시작 -->
+<!--                    <div th:if="${!replyonpost.isEmpty()}">-->
+<!--                        <ul class="pagination justify-content-center">-->
+<!--                            <li class="page-item" th:classappend="${!replyonpost.hasPrevious} ? 'disabled'">-->
+<!--                                <a class="page-link"-->
+<!--                                   th:href="@{|?page=${replyonpost.number-1}|}">-->
+<!--                                    <span>이전</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                            <li th:each="page: ${#numbers.sequence(0, replyonpost.totalPages-1)}"-->
+<!--                                th:if="${page >= replyonpost.number-5 and page <= replyonpost.number+5}"-->
+<!--                                th:classappend="${page == replyonpost.number} ? 'active'"-->
+<!--                                class="page-item">-->
+<!--                                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>-->
+<!--                            </li>-->
+<!--                            <li class="page-item" th:classappend="${!replyonpost.hasNext} ? 'disabled'">-->
+<!--                                <a class="page-link" th:href="@{|?page=${replyonpost.number+1}|}">-->
+<!--                                    <span>다음</span>-->
+<!--                                </a>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </div>-->
+                    <!-- 페이징처리 끝 -->
 
                 </div>
                 <!--                Reply on Post 끝-->
@@ -331,4 +354,100 @@
 
 </div>
 </body>
+
+<script layout:fragment="script" type='text/javascript'>
+    //체크박스 전체 선택 클릭 이벤트
+    function allChecked(target) {
+
+//전체 체크박스 버튼
+        const checkbox = document.getElementById('allCheckBox');
+
+//전체 체크박스 버튼 체크 여부
+        const is_checked = checkbox.checked;
+
+//전체 체크박스 제외한 모든 체크박스
+        if (is_checked) {
+//체크박스 전체 체크
+            chkAllChecked()
+        } else {
+//체크박스 전체 해제
+            chkAllUnChecked()
+        }
+    }
+
+    //자식 체크박스 클릭 이벤트
+    function chkClicked() {
+
+//체크박스 전체개수
+        const allCount = document.querySelectorAll(".chk").length;
+
+//체크된 체크박스 전체개수
+        const query = 'input[name="chk"]:checked'
+        const selectedElements = document.querySelectorAll(query)
+        const selectedElementsCnt = selectedElements.length;
+
+//체크박스 전체개수와 체크된 체크박스 전체개수가 같으면 전체 체크박스 체크
+        if (allCount == selectedElementsCnt) {
+            document.getElementById('allCheckBox').checked = true;
+        }
+
+//같지않으면 전체 체크박스 해제
+        else {
+            document.getElementById('allCheckBox').checked = false;
+        }
+    }
+
+    //체크박스 전체 체크
+    function chkAllChecked() {
+        document.querySelectorAll(".chk").forEach(function (v, i) {
+            v.checked = true;
+        });
+    }
+
+    //체크박스 전체 체크 해제
+    function chkAllUnChecked() {
+        document.querySelectorAll(".chk").forEach(function (v, i) {
+            v.checked = false;
+        });
+    }
+
+    //글삭제
+    function boardDelete() {
+//체크박스 체크된 항목
+        const query = 'input[name="chk"]:checked'
+        const selectedElements = document.querySelectorAll(query)
+
+//체크박스 체크된 항목의 개수
+        const selectedElementsCnt = selectedElements.length;
+
+        if (selectedElementsCnt == 0) {
+            alert("삭제할 항목을 선택해주세요.");
+            return false;
+        } else {
+            if (confirm("정말로 삭제하시겠습니까?")) {
+//배열생성
+                const arr = new Array(selectedElementsCnt);
+
+                document.querySelectorAll('input[name="chk"]:checked').forEach(function (v, i) {
+                    arr[i] = v.value;
+                });
+
+                const form = document.createElement('form');
+                form.setAttribute('method', 'post');        //Post 메소드 적용
+                form.setAttribute('action', '/delete');
+
+                var input1 = document.createElement('input');
+                input1.setAttribute("type", "hidden");
+                input1.setAttribute("name", "boardIds");
+                input1.setAttribute("value", arr);
+                form.appendChild(input1);
+                console.log(form);
+                document.body.appendChild(form);
+                form.submit();
+            }
+        }
+    }
+
+</script>
 </html>
+

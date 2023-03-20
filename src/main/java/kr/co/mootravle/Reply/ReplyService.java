@@ -1,5 +1,6 @@
 package kr.co.mootravle.Reply;
 
+import kr.co.mootravle.Question.Question;
 import kr.co.mootravle.Travel.Travel;
 import kr.co.mootravle.Travel.TravelRepository;
 import kr.co.mootravle.User.SiteUser;
@@ -57,5 +58,10 @@ public class ReplyService {
         reply.setTravelSubject(travel.getSubject());
         reply.setAuthor(author);
         this.replyRepository.save(reply);
+    }
+
+    //    삭제하기 서비스
+    public void delete(Integer id) {
+        this.replyRepository.deleteById(id);
     }
 }
