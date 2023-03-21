@@ -38,7 +38,9 @@ public interface TravelRepository extends JpaRepository<Travel, Integer> {
 //     사용자가 작성한 댓글의 글 페이징 처리 중
     List<Travel>findAllById(Pageable pageable, Integer id);
 
-
+//    사용자가 작성한 게시글 수 조회
+    @Query("select count(t) from Travel t where t.author.id =:id")
+    Long getCount(Long id);
 
     // Top3 구현 메서드
 //    @Query("select "

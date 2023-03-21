@@ -104,4 +104,9 @@ public class QuestionService {
             }
         };
     }
+
+    // 사용자가 작성한 문의글의 수
+    public Long getCount(Long id){
+        return this.questionRepository.getCount(id);
+    }
 }

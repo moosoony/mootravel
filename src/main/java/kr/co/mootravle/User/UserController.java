@@ -1,6 +1,5 @@
 package kr.co.mootravle.User;
 
-import kr.co.mootravle.Answer.AnswerRepository;
 import kr.co.mootravle.Like.LikeService;
 import kr.co.mootravle.Question.Question;
 import kr.co.mootravle.Question.QuestionService;
@@ -18,7 +17,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -36,7 +38,6 @@ public class UserController {
     private final ReplyService replyService;
     private final LikeService likeService;
     private final QuestionService questionService;
-
 
     //    회원가입 페이지
     @GetMapping("/signup")
@@ -170,15 +171,17 @@ public class UserController {
         SiteUser siteuser = this.userService.getUser(principal.getName());
         Long id = siteuser.getId();
 
-        // 사용자가 작성한 글 가져오기
+        // 사용자가 작성한 게시글
         Page<Travel> travelPaging = travelService.getList(page, id);
+        // 사용자가 작성한 게시글 수
+        Long postCount = this.travelService.getCount(id);
 
-        // 사용자가 작성한 댓글 가져오기
+        // 사용자가 작성한 댓글
         Page<Reply> replyPaging = this.replyService.getList(page, id);
+        // 사용자가 작성한 댓글 수
+        Long replyCount = this.replyService.getCount(id);
 
-        System.out.println("***********사용자가 작성한 댓글 : " + replyPaging);
-
-//         사용자가 작성한 댓글의 글 가져오기
+//         사용자가 작성한 댓글의 글
 
 //        List<Travel> travelId = userService.getTravelId(id);
 ////        System.out.println("travelId 리스트 = " + travelId);
@@ -198,18 +201,29 @@ public class UserController {
 //            replyonpost.add(travelRepository.findAllById(travelId.get(i).getId()));
 //        }
 
-        // 사용자가 좋아요 한 글 가져오기
+        // 사용자가 좋아요 한 글
         Page<Travel> likePaging = this.likeService.getLikeByTravel(page, id);
+        // 사용자가 좋아요한 게시글 수
+        Long likeCount = this.likeService.getCount(id);
 
-        // 사용자가 문의한 글 가져오기
+        // 사용자가 문의한 글
         Page<Question> questionPaging = questionService.getList(page, id);
-
+        // 사용자가 문의한 글 수
+        Long questionCount = this.questionService.getCount(id);
 
         model.addAttribute("travel", travelPaging);
+        model.addAttribute("postCount", postCount);
+
         model.addAttribute("reply", replyPaging);
+        model.addAttribute("replyCount", replyCount);
+
         model.addAttribute("replyonpost", replyonpost);
+
         model.addAttribute("like", likePaging);
+        model.addAttribute("likeCount", likeCount);
+
         model.addAttribute("question", questionPaging);
+        model.addAttribute("questionCount", questionCount);
 
 
         return "/user/activity/user_activity";

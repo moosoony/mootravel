@@ -64,4 +64,9 @@ public class ReplyService {
     public void delete(Integer id) {
         this.replyRepository.deleteById(id);
     }
+
+    // 사용자가 작성한 댓글 수
+    public Long getCount(Long id) {
+        return this.replyRepository.getCount(id);
+    }
 }

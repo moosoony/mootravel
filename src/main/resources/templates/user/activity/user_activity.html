@@ -73,9 +73,11 @@
                 <div class="tab-pane fade show active" id="v-pills-post" role="tabpanel"
                      aria-labelledby="v-pills-post-tab" tabindex="0">
 
-                    <!-- 작성글 갯수 표시 -->
-                    <h5 class="border-bottom my-3 py-2"
-                        th:text="|${#lists.size(travel)}개의 게시글이 있습니다.|"></h5>
+                    <!-- 사용자가 작성한 게시글 수 표시 -->
+                    <div>
+                        <h5 class="border-bottom my-3 py-2" th:text="|${postCount}개의 게시글이 있습니다.|"></h5>
+                    </div>
+
 
                     <!--테이블 시작-->
                     <table class="table">
@@ -129,13 +131,11 @@
                 <div class="tab-pane fade" id="v-pills-reply" role="tabpanel" aria-labelledby="v-pills-reply-tab"
                      tabindex="0">
 
-                    <!-- 댓글 갯수 표시 -->
+                    <!-- 사용자가 작성한 댓글 갯수 표시 -->
                     <div>
                         <h5 class="border-bottom my-3 py-2"
-                            th:text="|${#lists.size(reply)}개의 댓글이 있습니다.|">
-
+                            th:text="|${replyCount}개의 댓글이 있습니다.|">
                         </h5>
-
                     </div>
 
                     <form id="deleteForm" method="POST">
@@ -200,6 +200,12 @@
                      aria-labelledby="v-pills-replyonpost-tab"
                      tabindex="0">
 
+                    <div>
+                        <h5 class="border-bottom my-3 py-2"
+                            th:text="|${#lists.size(replyonpost)}개의 게시글이 있습니다.|">
+                        </h5>
+                    </div>
+
                     <!--테이블 시작-->
                     <table class="table">
                         <thead class="table-warning">
@@ -254,6 +260,14 @@
                 <!--                Like 시작-->
                 <div class="tab-pane fade" id="v-pills-like" role="tabpanel" aria-labelledby="v-pills-like-tab"
                      tabindex="0">
+
+                    <!-- 사용자가 좋아요한 게시글 수 표시 -->
+                    <div>
+                        <h5 class="border-bottom my-3 py-2"
+                            th:text="|${likeCount}개의 게시글이 있습니다.|">
+                        </h5>
+                    </div>
+
                     <!--테이블 시작-->
                     <table class="table">
                         <thead class="table-warning">
@@ -309,7 +323,7 @@
                      tabindex="0">
 
                     <h5 class="border-bottom my-3 py-2"
-                        th:text="|${#lists.size(question)}개의 게시글이 있습니다.|"></h5>
+                        th:text="|${questionCount}개의 게시글이 있습니다.|"></h5>
 
 
                     <!--테이블 시작-->

@@ -17,6 +17,10 @@ public interface ReplyRepository extends JpaRepository<Reply, Integer> {
     @Query("Select r from Reply r where r.author.id=:id")
     Page<Reply> findByAuthorId(Pageable pageable,Long id);
 
+    // 사용자가 작성한 댓글의 수
+    @Query("Select count(r) from Reply r where r.author.id=:id")
+    Long getCount(Long id);
+
     // 사용자가 작성한 댓글의 글 페이징
     @Query("Select distinct r.travel from Reply r where r.author.id=:id")
     List<Travel> findByTravelId(Long id);

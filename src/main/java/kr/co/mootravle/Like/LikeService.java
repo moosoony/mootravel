@@ -1,6 +1,5 @@
 package kr.co.mootravle.Like;
 
-import kr.co.mootravle.Reply.Reply;
 import kr.co.mootravle.Travel.Travel;
 import kr.co.mootravle.Travel.TravelRepository;
 import kr.co.mootravle.User.SiteUser;
@@ -15,7 +14,6 @@ import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Transactional
 @RequiredArgsConstructor
@@ -26,7 +24,7 @@ public class LikeService {
 
     private final TravelRepository travelRepository;
 
-    //    좋아요한 게시글 페이징 구현 서비스
+    // 좋아요한 게시글 페이징 구현 서비스
     public Page<Travel> getLikeByTravel(int page, Long id) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
@@ -34,6 +32,7 @@ public class LikeService {
         return travelRepository.findByTravel(pageable, id);
     }
 
+    // 좋아요 생성 서비스
     public void create(Travel travel, SiteUser author) {
         Like like = new Like();
         like.setTravel(travel);
@@ -49,6 +48,11 @@ public class LikeService {
         } else {
             return false;
         }
+    }
+
+    // 사용자가 좋아요한 게시글 수
+    public Long getCount(Long id){
+        return this.likeRepository.getCount(id);
     }
 
 }

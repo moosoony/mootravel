@@ -63,35 +63,6 @@ public class UserService {
         return replyonpost;
     }
 
-//     사용자가 작성한 댓글의 글 페이징 처리 중
-//    public Page<Travel> getTravelId(int page, Long id){
-//
-//        List<Travel> travelId = replyRepository.findByTravelId(id);
-//
-//        List<Travel> replyonpost = new ArrayList<>();
-//
-//        List<Sort.Order> sorts = new ArrayList<>();
-//
-//
-//
-//        for (int i = 0; i < travelId.size(); i++) {
-//            sorts.add(Sort.Order.desc("createDate"));
-//            Pageable pageable = PageRequest.of(page,10, Sort.by(sorts));
-//            replyonpost.add((Travel) travelRepository.findAllById(pageable,(travelId.get(i).getId())));
-//        }
-//
-//        return (Page<Travel>) replyonpost;
-//    }
-
-    // 사용자가 작성한 댓글의 글 페이징 서비스
-//    public Page<Travel> getList(int page, Long id){
-//        List<Sort.Order> sorts = new ArrayList<>();
-//        sorts.add(Sort.Order.desc("createDate"));
-//        Pageable pageable = PageRequest.of(page,10, Sort.by(sorts));
-//        return getTravelId(pageable, id);
-//    }
-
-
     // 사용자가 문의한 글
     public Page<Question> getQuestionList(Pageable pageable, Long id){
         return this.questionRepository.findByAuthorId(pageable, id);

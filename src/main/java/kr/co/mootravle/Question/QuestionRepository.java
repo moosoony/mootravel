@@ -17,6 +17,10 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     @Query("select q from Question q where q.author.id=:id")
     Page<Question> findByAuthorId(Pageable pageable,Long id);
 
+    // 사용자가 작성한 문의글의 수
+    @Query("select count(q) from Question q where q.author.id=:id")
+    Long getCount(Long id);
+
     Question findBySubject(String subject);
 
     Question findBySubjectAndContent(String subject, String content);

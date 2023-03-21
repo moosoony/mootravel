@@ -33,11 +33,11 @@ public class TravelService {
     private String fileDir;
 
     //    Account/Activity/Post 페이징 구현 서비스
-    public Page<Travel> getList(int page, Long id){
+    public Page<Travel> getList(int page, Long id) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page,10, Sort.by(sorts));
-        return this.travelRepository.findByTravel(pageable,id);
+        Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
+        return this.travelRepository.findByTravel(pageable, id);
     }
 
     //    Account/Activity/Reply on Post 페이징 구현 서비스
@@ -141,4 +141,10 @@ public class TravelService {
     public void delete(Travel travel) {
         this.travelRepository.delete(travel);
     }
+
+    //    사용자가 작성한 게시글 수
+    public Long getCount(Long id) {
+        return this.travelRepository.getCount(id);
+    }
+
 }
