@@ -215,15 +215,16 @@ public class UserController {
         return "/user/activity/user_activity";
     }
 
-    //    Account/Reply On Post 체크박스 삭제
+    //    Account/Reply 체크박스 삭제
     @PreAuthorize("isAuthenticated()")
-    @CrossOrigin(origins = "*", allowedHeaders = "*")
     @PostMapping("/delete")
     public String delete(@RequestParam List<String> replyIds) {
+
         for (int i = 0; i < replyIds.size(); i++) {
             Integer id = Integer.valueOf(replyIds.get(i));
             replyService.delete(id);
         }
         return "redirect:/user/activity";
     }
+
 }

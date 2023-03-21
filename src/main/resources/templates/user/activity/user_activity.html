@@ -3,6 +3,8 @@
       xmlns:th="http://thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml">
 <body>
+<!--<meta name="_csrf" th:content="${_csrf.token}"/>-->
+<!--<meta name="_csrf_header" th:content="${_csrf.headerName}"/>-->
 
 <div layout:fragment="content" class="container my-3 mt-10">
     <div class="mb-7 text-center">
@@ -131,7 +133,7 @@
 
                     </div>
 
-                    <form th:action method="POST">
+                    <form id="deleteForm" method="POST">
                         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
                         <div> <a href='javascript:boardDelete();' class="btn btn-primary mb-3">삭제하기</a></div>
@@ -430,6 +432,7 @@
             return false;
         } else {
             if (confirm("정말로 삭제하시겠습니까?")) {
+
 //배열생성
                 const arr = new Array(selectedElementsCnt);
 
@@ -438,21 +441,21 @@
                 });
 
                 const form = document.createElement('form');
-                form.setAttribute('method', 'post');        //Post 메소드 적용
-                form.setAttribute('action', '/delete');
+                const form1 = document.getElementById('deleteForm');
+                form1.setAttribute('action', '/user/delete');
 
                 var input1 = document.createElement('input');
                 input1.setAttribute("type", "hidden");
-                input1.setAttribute("name", "boardIds");
+                input1.setAttribute("name", "replyIds");
                 input1.setAttribute("value", arr);
-                form.appendChild(input1);
-                console.log(form);
-                document.body.appendChild(form);
-                form.submit();
+                form1.appendChild(input1);
+                console.log(form1);
+                document.body.appendChild(form1);
+                form1.submit();
+                document.getElementById("deleteForm").submit();
             }
         }
     }
-
 </script>
 </html>
 
