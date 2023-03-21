@@ -40,26 +40,31 @@
         <h5 class="mb-5 card-header">Account Activity</h5>
         <div class="d-flex align-items-start">
             <div class="nav flex-column nav-pills me-3" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                <button class="nav-link active" id="v-pills-home-tab" data-bs-toggle="pill"
+                <button class="nav-link active" id="v-pills-post-tab" data-bs-toggle="pill"
                         data-bs-target="#v-pills-post" type="button" role="tab" aria-controls="v-pills-post"
-                        aria-selected="true">Post
+                        aria-selected="true"
+                        data-toggle="tab" data-target="#v-pills-post">Post
                 </button>
                 <button class="nav-link" id="v-pills-reply-tab" data-bs-toggle="pill"
                         data-bs-target="#v-pills-reply" type="button" role="tab" aria-controls="v-pills-reply"
-                        aria-selected="false">Reply
+                        aria-selected="false"
+                        data-toggle="tab" data-target="#v-pills-reply">Reply
                 </button>
                 <button class="nav-link" id="v-pills-replyonpost-tab" data-bs-toggle="pill"
                         data-bs-target="#v-pills-replyonpost" type="button" role="tab"
                         aria-controls="v-pills-replyonpost"
-                        aria-selected="false">Reply on Post
+                        aria-selected="false"
+                        data-toggle="tab" data-target="#v-pills-replyonpost">Reply on Post
                 </button>
                 <button class="nav-link" id="v-pills-like-tab" data-bs-toggle="pill"
                         data-bs-target="#v-pills-like" type="button" role="tab" aria-controls="v-pills-like"
-                        aria-selected="false">Like
+                        aria-selected="false"
+                        data-toggle="tab" data-target="#v-pills-like">Like
                 </button>
                 <button class="nav-link" id="v-pills-question-tab" data-bs-toggle="pill"
                         data-bs-target="#v-pills-question" type="button" role="tab" aria-controls="v-pills-question"
-                        aria-selected="false">Question
+                        aria-selected="false"
+                        data-toggle="tab" data-target="#v-pills-question">Question
                 </button>
             </div>
 
@@ -106,7 +111,7 @@
                                 th:if="${page >= travel.number-5 and page <= travel.number+5}"
                                 th:classappend="${page == travel.number} ? 'active'"
                                 class="page-item">
-                                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                                <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
                             </li>
                             <li class="page-item" th:classappend="${!travel.hasNext} ? 'disabled'">
                                 <a class="page-link" th:href="@{|?page=${travel.number+1}|}">
@@ -176,7 +181,7 @@
                                 th:if="${page >= reply.number-5 and page <= reply.number+5}"
                                 th:classappend="${page == reply.number} ? 'active'"
                                 class="page-item">
-                                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                                <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
                             </li>
                             <li class="page-item" th:classappend="${!reply.hasNext} ? 'disabled'">
                                 <a class="page-link" th:href="@{|?page=${reply.number+1}|}">
@@ -285,7 +290,7 @@
                                 th:if="${page >= like.number-5 and page <= like.number+5}"
                                 th:classappend="${page == like.number} ? 'active'"
                                 class="page-item">
-                                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                                <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
                             </li>
                             <li class="page-item" th:classappend="${!like.hasNext} ? 'disabled'">
                                 <a class="page-link" th:href="@{|?page=${like.number+1}|}">
@@ -341,7 +346,7 @@
                                 th:if="${page >= question.number-5 and page <= question.number+5}"
                                 th:classappend="${page == question.number} ? 'active'"
                                 class="page-item">
-                                <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
+                                <a th:text="${page+1}" class="page-link" th:href="@{|?page=${page}|}"></a>
                             </li>
                             <li class="page-item" th:classappend="${!question.hasNext} ? 'disabled'">
                                 <a class="page-link" th:href="@{|?page=${question.number+1}|}">
@@ -456,6 +461,19 @@
             }
         }
     }
+
+    const tabs = document.querySelectorAll('[data-toggle="tab"]');
+    tabs.forEach(tab => {
+        tab.addEventListener('click', event => {
+            event.preventDefault();
+            const target = tab.getAttribute('data-target');
+            tabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+            document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('show', 'active'));
+            document.querySelector(target).classList.add('show', 'active');
+        });
+    });
+
 </script>
 </html>
 
