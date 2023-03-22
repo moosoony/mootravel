@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -22,6 +23,7 @@ import java.util.List;
 @RequestMapping("/travel")
 @RequiredArgsConstructor
 @Controller
+@Validated
 public class TravelController {
 
     private final UserService userService;
@@ -85,7 +87,8 @@ public class TravelController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String travelCreate(@Valid TravelForm travelForm, BindingResult bindingResult, Principal principal) throws IOException {
+    public String travelCreate(@Valid TravelForm travelForm, BindingResult bindingResult,
+                               Principal principal) throws IOException {
         if (bindingResult.hasErrors()) {
             return "travel/travel_form";
         }
@@ -105,13 +108,18 @@ public class TravelController {
         }
         travelForm.setSubject(travel.getSubject());
         travelForm.setContent(travel.getContent());
+        travelForm.setTravelStart(travel.getTravelStart());
+        travelForm.setTravelEnd(travel.getTravelEnd());
+        travelForm.setExpenses(travel.getExpenses());
         return "travel/travel_form";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
     public String travelModify(@Valid TravelForm travelForm, BindingResult bindingResult,
-                               Principal principal, @PathVariable("id") Integer id) {
+                               Principal principal,
+                               @PathVariable("id") Integer id) throws IOException{
+
         if (bindingResult.hasErrors()) {
             return "travel/travel_form";
         }
@@ -119,7 +127,7 @@ public class TravelController {
         if (!travel.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-        this.travelService.modify(travel, travelForm.getSubject(), travelForm.getContent());
+        this.travelService.modify(travel, travelForm.getSubject(), travelForm.getContent(), travelForm.getTravelStart(), travelForm.getTravelEnd(), travelForm.getExpenses(), travelForm.getFile());
         return String.format("redirect:/travel/detail/%s", id);
     }
 

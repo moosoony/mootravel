@@ -3,7 +3,6 @@ package kr.co.mootravle.Travel;
 import kr.co.mootravle.DataNotFoundException;
 import kr.co.mootravle.Reply.ReplyRepository;
 import kr.co.mootravle.User.SiteUser;
-import kr.co.mootravle.User.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
@@ -16,6 +15,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.criteria.*;
 import javax.transaction.Transactional;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.Size;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
@@ -130,9 +131,33 @@ public class TravelService {
     }
 
     //    수정 서비스
-    public void modify(Travel travel, String subject, String content) {
-        travel.setSubject(subject);
-        travel.setContent(content);
+    public void modify(Travel travel, @NotEmpty(message = "제목은 필수항목입니다.") @Size(max = 200) String travelFormSubject, @NotEmpty(message = "내용은 필수항목입니다.") String travelFormContent, @NotEmpty(message = "일정은 필수항목입니다.") String travelStart, String travelEnd, String expenses, MultipartFile file) throws IOException {
+        // 원래 파일 이름 추출
+        String origName = file.getOriginalFilename();
+
+        // 파일 이름으로 쓸 uuid 생성
+        String uuid = UUID.randomUUID().toString();
+
+        // 확장자 추출(ex : .png)
+        String extension = origName.substring(origName.lastIndexOf("."));
+
+        // uuid와 확장자 결합
+        String savedName = uuid + extension;
+
+        // 파일을 불러올 때 사용할 파일 경로
+        String savedPath = fileDir + savedName;
+
+        // 실제로 로컬에 uuid를 파일명으로 저장
+        file.transferTo(new File(savedPath));
+
+        travel.setSubject(travelFormSubject);
+        travel.setContent(travelFormContent);
+        travel.setTravelStart(travelStart);
+        travel.setTravelEnd(travelEnd);
+        travel.setExpenses(expenses);
+        travel.setOrgNm(origName);
+        travel.setSavedNm(savedName);
+        travel.setSavedPath(savedPath);
         travel.setModifyDate(LocalDateTime.now());
         this.travelRepository.save(travel);
     }
@@ -141,20 +166,6 @@ public class TravelService {
     public void delete(Travel travel) {
         this.travelRepository.delete(travel);
     }
-
-    //     사용자가 작성한 댓글의 글 찾는 서비스(페이징 안하고 성공)
-//    public List<Travel> getTravelId(int page, Long id){
-//
-//        List<Travel> travelId = replyRepository.findByTravelId(id);
-//
-//        List<Travel> replyonpost = new ArrayList<>();
-//
-//        for (int i = 0; i < travelId.size(); i++) {
-//            replyonpost.add(travelRepository.findAllById(travelId.get(i).getId()));
-//        }
-//
-//        return replyonpost;
-//    }
 
     //    사용자 아이디로 삭제 서비스
     public void deleteByAuthorId (Long id) {this.travelRepository.deleteByAuthorId(id);}

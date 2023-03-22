@@ -3,8 +3,8 @@ package kr.co.mootravle.Travel;
 import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.PositiveOrZero;
 import javax.validation.constraints.Size;
 
@@ -15,6 +15,7 @@ public class TravelForm {
     @Size(max=200)
     private String subject;
 
+    @NotNull(message = "썸네일은 필수항목입니다.")
     private MultipartFile file;
 
     @NotEmpty(message = "내용은 필수항목입니다.")
