@@ -69,4 +69,17 @@ public class ReplyService {
     public Long getCount(Long id) {
         return this.replyRepository.getCount(id);
     }
+
+    //     사용자가 작성한 댓글의 글 찾는 서비스(페이징 안하고 성공)
+    public Page<Travel> getTravelId(int page, Long id){
+        Pageable pageable = PageRequest.of(page, 10);
+        Page<Travel> replyonpost = replyRepository.findByTravelId(pageable, id);
+
+        return replyonpost;
+    }
+
+    // 사용자가 작성한 댓글의 글 수
+    public Long getCountByAuthorId(Long id){
+        return this.replyRepository.getCountByAuthorId(id);
+    }
 }

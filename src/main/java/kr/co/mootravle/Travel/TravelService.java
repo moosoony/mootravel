@@ -1,6 +1,7 @@
 package kr.co.mootravle.Travel;
 
 import kr.co.mootravle.DataNotFoundException;
+import kr.co.mootravle.Reply.ReplyRepository;
 import kr.co.mootravle.User.SiteUser;
 import kr.co.mootravle.User.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,10 +19,7 @@ import javax.transaction.Transactional;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
 
 
 @Transactional
@@ -29,6 +27,8 @@ import java.util.UUID;
 @Service
 public class TravelService {
     private final TravelRepository travelRepository;
+
+    private final ReplyRepository replyRepository;
     @Value("${file.dir}")
     private String fileDir;
 
@@ -142,14 +142,22 @@ public class TravelService {
         this.travelRepository.delete(travel);
     }
 
-    // 사용자가 작성한 댓글의 글 수
-    public Long getCountByAuthorId(Long id){
-        return this.travelRepository.getCountByAuthorId(id);
-    }
+    //     사용자가 작성한 댓글의 글 찾는 서비스(페이징 안하고 성공)
+//    public List<Travel> getTravelId(int page, Long id){
+//
+//        List<Travel> travelId = replyRepository.findByTravelId(id);
+//
+//        List<Travel> replyonpost = new ArrayList<>();
+//
+//        for (int i = 0; i < travelId.size(); i++) {
+//            replyonpost.add(travelRepository.findAllById(travelId.get(i).getId()));
+//        }
+//
+//        return replyonpost;
+//    }
 
     //    사용자 아이디로 삭제 서비스
     public void deleteByAuthorId (Long id) {this.travelRepository.deleteByAuthorId(id);}
-
 
 
     //    사용자가 작성한 게시글 수

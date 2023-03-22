@@ -4,10 +4,8 @@ import kr.co.mootravle.Like.LikeService;
 import kr.co.mootravle.Question.Question;
 import kr.co.mootravle.Question.QuestionService;
 import kr.co.mootravle.Reply.Reply;
-import kr.co.mootravle.Reply.ReplyRepository;
 import kr.co.mootravle.Reply.ReplyService;
 import kr.co.mootravle.Travel.Travel;
-import kr.co.mootravle.Travel.TravelRepository;
 import kr.co.mootravle.Travel.TravelService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -33,11 +31,11 @@ import java.util.List;
 @RequestMapping("/user")
 public class UserController {
 
-    private final UserService userService;
+    private final QuestionService questionService;
     private final TravelService travelService;
+    private final UserService userService;
     private final ReplyService replyService;
     private final LikeService likeService;
-    private final QuestionService questionService;
 
     //    회원가입 페이지
     @GetMapping("/signup")
@@ -175,52 +173,46 @@ public class UserController {
     public String activity(Principal principal, Model model,
                            @RequestParam(value = "page", defaultValue = "0") int page) {
 
+        // 현재 로그인한 사용자
         SiteUser siteuser = this.userService.getUser(principal.getName());
-        // 사용자의 ID
+
+        // 현재 로그인한 사용자의 ID
         Long id = siteuser.getId();
+
 
         // 사용자가 작성한 게시글
         Page<Travel> travelPaging = travelService.getList(page, id);
         // 사용자가 작성한 게시글 수
         Long postCount = this.travelService.getCount(id);
 
+
         // 사용자가 작성한 댓글
         Page<Reply> replyPaging = this.replyService.getList(page, id);
         // 사용자가 작성한 댓글 수
         Long replyCount = this.replyService.getCount(id);
 
-//         사용자가 작성한 댓글의 글
-
-//        List<Travel> travelId = userService.getTravelId(id);
-////        System.out.println("travelId 리스트 = " + travelId);
-////        System.out.println("travelId 사이즈 = " + travelId.size());
-//
-////        System.out.println("첫번째 게시글 " + travelRepository.findAllById(Collections.singleton((travelId.get(0).getId()))));
-//
-
-//        System.out.println("******사용자가 작성한 댓글의 글 가져오기" + replyonpost);
 
         // 사용자가 작성한 댓글의 글 (페이징 안하고 성공)
-        List<Travel> replyonpost = this.userService.getTravelId(page, id);
-        System.out.println("@@@@@@@@@@@사용자가 작성한 댓글의 글 가져오기" + replyonpost);
+//        List<Travel> replyonpost = this.travelService.getTravelId(page, id);
 
+
+        // 사용자가 작성한 댓글의 글 페이징
+        Page<Travel> replyonpost = this.replyService.getTravelId(page, id);
         // 사용자가 작성한 댓글의 글 수
-        Long replyOnPostCount = this.travelService.getCountByAuthorId(id);
+        Long replyOnPostCount = this.replyService.getCountByAuthorId(id);
 
-
-//        for (int i = 0; i < travelId.size(); i++) {
-//            replyonpost.add(travelRepository.findAllById(travelId.get(i).getId()));
-//        }
 
         // 사용자가 좋아요 한 글
         Page<Travel> likePaging = this.likeService.getLikeByTravel(page, id);
         // 사용자가 좋아요한 게시글 수
         Long likeCount = this.likeService.getCount(id);
 
+
         // 사용자가 문의한 글
         Page<Question> questionPaging = questionService.getList(page, id);
         // 사용자가 문의한 글 수
         Long questionCount = this.questionService.getCount(id);
+
 
         model.addAttribute("travel", travelPaging);
         model.addAttribute("postCount", postCount);

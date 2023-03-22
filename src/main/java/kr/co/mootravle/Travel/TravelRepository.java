@@ -30,15 +30,7 @@ public interface TravelRepository extends JpaRepository<Travel, Integer> {
 
 
     // 사용자가 작성한 댓글의 글 (페이징 안하고 성공)
-    Travel findAllById(Integer id);
-
-    // 사용자가 작성한 댓글의 글 (페이징)
-//    Page<Travel> findAllByAuthorId(Long id);
-
-    // 사용자가 작성한 댓글의 글 수
-    @Query("select count(r.travel.id) from Reply r where r.author.id=:id")
-    Long getCountByAuthorId(Long id);
-
+//    Travel findAllById(Integer id);
 
     // 사용자가 작성한 게시글 수 조회
     @Query("select count(t) from Travel t where t.author.id =:id")
