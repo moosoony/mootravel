@@ -142,6 +142,16 @@ public class TravelService {
         this.travelRepository.delete(travel);
     }
 
+    // 사용자가 작성한 댓글의 글 수
+    public Long getCountByAuthorId(Long id){
+        return this.travelRepository.getCountByAuthorId(id);
+    }
+
+    //    사용자 아이디로 삭제 서비스
+    public void deleteByAuthorId (Long id) {this.travelRepository.deleteByAuthorId(id);}
+
+
+
     //    사용자가 작성한 게시글 수
     public Long getCount(Long id) {
         return this.travelRepository.getCount(id);

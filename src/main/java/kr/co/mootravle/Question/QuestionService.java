@@ -27,35 +27,12 @@ public class QuestionService {
 
     private final QuestionRepository questionRepository;
 
-    //    Account/Activity/Reply 페이징 구현 서비스
-    public Page<Question> getList(int page, Long id){
-        List<Sort.Order> sorts = new ArrayList<>();
-        sorts.add(Sort.Order.desc("createDate"));
-        Pageable pageable = PageRequest.of(page,10, Sort.by(sorts));
-        return this.questionRepository.findByAuthorId(pageable, id);
-    }
-
     //  페이징, 검색 키워드 구현 서비스
     public Page<Question> getList(int page, String kw) {
         List<Sort.Order> sorts = new ArrayList<>();
         sorts.add(Sort.Order.desc("createDate"));
         Pageable pageable = PageRequest.of(page, 10, Sort.by(sorts));
         return this.questionRepository.findAllByKeyword(kw, pageable);
-    }
-
-    //    상세보기 서비스
-    public Question getQuestion(Integer id) {
-        Optional<Question> question = this.questionRepository.findById(id);
-        if (question.isPresent()) {
-            return question.get();
-        } else {
-            throw new DataNotFoundException("question not found");
-        }
-    }
-
-    // 조회수 구현 서비스
-    public void updateviewcnt(Integer id) {
-        questionRepository.updateCount(id);
     }
 
     //    작성하기 서비스
@@ -81,11 +58,28 @@ public class QuestionService {
         this.questionRepository.delete(question);
     }
 
-    public void vote(Question question, SiteUser siteUser) {
+    //    상세보기 서비스
+    public Question getQuestion(Integer id) {
+        Optional<Question> question = this.questionRepository.findById(id);
+        if (question.isPresent()) {
+            return question.get();
+        } else {
+            throw new DataNotFoundException("question not found");
+        }
+    }
+
+    // 조회수 구현 서비스
+    public void updateviewcnt(Integer id) {
+        questionRepository.updateCount(id);
+    }
+
+    // 좋아요 생성 서비스
+    public void like(Question question, SiteUser siteUser) {
         question.getVoter().add(siteUser);
         this.questionRepository.save(question);
     }
 
+    // 검색 키워드 서비스
     public Specification<Question> search(String kw) {
         return new Specification<>() {
             private static final long serialVersionUID = 1L;
@@ -105,8 +99,21 @@ public class QuestionService {
         };
     }
 
+    //    Account/Activity/Reply 페이징 구현 서비스
+    public Page<Question> getList(int page, Long id){
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createDate"));
+        Pageable pageable = PageRequest.of(page,10, Sort.by(sorts));
+        return this.questionRepository.findByAuthorId(pageable, id);
+    }
+
     // 사용자가 작성한 문의글의 수
     public Long getCount(Long id){
         return this.questionRepository.getCount(id);
+    }
+
+    // 사용자가 작성한 문의글 삭제
+    public void deleteByAuthorId(Long id){
+        this.questionRepository.deleteByAuthorId(id);
     }
 }

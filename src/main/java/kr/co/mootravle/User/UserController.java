@@ -126,10 +126,16 @@ public class UserController {
         if (!siteuser.getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
-        Integer id = Math.toIntExact(siteuser.getId());
 
-//        this.answerRepository.deleteById(id);
-//        this.travelRepository.deleteById(id);
+        Long id = Long.valueOf(Math.toIntExact(siteuser.getId()));
+
+        // 사용자가 작성한 게시글 삭제
+        this.travelService.deleteByAuthorId(id);
+
+        // 사용자가 작성한 문의글 삭제
+        this.questionService.deleteByAuthorId(id);
+
+
         this.userService.delete(siteuser);
 
         return "redirect:/user/logout";
@@ -163,12 +169,14 @@ public class UserController {
         return String.format("redirect:/user/logout");
     }
 
-    // 사용자 활동 페이지
+    // Acoount/Activity 페이지
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/activity")
     public String activity(Principal principal, Model model,
                            @RequestParam(value = "page", defaultValue = "0") int page) {
+
         SiteUser siteuser = this.userService.getUser(principal.getName());
+        // 사용자의 ID
         Long id = siteuser.getId();
 
         // 사용자가 작성한 게시글
@@ -196,6 +204,9 @@ public class UserController {
         List<Travel> replyonpost = this.userService.getTravelId(page, id);
         System.out.println("@@@@@@@@@@@사용자가 작성한 댓글의 글 가져오기" + replyonpost);
 
+        // 사용자가 작성한 댓글의 글 수
+        Long replyOnPostCount = this.travelService.getCountByAuthorId(id);
+
 
 //        for (int i = 0; i < travelId.size(); i++) {
 //            replyonpost.add(travelRepository.findAllById(travelId.get(i).getId()));
@@ -218,6 +229,7 @@ public class UserController {
         model.addAttribute("replyCount", replyCount);
 
         model.addAttribute("replyonpost", replyonpost);
+        model.addAttribute("replyOnPostCount", replyOnPostCount);
 
         model.addAttribute("like", likePaging);
         model.addAttribute("likeCount", likeCount);

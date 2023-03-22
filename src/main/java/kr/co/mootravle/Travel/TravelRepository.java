@@ -7,13 +7,19 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
-
-import java.util.List;
+import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 public interface TravelRepository extends JpaRepository<Travel, Integer> {
 
-    // 조회수 증가 메서드
+
+    //    페이징 구현 메서드
+    Page<Travel> findAll(Pageable pageable);
+
+    //    검색 구현 메서드
+    Page<Travel> findAll(Specification<Travel> spec, Pageable pageable);
+
+    // 조회수 증가
     @Modifying
     @Query(value = "update Travel t set t.viewcnt=t.viewcnt+1 where t.id=:id")
     void updateCount(Integer id);
@@ -22,25 +28,28 @@ public interface TravelRepository extends JpaRepository<Travel, Integer> {
     @Query("select t from Travel t where t.author.id =:id")
     Page<Travel> findByTravel(Pageable pageable, Long id);
 
-    //    페이징 구현 메서드
-    Page<Travel> findAll(Pageable pageable);
-
-    //    검색 구현 메서드
-    Page<Travel> findAll(Specification<Travel> spec, Pageable pageable);
-
-
-//    Travel findAllById(Integer id);
 
     // 사용자가 작성한 댓글의 글 (페이징 안하고 성공)
     Travel findAllById(Integer id);
 
+    // 사용자가 작성한 댓글의 글 (페이징)
+//    Page<Travel> findAllByAuthorId(Long id);
 
-//     사용자가 작성한 댓글의 글 페이징 처리 중
-    List<Travel>findAllById(Pageable pageable, Integer id);
+    // 사용자가 작성한 댓글의 글 수
+    @Query("select count(r.travel.id) from Reply r where r.author.id=:id")
+    Long getCountByAuthorId(Long id);
 
-//    사용자가 작성한 게시글 수 조회
+
+    // 사용자가 작성한 게시글 수 조회
     @Query("select count(t) from Travel t where t.author.id =:id")
     Long getCount(Long id);
+
+    // 사용자가 작성한 게시글 삭제
+    @Modifying
+    @Transactional
+    @Query("delete from Travel t where t.author.id =:id")
+    void deleteByAuthorId(Long id);
+
 
     // Top3 구현 메서드
 //    @Query("select "
