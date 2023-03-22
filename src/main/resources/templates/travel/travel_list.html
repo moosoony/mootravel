@@ -9,7 +9,11 @@
 <!--    Stylesheets End-->
 
 <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>-->
-
+<style>
+    .imgs {
+        object-fit: cover;
+    }
+</style>
 <body>
 
 <div layout:fragment="content" class="container my-3 mt-10">
@@ -36,17 +40,22 @@
             <div class="row">
                 <div class="col-md-4 mb-4" th:each="travel, loop : ${paging}">
                     <div class="card overflow-hidden shadow">
-                        <img th:if="${travel.savedNm} == null" src="/images/NoPhoto.jpg"/>
-                        <img th:if="${travel.savedNm} != null" class="card-img-top" th:src="|/img/${travel.savedNm}|"/>
+                        <img style="height: 35vh; object-fit: cover" class="card-img-top" th:if="${travel.savedNm} == null" src="/images/NoPhoto.jpg"/>
+                        <img style="height: 35vh; object-fit: cover " th:if="${travel.savedNm} != null" class="card-img-top" th:src="|/img/${travel.savedNm}|"/>
                         <div class="card-body py-4 px-3">
                             <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
+
                                 <h4 class="text-secondary fw-medium">
                                     <a class="link-900 text-decoration-none stretched-link"
                                        th:href="@{|/travel/detail/${travel.id}|}" th:text="${travel.subject}"/>
-                                </h4><span class="fs-1 fw-medium" th:text="|￦ ${travel.expenses}|"></span>
+                                </h4>
+
+                                <span class="fs-1 fw-medium" th:text="|￦ ${travel.expenses}|"></span>
+
                             </div>
                             <div class="d-flex align-items-center">
-                                <img src="/assets/img/dest/navigation.svg" style="margin-right: 14px" width="20"
+                                <img src="/assets/img/dest/navigation.svg"
+                                     style="margin-right: 14px" width="20"
                                      alt="navigation"/>
                                 <span class="fs-0 fw-medium"
                                       th:text="|${travel.travelStart}~${travel.travelEnd}|"></span>

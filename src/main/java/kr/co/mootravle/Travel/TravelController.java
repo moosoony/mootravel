@@ -1,5 +1,6 @@
 package kr.co.mootravle.Travel;
 
+import kr.co.mootravle.Like.Like;
 import kr.co.mootravle.Like.LikeService;
 import kr.co.mootravle.User.SiteUser;
 import kr.co.mootravle.User.UserService;
@@ -16,6 +17,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.List;
 
 @RequestMapping("/travel")
 @RequiredArgsConstructor
@@ -29,7 +31,12 @@ public class TravelController {
     @GetMapping("/list")
     public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
                        @RequestParam(value = "kw", defaultValue = "") String kw) {
+
         Page<Travel> paging = this.travelService.getList(page, kw);
+
+        List<Like> destination = this.likeService.findTravelByThisMonth();
+
+        model.addAttribute("destination",destination);
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
         return "travel/travel_list";
@@ -46,7 +53,7 @@ public class TravelController {
         // Travel 게시글의 아이디
         Travel travel = this.travelService.getTravel(id);
         Integer tid = travel.getId();
-        
+
         // 조회수 증가
         travelService.updateviewcnt(id);
 

@@ -55,4 +55,10 @@ public class LikeService {
         return this.likeRepository.getCount(id);
     }
 
+    // Top3 구현 메서드
+    public List<Like> findTravelByThisMonth(){
+        Pageable pageable = PageRequest.of(0, 3);
+        return this.likeRepository.findTop3TravelByThisMonth(pageable);
+    }
+
 }

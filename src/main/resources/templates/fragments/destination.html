@@ -1,3 +1,4 @@
+<html xmlns:th="http://thymeleaf.org">
 <section class="pt-5" id="destination">
 
     <div class="container">
@@ -7,53 +8,38 @@
             <h5 class="text-secondary">Top Travel </h5>
             <h3 class="fs-xl-10 fs-lg-8 fs-7 fw-bold font-cursive text-capitalize">Top Postings</h3>
         </div>
-        <div class="row">
 
-            <div class="col-md-4 mb-4">
-                <div class="card overflow-hidden shadow"><img class="card-img-top" src="/assets/img/dest/dest1.jpg"
-                                                              alt="Rome, Italty"/>
+        <div class="row">
+            <div class="col-md-4 mb-4" th:each="destination, loop : ${destination}">
+
+                <div class="card overflow-hidden shadow">
+
+                    <img style="height: 50vh; object-fit: cover" th:if="${destination.travel.savedNm} == null" src="/images/NoPhoto.jpg"/>
+                    <img style="height: 50vh; object-fit: cover" th:if="${destination.travel.savedNm} != null" class="card-img-top" th:src="|/img/${destination.travel.savedNm}|"/>
+
                     <div class="card-body py-4 px-3">
+
                         <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
-                            <h4 class="text-secondary fw-medium"><a
-                                    class="link-900 text-decoration-none stretched-link" href="#!">Rome, Italty</a>
-                            </h4><span class="fs-1 fw-medium">$5,42k</span>
+
+                            <h4 class="text-secondary fw-medium">
+                                <a
+                                    class="link-900 text-decoration-none stretched-link" th:href="@{|/travel/detail/${destination.travel.id}|}" th:text="${destination.travel.subject}"></a>
+                            </h4>
+
+                            <span class="fs-1 fw-medium" th:text="|￦ ${destination.travel.expenses}|"/>
+
                         </div>
-                        <div class="d-flex align-items-center"><img src="/assets/img/dest/navigation.svg"
-                                                                    style="margin-right: 14px" width="20"
-                                                                    alt="navigation"/><span class="fs-0 fw-medium">10 Days Trip</span>
+
+                        <div class="d-flex align-items-center">
+
+                            <img src="/assets/img/dest/navigation.svg"
+                                 style="margin-right: 14px" width="20" alt="navigation"/>
+
+                            <span class="fs-0 fw-medium"
+                                  th:text="|${destination.travel.travelStart}~${destination.travel.travelEnd}|"/>
+
                         </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card overflow-hidden shadow"><img class="card-img-top" src="/assets/img/dest/dest2.jpg"
-                                                              alt="London, UK"/>
-                    <div class="card-body py-4 px-3">
-                        <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
-                            <h4 class="text-secondary fw-medium"><a
-                                    class="link-900 text-decoration-none stretched-link" href="#!">London, UK</a>
-                            </h4><span class="fs-1 fw-medium">$4.2k</span>
-                        </div>
-                        <div class="d-flex align-items-center"><img src="/assets/img/dest/navigation.svg"
-                                                                    style="margin-right: 14px" width="20"
-                                                                    alt="navigation"/><span class="fs-0 fw-medium">12 Days Trip</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-4 mb-4">
-                <div class="card overflow-hidden shadow"><img class="card-img-top" src="/assets/img/dest/dest3.jpg"
-                                                              alt="Full Europe"/>
-                    <div class="card-body py-4 px-3">
-                        <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
-                            <h4 class="text-secondary fw-medium"><a
-                                    class="link-900 text-decoration-none stretched-link" href="#!">Full Europe</a>
-                            </h4><span class="fs-1 fw-medium">$15k</span>
-                        </div>
-                        <div class="d-flex align-items-center"><img src="/assets/img/dest/navigation.svg"
-                                                                    style="margin-right: 14px" width="20"
-                                                                    alt="navigation"/><span class="fs-0 fw-medium">28 Days Trip</span>
-                        </div>
+
                     </div>
                 </div>
             </div>
@@ -61,3 +47,4 @@
     </div><!-- end of .container-->
 
 </section>
+</html>

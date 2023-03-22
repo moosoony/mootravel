@@ -27,8 +27,6 @@ public class LikeController {
     private final UserService userService;
     private final LikeRepository likeRepository;
 
-    private final UserRepository userRepository;
-
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create/{id}")
     public String createlike(Model model, @PathVariable("id") Integer id,

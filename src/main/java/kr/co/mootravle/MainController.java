@@ -1,5 +1,7 @@
 package kr.co.mootravle;
 
+import kr.co.mootravle.Like.Like;
+import kr.co.mootravle.Like.LikeService;
 import kr.co.mootravle.Reply.ReplyService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -15,10 +17,15 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class MainController {
-    private final ReplyService replyService;
+    private final LikeService likeService;
 
     @GetMapping("/")
-    public String main() {
+    public String main(Model model) {
+
+        List<Like> destination = this.likeService.findTravelByThisMonth();
+
+        model.addAttribute("destination",destination);
+
         return "index";
     }
 
