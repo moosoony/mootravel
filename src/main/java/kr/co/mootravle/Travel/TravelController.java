@@ -35,7 +35,7 @@ public class TravelController {
 
         Page<Travel> paging = this.travelService.getList(page, kw);
 
-        List<Like> destination = this.likeService.findTravelByThisMonth();
+        List<Travel> destination = this.likeService.findTravelByThisMonth();
 
         model.addAttribute("destination",destination);
         model.addAttribute("paging", paging);

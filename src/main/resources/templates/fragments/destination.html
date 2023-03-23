@@ -10,12 +10,12 @@
         </div>
 
         <div class="row">
-            <div class="col-md-4 mb-4" th:each="destination, loop : ${destination}">
+            <div class="col-md-4 mb-4" th:each="travel, loop : ${destination}">
 
                 <div class="card overflow-hidden shadow">
 
-                    <img style="height: 50vh; object-fit: cover" th:if="${destination.travel.savedNm} == null" src="/images/NoPhoto.jpg"/>
-                    <img style="height: 50vh; object-fit: cover" th:if="${destination.travel.savedNm} != null" class="card-img-top" th:src="|/img/${destination.travel.savedNm}|"/>
+                    <img style="height: 50vh; object-fit: cover" th:if="${travel.savedNm} == null" src="/images/NoPhoto.jpg"/>
+                    <img style="height: 50vh; object-fit: cover" th:if="${travel.savedNm} != null" class="card-img-top" th:src="|/img/${travel.savedNm}|"/>
 
                     <div class="card-body py-4 px-3">
 
@@ -23,12 +23,12 @@
 
                             <h4 class="text-secondary fw-medium">
                                 <a class="link-900 text-decoration-none stretched-link"
-                                   th:href="@{|/travel/detail/${destination.travel.id}|}"
-                                   th:text="${destination.travel.subject}"></a>
+                                   th:href="@{|/travel/detail/${travel.id}|}"
+                                   th:text="${travel.subject}"></a>
                                 <span style="margin-left: 5px" class="badge bg-warning"> Hot 🧡</span>
                             </h4>
 
-                            <span class="fs-1 fw-medium" th:text="|￦ ${destination.travel.expenses}|"/>
+                            <span class="fs-1 fw-medium" th:text="|￦ ${travel.expenses}|"/>
 
                         </div>
 
@@ -38,7 +38,7 @@
                                  style="margin-right: 14px" width="20" alt="navigation"/>
 
                             <span class="fs-0 fw-medium"
-                                  th:text="|${destination.travel.travelStart}~${destination.travel.travelEnd}|"/>
+                                  th:text="|${travel.travelStart}~${travel.travelEnd}|"/>
 
                         </div>
 

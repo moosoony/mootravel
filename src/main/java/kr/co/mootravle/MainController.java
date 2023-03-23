@@ -3,6 +3,7 @@ package kr.co.mootravle;
 import kr.co.mootravle.Like.Like;
 import kr.co.mootravle.Like.LikeService;
 import kr.co.mootravle.Reply.ReplyService;
+import kr.co.mootravle.Travel.Travel;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -22,7 +23,7 @@ public class MainController {
     @GetMapping("/")
     public String main(Model model) {
 
-        List<Like> destination = this.likeService.findTravelByThisMonth();
+        List<Travel> destination = this.likeService.findTravelByThisMonth();
 
         model.addAttribute("destination",destination);
 
