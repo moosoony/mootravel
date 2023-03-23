@@ -16,7 +16,7 @@ public interface LikeRepository extends JpaRepository<Like, Integer> {
     public String like(Long aid, Integer tid);
 
     //    사용자가 좋아요한 게시글 페이징
-    @Query(value = "select l.travel.id from Like l where l.author.id=:id")
+    @Query(value = "select l.travel from Like l where l.author.id=:id")
     Page<Travel> LikeByTravelId(Pageable pageable, Long id);
 
     //    사용자가 좋아요한 게시글 수
