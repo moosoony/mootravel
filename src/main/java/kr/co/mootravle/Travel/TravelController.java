@@ -18,6 +18,7 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Arrays;
 import java.util.List;
 
 @RequestMapping("/travel")
@@ -40,6 +41,12 @@ public class TravelController {
         model.addAttribute("destination",destination);
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
+
+        // 여행지 목록
+        List<String> options = Arrays.asList("Option 1", "Option 2", "Option 3");
+        model.addAttribute("options", options);
+
+
         return "travel/travel_list";
     }
 

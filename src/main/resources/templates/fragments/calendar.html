@@ -16,10 +16,10 @@
 
 
         <!-- Bootstrap CSS -->
-<!--        <link rel="stylesheet" href="/calendar-18/css/bootstrap.min.css">-->
+        <!--        <link rel="stylesheet" href="/calendar-18/css/bootstrap.min.css">-->
 
         <!-- Style -->
-<!--        <link rel="stylesheet" href="/calendar-18/css/style.css">-->
+        <!--        <link rel="stylesheet" href="/calendar-18/css/style.css">-->
 
         <title>Calendar</title>
     </head>
@@ -28,15 +28,31 @@
 
     <div class="content">
 
-        <div class="container text-left">
+        <div class="container">
 
             <div class="row justify-content-center">
-                <div class="col-md-10 text-center">
-                    <h2 class="mb-5 text-center">Calendar</h2>
+                <div class="col-md-10">
+
+
+                    <h5 class="mb-5 text-left">Subject</h5>
+                    <div class="mb-5 d-flex">
+                        <input type="text" class="form-control"/>
+                    </div>
+
+
+                    <h5 class="mb-5 text-left">Category</h5>
+                    <div class="mb-5 d-flex">
+                        <select class="form-control" th:name="selectedOption">
+                            <option th:each="option : ${options}" th:value="${option}" th:text="${option}"></option>
+                        </select>
+                    </div>
+
+
+                    <h5 class="mb-5 text-left">Calendar</h5>
                     <div class="d-flex">
-                        <input type="text" class="form-control m-2  mb-3" id="result_from" placeholder="Check in"
+                        <input type="text" class="form-control m-2  mb-3" id="result_from" placeholder="Travel Start"
                                disabled="">
-                        <input type="text" class="form-control m-2  mb-3" id="result_to" placeholder="Check out"
+                        <input type="text" class="form-control m-2  mb-3" id="result_to" placeholder="Travel End"
                                disabled="">
                     </div>
                     <form action="#" class="row">
@@ -47,6 +63,15 @@
                             <div id="inline_cal_to"></div>
                         </div>
                     </form>
+
+
+                    <!--                    Thumbnail 시작-->
+                    <h5 class="mb-5 text-center">Thumbnail</h5>
+                    <div class="mb-5 d-flex">
+                        <input type="text" class="form-control"/>
+                    </div>
+                    <!--                    Thumbnail 끝-->
+
                 </div>
             </div>
 
