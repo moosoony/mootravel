@@ -22,8 +22,10 @@
                         <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
 
                             <h4 class="text-secondary fw-medium">
-                                <a
-                                    class="link-900 text-decoration-none stretched-link" th:href="@{|/travel/detail/${destination.travel.id}|}" th:text="${destination.travel.subject}"></a>
+                                <a class="link-900 text-decoration-none stretched-link"
+                                   th:href="@{|/travel/detail/${destination.travel.id}|}"
+                                   th:text="${destination.travel.subject}"></a>
+                                <span style="margin-left: 5px" class="badge bg-warning"> Hot 🧡</span>
                             </h4>
 
                             <span class="fs-1 fw-medium" th:text="|￦ ${destination.travel.expenses}|"/>
