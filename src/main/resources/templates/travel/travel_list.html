@@ -9,11 +9,6 @@
 <!--    Stylesheets End-->
 
 <!--<script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.12.4.min.js"></script>-->
-<style>
-    .imgs {
-        object-fit: cover;
-    }
-</style>
 <body>
 
 <div layout:fragment="content" class="container my-3 mt-10">
@@ -29,8 +24,35 @@
         </div>
     </div>
 
+    <!-- modal 버튼 시작 -->
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        여행 일정 등록하기
+    </button>
+    <!-- modal 버튼 끝 -->
+
+    <!-- Modal 시작 -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">여행 일정 등록</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <th:block th:include="fragments/calendar.html"></th:block>
+                </div>
+<!--                <div class="modal-footer">-->
+<!--                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>-->
+<!--                    <button type="button" class="btn btn-primary">Save</button>-->
+<!--                </div>-->
+            </div>
+        </div>
+    </div>
+    <!-- Modal 끝 -->
+
     <section class="pt-5" id="destination">
 
+        <!--        TOP 3 여행 일정 게시글-->
         <div class="container">
             <div class="position-absolute start-100 bottom-0 translate-middle-x d-none d-xl-block ms-xl-n4">
             </div>
@@ -40,8 +62,10 @@
             <div class="row">
                 <div class="col-md-4 mb-4" th:each="travel, loop : ${paging}">
                     <div class="card overflow-hidden shadow">
-                        <img style="height: 35vh; object-fit: cover" class="card-img-top" th:if="${travel.savedNm} == null" src="/images/NoPhoto.jpg"/>
-                        <img style="height: 35vh; object-fit: cover " th:if="${travel.savedNm} != null" class="card-img-top" th:src="|/img/${travel.savedNm}|"/>
+                        <img style="height: 35vh; object-fit: cover" class="card-img-top"
+                             th:if="${travel.savedNm} == null" src="/images/NoPhoto.jpg"/>
+                        <img style="height: 35vh; object-fit: cover " th:if="${travel.savedNm} != null"
+                             class="card-img-top" th:src="|/img/${travel.savedNm}|"/>
                         <div class="card-body py-4 px-3">
                             <div class="d-flex flex-column flex-lg-row justify-content-between mb-3">
 
