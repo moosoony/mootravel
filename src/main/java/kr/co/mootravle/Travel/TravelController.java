@@ -23,7 +23,6 @@ import java.util.List;
 @RequestMapping("/travel")
 @RequiredArgsConstructor
 @Controller
-@Validated
 public class TravelController {
 
     private final UserService userService;
@@ -87,8 +86,15 @@ public class TravelController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String travelCreate(@Valid TravelForm travelForm, BindingResult bindingResult,
+    public String travelCreate(Model model,@Valid TravelForm travelForm, BindingResult bindingResult,
                                Principal principal) throws IOException {
+
+        if(travelForm.getFile().isEmpty()){
+            String file="썸네일은 필수항목입니다.";
+            model.addAttribute("file",file);
+            return "travel/travel_form";
+        }
+
         if (bindingResult.hasErrors()) {
             return "travel/travel_form";
         }

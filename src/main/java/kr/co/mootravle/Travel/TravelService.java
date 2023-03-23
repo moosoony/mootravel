@@ -83,6 +83,7 @@ public class TravelService {
 
     //   작성하기 서비스
     public void create(String subject, MultipartFile file, String content, SiteUser user, String travelStart, String travelEnd, String expenses) throws IOException {
+
         // 원래 파일 이름 추출
         String origName = file.getOriginalFilename();
 
