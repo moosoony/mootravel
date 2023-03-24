@@ -1,6 +1,5 @@
 package kr.co.mootravle.Travel;
 
-import kr.co.mootravle.Like.Like;
 import kr.co.mootravle.Like.LikeService;
 import kr.co.mootravle.User.SiteUser;
 import kr.co.mootravle.User.UserService;
@@ -11,7 +10,6 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 
@@ -38,7 +36,7 @@ public class TravelController {
 
         List<Travel> destination = this.likeService.findTravelByThisMonth();
 
-        model.addAttribute("destination",destination);
+        model.addAttribute("destination", destination);
         model.addAttribute("paging", paging);
         model.addAttribute("kw", kw);
 
@@ -87,18 +85,19 @@ public class TravelController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
-    public String travelCreate(TravelForm travelForm) {
+    public String travelCreate(Model model, @RequestParam String value, TravelForm travelForm) {
+        model.addAttribute("subject",value);
         return "travel/travel_form";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-    public String travelCreate(Model model,@Valid TravelForm travelForm, BindingResult bindingResult,
+    public String travelCreate(Model model, @Valid TravelForm travelForm, BindingResult bindingResult,
                                Principal principal) throws IOException {
 
-        if(travelForm.getFile().isEmpty()){
-            String file="썸네일은 필수항목입니다.";
-            model.addAttribute("file",file);
+        if (travelForm.getFile().isEmpty()) {
+            String file = "썸네일은 필수항목입니다.";
+            model.addAttribute("file", file);
             return "travel/travel_form";
         }
 
@@ -131,7 +130,7 @@ public class TravelController {
     @PostMapping("/modify/{id}")
     public String travelModify(@Valid TravelForm travelForm, BindingResult bindingResult,
                                Principal principal,
-                               @PathVariable("id") Integer id) throws IOException{
+                               @PathVariable("id") Integer id) throws IOException {
 
         if (bindingResult.hasErrors()) {
             return "travel/travel_form";
@@ -154,5 +153,15 @@ public class TravelController {
         }
         this.travelService.delete(travel);
         return "redirect:/travel/list";
+    }
+
+    // 모달창에 있는 값 PostMapping
+    @PostMapping("/saveValue")
+    public String saveValue(@RequestParam String subject) {
+        // 입력 받은 값을 처리합니다.
+
+        System.out.println("모달창 컨트롤러");
+
+        return "redirect:/travel/create?value="+subject;
     }
 }
