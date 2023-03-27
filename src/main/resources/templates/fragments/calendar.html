@@ -122,8 +122,11 @@
                 },
                 data: {subject: subject},
                 success: function (response) {
-                    // 페이지에서 반환된 결과를 처리합니다.
-                    window.location.href = '/travel/create?value=' + response;
+                    // 성공적으로 전송되었을 때 처리할 코드
+                    window.location.href = '/travel/create';
+                },
+                error: function () {
+                    alert('Error');
                 }
             });
         });

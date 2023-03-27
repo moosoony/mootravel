@@ -12,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.validation.Valid;
 import java.io.IOException;
@@ -157,11 +158,11 @@ public class TravelController {
 
     // 모달창에 있는 값 PostMapping
     @PostMapping("/saveValue")
-    public String saveValue(@RequestParam String subject) {
+    public ModelAndView saveValue(@RequestParam ("subject") String subject) {
         // 입력 받은 값을 처리합니다.
 
         System.out.println("모달창 컨트롤러");
 
-        return "redirect:/travel/create?value="+subject;
+        return new ModelAndView("redirect:/create");
     }
 }
