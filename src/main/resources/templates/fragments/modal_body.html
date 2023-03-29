@@ -25,82 +25,94 @@
 
 
     <body>
+    <form th:object="${modalForm}" method="post" enctype="multipart/form-data">
+        <!--        csrf 토큰-->
+        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-    <div class="content">
-
-        <div class="container">
-
-            <div class="row justify-content-center">
-                <div class="col-md-10">
-
-
-                    <!--                    Subject 시작-->
-                    <h5 class="mb-5 text-left">Subject</h5>
-                    <div class="mb-5 d-flex">
-                        <input type="text" class="form-control"/>
-                    </div>
-                    <!--                    Subject 끝-->
-
-
-                    <!--                    Category 시작-->
-                    <h5 class="mb-5 text-left">Category</h5>
-                    <div class="mb-5 d-flex">
-                        <select class="form-control" th:name="selectedOption">
-                            <option th:each="option : ${options}" th:value="${option}" th:text="${option}"></option>
-                        </select>
-                    </div>
-                    <!--                    Category 끝-->
-
-
-                    <!--                    Calendar 시작-->
-                    <h5 class="mb-4 text-left">Calendar</h5>
-                    <div class="d-flex">
-                        <input type="text" class="form-control m-2  mb-3" id="result_from" placeholder="Travel Start"
-                               disabled="">
-                        <input type="text" class="form-control m-2  mb-3" id="result_to" placeholder="Travel End"
-                               disabled="">
-                    </div>
-                    <form action="#" class="row justify-content-center">
-                        <div class="col-lg-6 mb-4">
-                            <div id="inline_cal_from"></div>
-                        </div>
-                        <div class="col-lg-6 mb-5">
-                            <div id="inline_cal_to"></div>
-                        </div>
-                    </form>
-                    <!--                    Calendar 끝-->
-
-
-                    <!--                    Thumbnail 시작-->
-                    <h5 class="mb-5 text-left">Thumbnail</h5>
-                    <div class="mb-5 d-flex">
-                        <input type="text" class="form-control"/>
-                    </div>
-                    <!--                    Thumbnail 끝-->
-
-
-                </div>
-            </div>
-
+        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()} or ${file}!=null">
+            <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
+            <div th:if="${file}!=null" th:text="${file}"/>
         </div>
-    </div>
+
+        <div class="content">
+
+            <div class="container">
+
+                <div class="row justify-content-center">
+                    <div class="col-md-10">
 
 
-    <!--    modal-footer 시작-->
-    <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Next</button>
-    </div>
-    <!--    modal-footer 끝-->
+                        <!--                    Subject 시작-->
+                        <h5 class="mb-5 text-left">Subject</h5>
+                        <div class="mb-5 d-flex">
+                            <input type="text" class="form-control" th:field="*{subject}"/>
+                        </div>
+                        <!--                    Subject 끝-->
 
-    <!--    calendar Script 시작-->
-    <script src="/calendar-18/js/jquery-3.3.1.min.js"></script>
-    <script src="/calendar-18/js/popper.min.js"></script>
-    <script src="/calendar-18/js/bootstrap.min.js"></script>
-    <script src="/calendar-18/js/rome.js"></script>
-    <script src="/calendar-18/js/main.js"></script>
-    <!--    calendar Script 시작-->
 
+                        <!--                    Category 시작-->
+                        <h5 class="mb-5 text-left">Category</h5>
+                        <div class="mb-5 d-flex">
+                            <select class="form-control" th:name="selectedOption" th:field="*{category}">
+                                <option th:each="option : ${options}" th:value="${option}" th:text="${option}"></option>
+                            </select>
+                        </div>
+                        <!--                    Category 끝-->
+
+
+                        <!--                    Calendar 시작-->
+                        <h5 class="mb-4 text-left">Calendar</h5>
+                        <div class="d-flex">
+                            <input type="text" class="form-control m-2  mb-3" id="result_from"
+                                   placeholder="Travel Start"
+                                   disabled="" th:value="값" th:field="*{travelStart}">
+                            <input type="text" class="form-control m-2  mb-3" id="result_to" placeholder="Travel End"
+                                   disabled="" th:field="*{travelEnd}">
+                        </div>
+                        <!--                        <form action="#" class="row justify-content-center">-->
+                        <div class="row justify-content-center">
+                            <div class="col-lg-6 mb-4">
+                                <div id="inline_cal_from"></div>
+                            </div>
+                            <div class="col-lg-6 mb-5">
+                                <div id="inline_cal_to"></div>
+                            </div>
+                        </div>
+                        <!--                        </form>-->
+                        <!--                    Calendar 끝-->
+
+
+                        <!--                    Thumbnail 시작-->
+                        <h5 class="mb-5 text-left">Thumbnail</h5>
+                        <div class="mb-5 d-flex">
+                            <input type="file" class="form-control" accept="image/png, image/jpeg" th:field="*{file}"/>
+                        </div>
+                        <!--                    Thumbnail 끝-->
+
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <!--    modal-footer 시작-->
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            <button type="submit" class="btn btn-primary">Next</button>
+        </div>
+        <!--    modal-footer 끝-->
+
+        <!--    calendar Script 시작-->
+        <script src="/calendar-18/js/jquery-3.3.1.min.js"></script>
+        <script src="/calendar-18/js/popper.min.js"></script>
+        <script src="/calendar-18/js/bootstrap.min.js"></script>
+        <script src="/calendar-18/js/rome.js"></script>
+        <script src="/calendar-18/js/main.js"></script>
+        <!--    calendar Script 시작-->
+
+    </form>
     </body>
 </div>
 </html>

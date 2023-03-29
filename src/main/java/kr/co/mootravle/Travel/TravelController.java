@@ -12,9 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
-import org.springframework.web.servlet.ModelAndView;
 
-import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
@@ -31,7 +29,7 @@ public class TravelController {
     private final LikeService likeService;
 
     @GetMapping("/list")
-    public String list(Model model, @RequestParam(value = "page", defaultValue = "0") int page,
+    public String list(ModalForm modalForm, Model model, @RequestParam(value = "page", defaultValue = "0") int page,
                        @RequestParam(value = "kw", defaultValue = "") String kw) {
 
         Page<Travel> paging = this.travelService.getList(page, kw);
@@ -48,6 +46,26 @@ public class TravelController {
 
 
         return "travel/travel_list";
+    }
+
+    // 모달창에 있는 값 PostMapping
+    @PreAuthorize("isAuthenticated()")
+    @PostMapping("/list")
+    public String modalvalue(@Valid ModalForm modalForm, BindingResult bindingResult, Model model) {
+        //        유효성 검사 실패 시
+//        if (bindingResult.hasErrors()) {
+//            return "redirect:/travel/list";
+//        }
+        // 입력한 값을 저장하거나 처리하는 코드
+        System.out.println("모달창 컨트롤러1");
+        System.out.println("travelStart"+modalForm.getTravelStart());
+        model.addAttribute("subject", modalForm.getSubject());
+        model.addAttribute("category", modalForm.getCategory());
+        model.addAttribute("travelStart", modalForm.getTravelStart());
+        model.addAttribute("travelEnd", modalForm.getTravelEnd());
+        model.addAttribute("file", modalForm.getFile());
+//        model.addAttribute("subject", modalForm.getSubject());
+        return "travel/travel_create";
     }
 
     //    상세보기
@@ -93,7 +111,7 @@ public class TravelController {
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
-  
+
     public String travelCreate(Model model, @Valid TravelForm travelForm, BindingResult bindingResult,
                                Principal principal) throws IOException {
 
@@ -156,22 +174,5 @@ public class TravelController {
         this.travelService.delete(travel);
         return "redirect:/travel/list";
     }
-
-    // 모달창에 있는 값 PostMapping
-    @PostMapping("/saveValue")
-    public String saveInputValue(@RequestParam("subject") String subject, Model model){
-        // 입력한 값을 저장하거나 처리하는 코드
-        System.out.println("모달창 컨트롤러1 "+subject);
-        model.addAttribute("subject",subject);
-        return "travel/travel_list";
-    }
-
-    @GetMapping("/result")
-    public String showResult(@RequestParam String subject, Model model) {
-        model.addAttribute("subject", subject);
-        System.out.println("모달창 컨트롤러2");
-        return "travel/travel_form";
-    }
-
 
 }
