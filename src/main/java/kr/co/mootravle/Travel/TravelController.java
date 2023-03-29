@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
@@ -86,13 +87,13 @@ public class TravelController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
-    public String travelCreate(Model model, @RequestParam String value, TravelForm travelForm) {
-        model.addAttribute("subject",value);
+    public String travelCreate(TravelForm travelForm) {
         return "travel/travel_form";
     }
 
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/create")
+  
     public String travelCreate(Model model, @Valid TravelForm travelForm, BindingResult bindingResult,
                                Principal principal) throws IOException {
 
@@ -158,11 +159,19 @@ public class TravelController {
 
     // 모달창에 있는 값 PostMapping
     @PostMapping("/saveValue")
-    public ModelAndView saveValue(@RequestParam ("subject") String subject) {
-        // 입력 받은 값을 처리합니다.
-
-        System.out.println("모달창 컨트롤러");
-
-        return new ModelAndView("redirect:/create");
+    public String saveInputValue(@RequestParam("subject") String subject, Model model){
+        // 입력한 값을 저장하거나 처리하는 코드
+        System.out.println("모달창 컨트롤러1 "+subject);
+        model.addAttribute("subject",subject);
+        return "travel/travel_list";
     }
+
+    @GetMapping("/result")
+    public String showResult(@RequestParam String subject, Model model) {
+        model.addAttribute("subject", subject);
+        System.out.println("모달창 컨트롤러2");
+        return "travel/travel_form";
+    }
+
+
 }

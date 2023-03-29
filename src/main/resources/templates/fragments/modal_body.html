@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="ko" xmlns:th="http://thymeleaf.org">
+<div th:fragment="fragment-calender">
+
+    <head>
+        <!-- Required meta tags -->
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <link href="https://fonts.googleapis.com/css?family=Roboto:300,400&display=swap" rel="stylesheet">
+
+        <link href="https://fonts.googleapis.com/css?family=Poppins:300,400,500&display=swap" rel="stylesheet">
+
+        <link rel="stylesheet" href="/calendar-18/fonts/icomoon/style.css">
+
+        <link rel="stylesheet" href="/calendar-18/css/rome.css">
+
+        <!-- Bootstrap CSS -->
+        <!--        <link rel="stylesheet" href="/calendar-18/css/bootstrap.min.css">-->
+
+        <!-- Style -->
+        <!--        <link rel="stylesheet" href="/calendar-18/css/style.css">-->
+
+        <title>Calendar</title>
+    </head>
+
+
+    <body>
+
+    <div class="content">
+
+        <div class="container">
+
+            <div class="row justify-content-center">
+                <div class="col-md-10">
+
+
+                    <!--                    Subject 시작-->
+                    <h5 class="mb-5 text-left">Subject</h5>
+                    <div class="mb-5 d-flex">
+                        <input type="text" class="form-control"/>
+                    </div>
+                    <!--                    Subject 끝-->
+
+
+                    <!--                    Category 시작-->
+                    <h5 class="mb-5 text-left">Category</h5>
+                    <div class="mb-5 d-flex">
+                        <select class="form-control" th:name="selectedOption">
+                            <option th:each="option : ${options}" th:value="${option}" th:text="${option}"></option>
+                        </select>
+                    </div>
+                    <!--                    Category 끝-->
+
+
+                    <!--                    Calendar 시작-->
+                    <h5 class="mb-4 text-left">Calendar</h5>
+                    <div class="d-flex">
+                        <input type="text" class="form-control m-2  mb-3" id="result_from" placeholder="Travel Start"
+                               disabled="">
+                        <input type="text" class="form-control m-2  mb-3" id="result_to" placeholder="Travel End"
+                               disabled="">
+                    </div>
+                    <form action="#" class="row justify-content-center">
+                        <div class="col-lg-6 mb-4">
+                            <div id="inline_cal_from"></div>
+                        </div>
+                        <div class="col-lg-6 mb-5">
+                            <div id="inline_cal_to"></div>
+                        </div>
+                    </form>
+                    <!--                    Calendar 끝-->
+
+
+                    <!--                    Thumbnail 시작-->
+                    <h5 class="mb-5 text-left">Thumbnail</h5>
+                    <div class="mb-5 d-flex">
+                        <input type="text" class="form-control"/>
+                    </div>
+                    <!--                    Thumbnail 끝-->
+
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!--    modal-footer 시작-->
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary">Next</button>
+    </div>
+    <!--    modal-footer 끝-->
+
+    <!--    calendar Script 시작-->
+    <script src="/calendar-18/js/jquery-3.3.1.min.js"></script>
+    <script src="/calendar-18/js/popper.min.js"></script>
+    <script src="/calendar-18/js/bootstrap.min.js"></script>
+    <script src="/calendar-18/js/rome.js"></script>
+    <script src="/calendar-18/js/main.js"></script>
+    <!--    calendar Script 시작-->
+
+    </body>
+</div>
+</html>
