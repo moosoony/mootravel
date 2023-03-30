@@ -51,18 +51,24 @@ public class TravelController {
     // 모달창에 있는 값 PostMapping
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/list")
-    public String modalvalue(@Valid ModalForm modalForm, BindingResult bindingResult, Model model) {
+    public String modalvalue(@RequestParam("result_from") String resultFrom, @RequestParam ("result_to") String resultTo, @Valid ModalForm modalForm, BindingResult bindingResult, Model model) {
         //        유효성 검사 실패 시
 //        if (bindingResult.hasErrors()) {
 //            return "redirect:/travel/list";
 //        }
+
+        // 받은 값 확인
+        System.out.println("resultFrom 받은 값 확인 "+resultFrom);
+        System.out.println("resultFrom 받은 값 확인 "+resultTo);
+
+
         // 입력한 값을 저장하거나 처리하는 코드
         System.out.println("모달창 컨트롤러1");
         System.out.println("travelStart"+modalForm.getTravelStart());
         model.addAttribute("subject", modalForm.getSubject());
         model.addAttribute("category", modalForm.getCategory());
-        model.addAttribute("travelStart", modalForm.getTravelStart());
-        model.addAttribute("travelEnd", modalForm.getTravelEnd());
+        model.addAttribute("travelStart", resultFrom);
+        model.addAttribute("travelEnd", resultTo);
         model.addAttribute("file", modalForm.getFile());
 //        model.addAttribute("subject", modalForm.getSubject());
         return "travel/travel_create";

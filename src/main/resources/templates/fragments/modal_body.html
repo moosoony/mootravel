@@ -63,11 +63,11 @@
                         <!--                    Calendar 시작-->
                         <h5 class="mb-4 text-left">Calendar</h5>
                         <div class="d-flex">
-                            <input type="text" class="form-control m-2  mb-3" id="result_from"
+                            <input type="text" class="form-control m-2  mb-3" id="result_from" name="result_from"
                                    placeholder="Travel Start"
-                                   disabled="" th:value="값" th:field="*{travelStart}">
-                            <input type="text" class="form-control m-2  mb-3" id="result_to" placeholder="Travel End"
-                                   disabled="" th:field="*{travelEnd}">
+                                   disabled="">
+                            <input type="text" class="form-control m-2  mb-3" id="result_to" name="result_to" placeholder="Travel End"
+                                   disabled="">
                         </div>
                         <!--                        <form action="#" class="row justify-content-center">-->
                         <div class="row justify-content-center">
@@ -100,7 +100,8 @@
         <!--    modal-footer 시작-->
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-            <button type="submit" class="btn btn-primary">Next</button>
+            <!--            <button type="submit" class="btn btn-primary">Next</button>-->
+            <input type="submit" value="Next" onclick="sendResultFrom()">
         </div>
         <!--    modal-footer 끝-->
 
@@ -109,9 +110,35 @@
         <script src="/calendar-18/js/popper.min.js"></script>
         <script src="/calendar-18/js/bootstrap.min.js"></script>
         <script src="/calendar-18/js/rome.js"></script>
+        <!--        달력 날짜 관련 js-->
         <script src="/calendar-18/js/main.js"></script>
         <!--    calendar Script 시작-->
+        <script>
+            function sendResultFrom() {
+                // result_from 값 가져오기
+                var resultFromValue = document.getElementById('result_from').value;
+                var resultToValue = document.getElementById('result_to').value;
 
+                console.log(resultFromValue);
+
+                // hidden input 요소 생성하여 form에 추가
+                var hiddenInput1 = document.createElement('input');
+                var hiddenInput2 = document.createElement('input');
+
+                hiddenInput1.type = 'hidden';
+                hiddenInput1.name = 'result_from';
+                hiddenInput1.value = resultFromValue;
+                document.querySelector('form').appendChild(hiddenInput1);
+
+                hiddenInput2.type = 'hidden';
+                hiddenInput2.name = 'result_to';
+                hiddenInput2.value = resultToValue;
+                document.querySelector('form').appendChild(hiddenInput2);
+
+                // form 제출
+                document.querySelector('form').submit();
+            }
+        </script>
     </form>
     </body>
 </div>
