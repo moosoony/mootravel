@@ -16,6 +16,8 @@ import org.springframework.web.server.ResponseStatusException;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.security.Principal;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
 import java.util.Arrays;
 import java.util.List;
 
@@ -51,26 +53,37 @@ public class TravelController {
     // 모달창에 있는 값 PostMapping
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/list")
-    public String modalvalue(@RequestParam("result_from") String resultFrom, @RequestParam ("result_to") String resultTo, @Valid ModalForm modalForm, BindingResult bindingResult, Model model) {
+    public String modalInputValue(@RequestParam("result_from") String resultFrom,
+                                  @RequestParam("result_to") String resultTo,
+                                  @Valid ModalForm modalForm,
+                                  BindingResult bindingResult,
+                                  Model model) {
+
         //        유효성 검사 실패 시
 //        if (bindingResult.hasErrors()) {
 //            return "redirect:/travel/list";
 //        }
 
         // 받은 값 확인
-        System.out.println("resultFrom 받은 값 확인 "+resultFrom);
-        System.out.println("resultFrom 받은 값 확인 "+resultTo);
+//        System.out.println("resultFrom 받은 값 확인 "+resultFrom);
+//        System.out.println("resultTo 받은 값 확인 "+resultTo);
 
+        // 달력에 입력받은 값 날짜로 변환
+        LocalDate date1 = LocalDate.parse(resultFrom);
+        LocalDate date2 = LocalDate.parse(resultTo);
+
+        // 두 날짜의 차 계산 + 1
+        long daysBetween = date1.until(date2, ChronoUnit.DAYS)+1;
+
+        System.out.println("두 날짜의 차 : "+daysBetween);
 
         // 입력한 값을 저장하거나 처리하는 코드
-        System.out.println("모달창 컨트롤러1");
-        System.out.println("travelStart"+modalForm.getTravelStart());
         model.addAttribute("subject", modalForm.getSubject());
         model.addAttribute("category", modalForm.getCategory());
         model.addAttribute("travelStart", resultFrom);
         model.addAttribute("travelEnd", resultTo);
         model.addAttribute("file", modalForm.getFile());
-//        model.addAttribute("subject", modalForm.getSubject());
+
         return "travel/travel_create";
     }
 
@@ -105,7 +118,7 @@ public class TravelController {
         }
 
         model.addAttribute("travel", travel);
-        System.out.println(travel);
+
         return "travel/travel_detail";
     }
 
