@@ -32,7 +32,7 @@ public class ReplyController {
         SiteUser siteUser = this.userService.getUser(principal.getName());
         if(bindingResult.hasErrors()){
             model.addAttribute("travel", travel);
-            return "travel/travel_detail";
+            return "detail";
         }
         this.replyService.create(travel, replyForm.getContent(), siteUser);
         return String.format("redirect:/travel/detail/%s", id);

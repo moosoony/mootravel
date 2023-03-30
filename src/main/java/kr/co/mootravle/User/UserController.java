@@ -96,7 +96,7 @@ public class UserController {
         userModifyForm.setBirthday(user.getBirthday());
         model.addAttribute("savedNm", savedNm);
 
-        return "/user/user_account";
+        return "user/account";
     }
 
     // 사용자 정보 수정
@@ -105,7 +105,7 @@ public class UserController {
     public String accountModify(
             @Valid UserModifyForm userModifyForm, BindingResult bindingResult, Principal principal) throws IOException {
         if (bindingResult.hasErrors()) {
-            return "user/user_account";
+            return "user/account";
         }
         SiteUser user = this.userService.getUser(principal.getName());
         if (!user.getUsername().equals(principal.getName())) {
@@ -144,7 +144,7 @@ public class UserController {
     @GetMapping("/password")
     public String password(Model model) {
         model.addAttribute("userPasswordForm", new UserPasswordForm());
-        return "user/user_password";
+        return "user/password";
     }
 
     // 사용자 비밀번호 수정
@@ -152,12 +152,12 @@ public class UserController {
     @PostMapping("/password")
     public String accountModify(@Valid UserPasswordForm userPasswordForm, BindingResult bindingResult, Principal principal) {
         if (bindingResult.hasErrors()) {
-            return "user/user_password";
+            return "password";
         }
         if (!userPasswordForm.getPassword1().equals(userPasswordForm.getPassword2())) {
             bindingResult.rejectValue("password2", "passwordInCorrect",
                     "2개의 패스워드가 일치하지 않습니다.");
-            return "user/user_password";
+            return "user/password";
         }
         SiteUser user = this.userService.getUser(principal.getName());
         if (!user.getUsername().equals(principal.getName())) {

@@ -47,7 +47,7 @@ public class TravelController {
         model.addAttribute("options", options);
 
 
-        return "travel/travel_list";
+        return "travel/list";
     }
 
     // 모달창에 있는 값 PostMapping
@@ -83,8 +83,9 @@ public class TravelController {
         model.addAttribute("travelStart", resultFrom);
         model.addAttribute("travelEnd", resultTo);
         model.addAttribute("file", modalForm.getFile());
+        model.addAttribute("numTabs", daysBetween);
 
-        return "travel/travel_create";
+        return "travel/create";
     }
 
     //    상세보기
@@ -119,7 +120,7 @@ public class TravelController {
 
         model.addAttribute("travel", travel);
 
-        return "travel/travel_detail";
+        return "travel/detail";
     }
 
     @PreAuthorize("isAuthenticated()")

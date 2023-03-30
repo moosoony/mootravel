@@ -6403,6 +6403,7 @@ fieldset:disabled .btn {
 .modal-title {
   margin-bottom: 0;
   line-height: 1.5;
+  /*text-align: center;*/
 }
 
 .modal-body {

@@ -16,10 +16,19 @@
 
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-<!--        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()} or ${file}!=null">-->
-<!--            <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>-->
-<!--            <div th:if="${file}!=null" th:text="${file}"/>-->
-<!--        </div>-->
+        <!--        <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()} or ${file}!=null">-->
+        <!--            <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>-->
+        <!--            <div th:if="${file}!=null" th:text="${file}"/>-->
+        <!--        </div>-->
+
+
+        <!--        다이나믹 탭 시작-->
+        <div>
+            <input type="text" id="numTabs" class="form-control" th:value="${numTabs}">
+        </div>
+        <!--        다이나믹 탭 끝-->
+
+
 
         <div class="mb-3">
             <label class="form-label">Subject</label>
