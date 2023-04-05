@@ -59,6 +59,7 @@ public class TravelController {
                                   BindingResult bindingResult,
                                   Model model) {
 
+
         //        유효성 검사 실패 시
 //        if (bindingResult.hasErrors()) {
 //            return "redirect:/travel/list";
@@ -73,9 +74,9 @@ public class TravelController {
         LocalDate date2 = LocalDate.parse(resultTo);
 
         // 두 날짜의 차 계산 + 1
-        long daysBetween = date1.until(date2, ChronoUnit.DAYS)+1;
+        long daysBetween = date1.until(date2, ChronoUnit.DAYS) + 1;
 
-        System.out.println("두 날짜의 차 : "+daysBetween);
+        System.out.println("두 날짜의 차 : " + daysBetween);
 
         // 입력한 값을 저장하거나 처리하는 코드
         model.addAttribute("subject", modalForm.getSubject());
@@ -124,8 +125,33 @@ public class TravelController {
     }
 
     @PreAuthorize("isAuthenticated()")
+    @GetMapping("/index")
+    public String index() {
+
+
+        return "travel/index";
+    }
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/map")
+    public String map() {
+
+
+        return "travel/map";
+    }
+
+    @PostMapping("/places")
+    public void savePlace(@RequestBody Place place) {
+        // Place 객체를 이용해 디비에 저장하는 코드
+        System.out.println("장소"+place);
+    }
+
+
+
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String travelCreate(TravelForm travelForm) {
+
+
         return "travel/travel_form";
     }
 

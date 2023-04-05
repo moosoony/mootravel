@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Google Maps API Example</title>
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places&callback=initMap" async defer></script>
+</head>
+<body>
+<h1>Google Maps API Example</h1>
+<div>
+  <input id="search-box" type="text" placeholder="장소 검색">
+  <button type="button" onclick="savePlace()">검색</button>
+</div>
+<div id="map" style="height: 400px;"></div>
+<script>
+  function initMap() {
+    // 지도 생성
+    var map = new google.maps.Map(document.getElementById("map"), {
+      center: { lat: 37.5665, lng: 126.9780 },
+      zoom: 12,
+    });
+
+    // 검색 결과 표시를 위한 infowindow 생성
+    var infowindow = new google.maps.InfoWindow();
+
+    // 검색창과 검색 버튼 생성
+    var input = document.getElementById("search-box");
+    var searchBox = new google.maps.places.SearchBox(input);
+    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+    // 검색 결과 변경 시 지도의 중심점 이동 및 검색 결과 표시
+    map.addListener("bounds_changed", function() {
+      searchBox.setBounds(map.getBounds());
+    });
+
+    // 검색 결과 마커 생성 및 클릭 시 정보 표시
+    var markers = [];
+    searchBox.addListener("places_changed", function() {
+      var places = searchBox.getPlaces();
+      if (places.length == 0) {
+        return;
+      }
+      markers.forEach(function(marker) {
+        marker.setMap(null);
+      });
+      markers = [];
+      var bounds = new google.maps.LatLngBounds();
+      places.forEach(function(place) {
+        if (!place.geometry) {
+          console.log("장소에 대한 정보를 찾을 수 없습니다.");
+          return;
+        }
+        var marker = new google.maps.Marker({
+          map: map,
+          title: place.name,
+          position: place.geometry.location,
+        });
+        markers.push(marker);
+        bounds.extend(place.geometry.location);
+        marker.addListener("click", function() {
+          infowindow.setContent(place.name + "<br>" + place.formatted_address);
+          infowindow.open(map, marker);
+        });
+      });
+      map.fitBounds(bounds);
+    });
+  }
+
+</script>
+</body>
+<script>
+
+  function savePlace() {
+    // 선택한 장소의 이름과 주소 가져오기
+    var name = document.getElementsByClassName("gm-ui-hover-effect")[0].textContent;
+    var address = document.getElementsByClassName("gm-addr")[0].textContent;
+
+    // 서버로 데이터 전송
+    var xhr = new XMLHttpRequest();
+    xhr.open("POST", "/travel/places", true);
+    xhr.setRequestHeader("Content-type", "application/json");
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState === 4 && xhr.status === 200) {
+        console.log("장소 정보를 저장했습니다.");
+      }
+    };
+    var data = JSON.stringify({"name": name, "address": address});
+    xhr.send(data);
+  }
+</script>
+</html>
