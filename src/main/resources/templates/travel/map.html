@@ -60,32 +60,21 @@
         marker.addListener("click", function() {
           infowindow.setContent(place.name + "<br>" + place.formatted_address);
           infowindow.open(map, marker);
+
+          const name = marker.getTitle();
+          const lat = marker.getPosition().lat();
+          const lng = marker.getPosition().lng();
+
+
+          console.log('이름: '+name);
+          console.log('위도: '+lat);
+          console.log('경도: '+lng);
+
         });
       });
       map.fitBounds(bounds);
     });
   }
-
 </script>
 </body>
-<script>
-
-  function savePlace() {
-    // 선택한 장소의 이름과 주소 가져오기
-    var name = document.getElementsByClassName("gm-ui-hover-effect")[0].textContent;
-    var address = document.getElementsByClassName("gm-addr")[0].textContent;
-
-    // 서버로 데이터 전송
-    var xhr = new XMLHttpRequest();
-    xhr.open("POST", "/travel/places", true);
-    xhr.setRequestHeader("Content-type", "application/json");
-    xhr.onreadystatechange = function () {
-      if (xhr.readyState === 4 && xhr.status === 200) {
-        console.log("장소 정보를 저장했습니다.");
-      }
-    };
-    var data = JSON.stringify({"name": name, "address": address});
-    xhr.send(data);
-  }
-</script>
 </html>
