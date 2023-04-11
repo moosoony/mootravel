@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-<html>
 <head>
   <meta charset="UTF-8">
   <title>Google Maps API Example</title>
@@ -7,11 +6,36 @@
 </head>
 <body>
 <h1>Google Maps API Example</h1>
-<div>
-  <input id="search-box" type="text" placeholder="장소 검색">
-  <button type="button" onclick="savePlace()">검색</button>
+
+<ul class="nav">
+    <li class="nav-item">
+        <a class="nav-link" href="#">1일차</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#">2일차</a>
+    </li>
+</ul>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <input id="search-box" type="text" placeholder="장소 검색">
+            <button type="button" onclick="savePlace()">검색</button>
+        </div>
+    </div>
 </div>
-<div id="map" style="height: 400px;"></div>
+
+<div class="container">
+    <div class="row">
+        <div class="col">
+            <div id="map" style="height: 400px;"></div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <script>
   function initMap() {
     // 지도 생성
