@@ -56,8 +56,10 @@ public class TravelController {
     public String modalInputValue(@RequestParam("result_from") String resultFrom,
                                   @RequestParam("result_to") String resultTo,
                                   @Valid ModalForm modalForm,
+//                                  TravelCreateForm travelCreateForm,
                                   BindingResult bindingResult,
                                   Model model) {
+        System.out.println("모달창 POST 컨트롤러");
 
 
         //        유효성 검사 실패 시
