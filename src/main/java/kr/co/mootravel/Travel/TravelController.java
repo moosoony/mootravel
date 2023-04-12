@@ -56,7 +56,6 @@ public class TravelController {
     public String modalInputValue(@RequestParam("result_from") String resultFrom,
                                   @RequestParam("result_to") String resultTo,
                                   @Valid ModalForm modalForm,
-//                                  TravelCreateForm travelCreateForm,
                                   BindingResult bindingResult,
                                   Model model) {
         System.out.println("모달창 POST 컨트롤러");
@@ -79,13 +78,6 @@ public class TravelController {
         long daysBetween = date1.until(date2, ChronoUnit.DAYS) + 1;
         System.out.println("두 날짜의 차 : " + daysBetween);
 
-        StringBuilder sb = new StringBuilder();
-        for (int i = 1; i <= daysBetween; i++) {
-            sb.append("<li class=\"nav-item\"><a class=\"nav-link\" href=\"#\">Tab ").append(i).append("</a></li>");
-        }
-
-        System.out.println(sb.toString());
-        model.addAttribute("navTabs", sb.toString());
 
         // 입력한 값을 저장하거나 처리하는 코드
         model.addAttribute("subject", modalForm.getSubject());
@@ -95,8 +87,14 @@ public class TravelController {
         model.addAttribute("file", modalForm.getFile());
         model.addAttribute("numTabs", daysBetween);
 
-        return "travel/create";
+        return "travel/insert";
     }
+
+    @GetMapping(value = "/insert")
+    public String insert(TravelCreateForm travelCreateForm){
+        return "travel/insert";
+    }
+
 
     //    상세보기
     @GetMapping(value = "/detail/{id}")
@@ -143,8 +141,6 @@ public class TravelController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/map")
     public String map() {
-
-
         return "travel/map";
     }
 
@@ -159,8 +155,6 @@ public class TravelController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
     public String travelCreate(TravelForm travelForm) {
-
-
         return "travel/travel_form";
     }
 

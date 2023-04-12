@@ -21,55 +21,55 @@
 
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-                <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()} or ${file}!=null">
-                    <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>
-                    <div th:if="${file}!=null" th:text="${file}"/>
-                </div>
+<!--                <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()} or ${file}!=null">-->
+<!--                    <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>-->
+<!--                    <div th:if="${file}!=null" th:text="${file}"/>-->
+<!--                </div>-->
 
         <div class="mb-3">
             <label class="form-label" th:for="subject">Subject</label>
-            <input type="text" name="subject" class="form-control" th:value="${subject}" th:field="*{subject}">
+            <input type="text" name="subject" class="form-control" th:value="${subject}" >
         </div>
 
         <div class="mb-3">
             <label class="form-label" th:for="category">Travel Category</label>
-            <input type="text" name="category" class="form-control" th:value="${category}" th:field="*{category}">
+            <input type="text" name="category" class="form-control" th:value="${category}" >
         </div>
 
         <div class="row">
             <div class="mb-3 col-md-6">
                 <label class="form-label" th:for="travelStart">Travel Start</label>
-                <input type="text" name="travelStart" class="form-control" th:value="${travelStart}" th:field="*{travelStart}">
+                <input type="text" name="travelStart" class="form-control" th:value="${travelStart}" >
             </div>
             <div class="mb-3 col-md-6">
                 <label class="form-label" th:for="travelEnd">Travel End</label>
-                <input type="text" name="travelEnd" class="form-control" th:value="${travelEnd}" th:field="*{travelEnd}">
+                <input type="text" name="travelEnd" class="form-control" th:value="${travelEnd}" >
             </div>
         </div>
 
         <div class="mb-3">
             <label class="form-label" th:for="expenses">Travel expenses</label>
-            <input type="text" name="expenses" class="form-control" th:field="*{expenses}">
+            <input type="text" name="expenses" class="form-control" >
         </div>
 
         <div class="mb-3">
             <label class="form-label" th:for="file">Travel File</label>
-            <input type="text" name="file" class="form-control" th:value="${file}" th:field="*{file}">
+            <input type="text" name="file" class="form-control" th:value="${file}" >
         </div>
 
         <div class="mb-3">
             <label class="form-label" th:for="destination">지역명</label>
-            <input type="text" name="destination" class="form-control" id="destination" th:field="*{destination}">
+            <input type="text" name="destination" class="form-control" id="destination" >
         </div>
 
         <div class="mb-3">
             <label class="form-label" th:for="lat">위도</label>
-            <input type="text" name="lat" class="form-control" id="lat" th:field="*{lat}">
+            <input type="text" name="lat" class="form-control" id="lat" >
         </div>
 
         <div class="mb-3">
             <label class="form-label" th:for="lng">경도</label>
-            <input type="text" name="lng" class="form-control" id="lng" th:field="*{lng}">
+            <input type="text" name="lng" class="form-control" id="lng" >
         </div>
 
         <!--        구글 지도 영역 시작-->
