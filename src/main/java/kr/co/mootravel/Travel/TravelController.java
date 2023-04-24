@@ -96,6 +96,23 @@ public class TravelController {
     }
 
 
+    @PostMapping(value="/insert")
+    public String insert(TravelCreateForm travelCreateForm, Model model,BindingResult bindingResult,
+                         Principal principal) throws IOException {
+//        if (travelCreateForm.getFile().isEmpty()) {
+//            String file = "썸네일은 필수항목입니다.";
+//            model.addAttribute("file", file);
+//            return "travel/travel_form";
+//        }
+
+//        if (bindingResult.hasErrors()) {
+//            return "travel/travel_form";
+//        }
+
+        SiteUser siteUser = this.userService.getUser(principal.getName());
+        this.travelService.create(travelCreateForm.getSubject(), travelCreateForm.getContent(), siteUser, travelCreateForm.getTravelStart(), travelCreateForm.getTravelEnd(), travelCreateForm.getExpenses());
+        return "redirect:/travel/list";
+    }
     //    상세보기
     @GetMapping(value = "/detail/{id}")
     public String detail(Model model, Principal principal, @PathVariable("id") Integer id) {

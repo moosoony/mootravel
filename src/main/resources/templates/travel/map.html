@@ -16,6 +16,21 @@
     </li>
 </ul>
 
+<div className="mb-3">
+    <label className="form-label">지역명</label>
+    <input type="text" name="destination" className="form-control" id="destination">
+</div>
+
+<div className="mb-3">
+    <label className="form-label" >위도</label>
+    <input type="text" name="lat" className="form-control" id="lat">
+</div>
+
+<div className="mb-3">
+    <label className="form-label" >경도</label>
+    <input type="text" name="lng" className="form-control" id="lng">
+</div>
+
 <div class="container">
     <div class="row">
         <div class="col">
@@ -32,73 +47,77 @@
         </div>
     </div>
 </div>
-
-
-
-
-<script>
-  function initMap() {
-    // 지도 생성
-    var map = new google.maps.Map(document.getElementById("map"), {
-      center: { lat: 37.5665, lng: 126.9780 },
-      zoom: 12,
-    });
-
-    // 검색 결과 표시를 위한 infowindow 생성
-    var infowindow = new google.maps.InfoWindow();
-
-    // 검색창과 검색 버튼 생성
-    var input = document.getElementById("search-box");
-    var searchBox = new google.maps.places.SearchBox(input);
-    map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
-
-    // 검색 결과 변경 시 지도의 중심점 이동 및 검색 결과 표시
-    map.addListener("bounds_changed", function() {
-      searchBox.setBounds(map.getBounds());
-    });
-
-    // 검색 결과 마커 생성 및 클릭 시 정보 표시
-    var markers = [];
-    searchBox.addListener("places_changed", function() {
-      var places = searchBox.getPlaces();
-      if (places.length == 0) {
-        return;
-      }
-      markers.forEach(function(marker) {
-        marker.setMap(null);
-      });
-      markers = [];
-      var bounds = new google.maps.LatLngBounds();
-      places.forEach(function(place) {
-        if (!place.geometry) {
-          console.log("장소에 대한 정보를 찾을 수 없습니다.");
-          return;
-        }
-        var marker = new google.maps.Marker({
-          map: map,
-          title: place.name,
-          position: place.geometry.location,
-        });
-        markers.push(marker);
-        bounds.extend(place.geometry.location);
-        marker.addListener("click", function() {
-          infowindow.setContent(place.name + "<br>" + place.formatted_address);
-          infowindow.open(map, marker);
-
-          const name = marker.getTitle();
-          const lat = marker.getPosition().lat();
-          const lng = marker.getPosition().lng();
-
-
-          console.log('이름: '+name);
-          console.log('위도: '+lat);
-          console.log('경도: '+lng);
-
-        });
-      });
-      map.fitBounds(bounds);
-    });
-  }
-</script>
 </body>
+<script>
+
+    function initMap() {
+        // 지도 생성
+        var map = new google.maps.Map(document.getElementById("map"), {
+            center: { lat: 37.5665, lng: 126.9780 },
+            zoom: 12,
+        });
+
+        // 검색 결과 표시를 위한 infowindow 생성
+        var infowindow = new google.maps.InfoWindow();
+
+        // 검색창과 검색 버튼 생성
+        var input = document.getElementById("search-box");
+        var searchBox = new google.maps.places.SearchBox(input);
+        map.controls[google.maps.ControlPosition.TOP_LEFT].push(input);
+
+        // 검색 결과 변경 시 지도의 중심점 이동 및 검색 결과 표시
+        map.addListener("bounds_changed", function() {
+            searchBox.setBounds(map.getBounds());
+        });
+
+        // 검색 결과 마커 생성 및 클릭 시 정보 표시
+        var markers = [];
+        searchBox.addListener("places_changed", function() {
+            var places = searchBox.getPlaces();
+            if (places.length == 0) {
+                return;
+            }
+            markers.forEach(function(marker) {
+                marker.setMap(null);
+            });
+            markers = [];
+            var bounds = new google.maps.LatLngBounds();
+            places.forEach(function(place) {
+                if (!place.geometry) {
+                    console.log("장소에 대한 정보를 찾을 수 없습니다.");
+                    return;
+                }
+                var marker = new google.maps.Marker({
+                    map: map,
+                    title: place.name,
+                    position: place.geometry.location,
+                });
+                markers.push(marker);
+                bounds.extend(place.geometry.location);
+                marker.addListener("click", function() {
+                    infowindow.setContent(place.name + "<br>" + place.formatted_address);
+                    infowindow.open(map, marker);
+
+                    const name = marker.getTitle();
+                    const lat = marker.getPosition().lat();
+                    const lng = marker.getPosition().lng();
+
+                    console.log('이름: '+name);
+                    console.log('위도: '+lat);
+                    console.log('경도: '+lng);
+
+                    const nameInput = document.getElementById("name");
+                    const latInput = document.getElementById("lat");
+                    const lngInput = document.getElementById("lng");
+
+                    // input value에 값 넣기
+                    nameInput.value = name;
+                    latInput.value = lat;
+                    lngInput.value = lng;
+                });
+            });
+            map.fitBounds(bounds);
+        });
+    }
+</script>
 </html>

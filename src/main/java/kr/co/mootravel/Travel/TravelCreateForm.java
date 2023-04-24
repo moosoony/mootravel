@@ -25,15 +25,15 @@ public class TravelCreateForm {
     private String travelEnd;
 
 
-    private MultipartFile file;
+//    private MultipartFile file;
 
-    @NotEmpty(message = "여행지는 필수항목입니다.")
+//    @NotEmpty(message = "여행지는 필수항목입니다.")
     private String destination;
     
-    @NotEmpty(message = "위도는 필수항목입니다.")
+//    @NotEmpty(message = "위도는 필수항목입니다.")
     private String lat;
 
-    @NotEmpty(message = "경도는 필수항목입니다.")
+//    @NotEmpty(message = "경도는 필수항목입니다.")
     private String lng;
 
     @NotEmpty(message = "내용은 필수항목입니다.")

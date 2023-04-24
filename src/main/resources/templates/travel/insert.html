@@ -85,7 +85,6 @@
         <label th:for="content" class="form-label">Content</label>
         <textarea class="mb-3" id="summernote">
         </textarea>
-
         <script>
             $('#summernote').summernote({
                 placeholder: 'Hello stand alone ui',
@@ -111,6 +110,10 @@
 
             // 구글 지도 스크립트
             function initMap() {
+                const nameInput = document.getElementById("name");
+                const latInput = document.getElementById("lat");
+                const lngInput = document.getElementById("lng");
+
                 // 지도 생성
                 var map = new google.maps.Map(document.getElementById("map"), {
                     center: {lat: 37.5665, lng: 126.9780},
@@ -163,19 +166,20 @@
                             const lat = marker.getPosition().lat();
                             const lng = marker.getPosition().lng();
 
-                            const nameInput = document.getElementById("name");
-                            const latInput = document.getElementById("lat");
-                            const lngInput = document.getElementById("lng");
-
-                            // input value에 값 넣기
-                            nameInput.value = name;
-                            latInput.value = lat;
-                            lngInput.value = lng;
-
-
+                            // 콘솔에 이름, 위도, 경도 출력
                             console.log('이름: ' + name);
                             console.log('위도: ' + lat);
                             console.log('경도: ' + lng);
+
+                            window.addEventListener('DOMContentLoaded', () => {
+                                const nameInput = document.getElementById("name");
+                                const latInput = document.getElementById("lat");
+                                const lngInput = document.getElementById("lng");
+
+                                nameInput.value = name;
+                                latInput.value = lat;
+                                lngInput.value = lng;
+                            });
 
 
                         });
@@ -185,8 +189,10 @@
             }
 
         </script>
-
         <input type="submit" value="Submit" class="btn btn-primary my-2">
+
     </form>
+
 </div>
+
 </html>

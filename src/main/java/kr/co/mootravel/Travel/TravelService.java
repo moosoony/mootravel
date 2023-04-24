@@ -116,6 +116,41 @@ public class TravelService {
         this.travelRepository.save(t);
     }
 
+    //   작성하기 서비스2
+    public void create(String subject, String content, SiteUser user, String travelStart, String travelEnd, String expenses) throws IOException {
+
+//        // 원래 파일 이름 추출
+//        String origName = file.getOriginalFilename();
+//
+//        // 파일 이름으로 쓸 uuid 생성
+//        String uuid = UUID.randomUUID().toString();
+//
+//        // 확장자 추출(ex : .png)
+//        String extension = origName.substring(origName.lastIndexOf("."));
+//
+//        // uuid와 확장자 결합
+//        String savedName = uuid + extension;
+//
+//        // 파일을 불러올 때 사용할 파일 경로
+//        String savedPath = fileDir + savedName;
+//
+//        // 실제로 로컬에 uuid를 파일명으로 저장
+//        file.transferTo(new File(savedPath));
+
+        Travel t = new Travel();
+        t.setAuthor(user);
+        t.setSubject(subject);
+//        t.setOrgNm(origName);
+//        t.setSavedNm(savedName);
+//        t.setSavedPath(savedPath);
+        t.setContent(content);
+        t.setCreateDate(LocalDateTime.now());
+        t.setTravelStart(travelStart);
+        t.setTravelEnd(travelEnd);
+        t.setExpenses(expenses);
+        this.travelRepository.save(t);
+    }
+
     //    상세보기 서비스
     public Travel getTravel(Integer id) {
         Optional<Travel> travel = this.travelRepository.findById(id);
