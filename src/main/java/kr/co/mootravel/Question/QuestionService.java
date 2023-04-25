@@ -72,10 +72,10 @@ public class QuestionService {
     }
 
     // 좋아요 생성 서비스
-    public void like(Question question, SiteUser siteUser) {
-        question.getVoter().add(siteUser);
-        this.questionRepository.save(question);
-    }
+//    public void like(Question question, SiteUser siteUser) {
+//        question.getVoter().add(siteUser);
+//        this.questionRepository.save(question);
+//    }
 
     // 검색 키워드 서비스
     public Specification<Question> search(String kw) {
@@ -113,5 +113,10 @@ public class QuestionService {
     // 사용자가 작성한 문의글 삭제
     public void deleteByAuthorId(Long id){
         this.questionRepository.deleteByAuthorId(id);
+    }
+
+    // 사용자가 작성한 문의글의 Id
+    public List<Integer> findByQuestionId(Long id){
+        return this.questionRepository.findByAuthorId(id);
     }
 }

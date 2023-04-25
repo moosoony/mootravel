@@ -23,6 +23,7 @@ public interface LikeRepository extends JpaRepository<Like, Integer> {
     @Query(value = "select count(l) from Like l where l.author.id=:id")
     Long getCount(Long id);
 
+
     // Top3 구현 메서드
     @Query("SELECT l.travel FROM Like l " +
             "WHERE YEAR(l.travel.createDate) = YEAR(CURRENT_DATE) " +
@@ -30,4 +31,8 @@ public interface LikeRepository extends JpaRepository<Like, Integer> {
             "group by l.travel.id " +
             "order by count(l.author.id) desc")
     List<Travel> findTop3TravelByThisMonth(Pageable pageable);
+
+    void deleteByAuthorId(Long userId);
 }
+
+

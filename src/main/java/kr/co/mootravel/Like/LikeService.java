@@ -51,14 +51,23 @@ public class LikeService {
     }
 
     // 사용자가 좋아요한 게시글 수
-    public Long getCount(Long id){
+    public Long getCount(Long id) {
         return this.likeRepository.getCount(id);
     }
 
     // Top3 구현 메서드
-    public List<Travel> findTravelByThisMonth(){
+    public List<Travel> findTravelByThisMonth() {
         Pageable pageable = PageRequest.of(0, 3);
         return this.likeRepository.findTop3TravelByThisMonth(pageable);
     }
 
+    //    게시글 id로 좋아요 취소
+    public void delete(Long id) {
+        this.likeRepository.deleteById(Math.toIntExact(id));
+    }
+
+    //    사용자 id로 좋아요 취소
+    public void deleteByAuthorId(Long id){
+        this.likeRepository.deleteByAuthorId(id);
+    }
 }

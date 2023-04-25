@@ -10,6 +10,8 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 @Repository
 public interface QuestionRepository extends JpaRepository<Question, Integer> {
 
@@ -51,4 +53,8 @@ public interface QuestionRepository extends JpaRepository<Question, Integer> {
     @Transactional
     @Query("delete from Question q where q.author.id=:id")
     void deleteByAuthorId(Long id);
+
+    // 사용자가 작성한 문의글의 Id
+    @Query("select q.id from Question q where q.author.id=:id")
+    List<Integer> findByAuthorId(Long id);
 }

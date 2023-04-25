@@ -48,8 +48,10 @@ public class LikeController {
         else {
             // 좋아요 취소
             Integer likeId = Integer.valueOf(this.likeRepository.like(aid, tid));
-            likeRepository.deleteById(likeId);
+//            likeRepository.deleteById(likeId);
+            this.likeService.delete(Long.valueOf(likeId));
         }
+
 
         return String.format("redirect:/travel/detail/%s", id);
     }

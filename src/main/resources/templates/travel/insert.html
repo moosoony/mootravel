@@ -21,70 +21,104 @@
 
         <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 
-<!--                <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()} or ${file}!=null">-->
-<!--                    <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>-->
-<!--                    <div th:if="${file}!=null" th:text="${file}"/>-->
-<!--                </div>-->
+        <!--                <div class="alert alert-danger" role="alert" th:if="${#fields.hasAnyErrors()} or ${file}!=null">-->
+        <!--                    <div th:each="err : ${#fields.allErrors()}" th:text="${err}"/>-->
+        <!--                    <div th:if="${file}!=null" th:text="${file}"/>-->
+        <!--                </div>-->
 
-        <div class="mb-3">
-            <label class="form-label" th:for="subject">Subject</label>
-            <input type="text" name="subject" class="form-control" th:value="${subject}" >
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label" th:for="category">Travel Category</label>
-            <input type="text" name="category" class="form-control" th:value="${category}" >
+        <div class="row">
+            <div class="mb-3 col-md-6">
+                <label class="form-label" th:for="subject">Subject</label>
+                <input type="text" name="subject" class="form-control" th:value="${subject}">
+            </div>
+            <div class="mb-3 col-md-6">
+                <label class="form-label" th:for="category">Travel Category</label>
+                <input type="text" name="category" class="form-control" th:value="${category}">
+            </div>
         </div>
 
         <div class="row">
             <div class="mb-3 col-md-6">
                 <label class="form-label" th:for="travelStart">Travel Start</label>
-                <input type="text" name="travelStart" class="form-control" th:value="${travelStart}" >
+                <input type="text" name="travelStart" class="form-control" th:value="${travelStart}">
             </div>
             <div class="mb-3 col-md-6">
                 <label class="form-label" th:for="travelEnd">Travel End</label>
-                <input type="text" name="travelEnd" class="form-control" th:value="${travelEnd}" >
+                <input type="text" name="travelEnd" class="form-control" th:value="${travelEnd}">
             </div>
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label" th:for="expenses">Travel expenses</label>
-            <input type="text" name="expenses" class="form-control" >
         </div>
 
         <div class="mb-3">
             <label class="form-label" th:for="file">Travel File</label>
-            <input type="text" name="file" class="form-control" th:value="${file}" >
+            <input type="text" name="file" class="form-control" th:value="${file}">
         </div>
 
         <div class="mb-3">
             <label class="form-label" th:for="destination">지역명</label>
-            <input type="text" name="destination" class="form-control" id="destination" >
+            <input type="text" name="destination" class="form-control" id="destination">
         </div>
 
         <div class="mb-3">
             <label class="form-label" th:for="lat">위도</label>
-            <input type="text" name="lat" class="form-control" id="lat" >
+            <input type="text" name="lat" class="form-control" id="lat">
         </div>
 
         <div class="mb-3">
             <label class="form-label" th:for="lng">경도</label>
-            <input type="text" name="lng" class="form-control" id="lng" >
+            <input type="text" name="lng" class="form-control" id="lng">
+        </div>
+
+        <div class="card border-warning mb-3" style="max-width: 18rem;">
+            <div class="card-header">Header</div>
+            <div class="card-body">
+                <h5 class="card-title">Warning card title</h5>
+                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
+            </div>
+        </div>
+
+        <div class="mb-3">
+            <ul class="ul-style" id="cart2">
+                <li id="cart2NoList" class="center">
+                    <hs><span data-langnum="27">가고 싶은 장소들을 검색하여 추가해주세요.</span><br><span data-langnum="28">설정하신 일자별 여행시간 내에서 </span><br><span
+                            data-langnum="29">하루 평균 최대 8개의 장소까지 선택 가능합니다.</span></hs>
+                    <br><br><i style="cursor: pointer" class="material-icons" onclick="searchSpotKeywordFocus()">add</i>
+                </li>
+            </ul>
+        </div>
+
+        <!--        검색어 입력 영역 시작-->
+        <div class="mb-3 flex-column">
+            <!--            <input id="search-box" type="text" style="height: max-content" placeholder="장소 검색">-->
+            <div>
+                <div class="mappage-search-container" id="searchSpotOrHotelKeywordWrapper">
+                    <div class="mappage-search-input-container">
+                        <input id="search-box" type="text" class="center" data-attrnum="10" data-attrtype="placeholder"
+                               placeholder="검색어를 입력하세요." autocomplete="off">
+                    </div>
+
+                    <button class="mappage-search-button" id="searchSpotsOrHotelsButton"
+                            onclick="searchSpotsOrHotels()">
+                        <i class="material-icons mappage-search-button-icon">search</i>
+                    </button>
+                </div>
+                <!--        검색어 입력 영역 끝-->
+
+                <!--            <button type="button" onclick="savePlace()">검색</button>-->
+            </div>
         </div>
 
         <!--        구글 지도 영역 시작-->
-        <div class="mb-3">
-            <input id="search-box" type="text" style="height: max-content" placeholder="장소 검색">
-<!--            <button type="button" onclick="savePlace()">검색</button>-->
-        </div>
-
         <div id="map" style="height: 400px;"></div>
         <!--        구글 지도 영역 끝-->
 
-
-        <label th:for="content" class="form-label">Content</label>
-        <textarea class="mb-3" id="summernote" name="content">
+        <!--        Summernote 영역 시작-->
+        <div class="mb-3">
+            <label th:for="content" class="form-label">Content</label>
+            <textarea class="mb-3" id="summernote" name="content">
         </textarea>
+        </div>
+        <!--        Summernote 끝-->
+
         <script>
             $('#summernote').summernote({
                 placeholder: 'Hello stand alone ui',
@@ -107,7 +141,6 @@
 
                 fontSizes: ['8', '9', '10', '11', '12', '14', '16', '18', '20', '22', '24', '28', '30', '36', '50', '72'],
             });
-
 
 
             // 구글 지도 스크립트
@@ -173,13 +206,13 @@
                             console.log('위도: ' + lat);
                             console.log('경도: ' + lng);
 
-                                const destinationInput = document.getElementById("destination");
-                                const latInput = document.getElementById("lat");
-                                const lngInput = document.getElementById("lng");
+                            const destinationInput = document.getElementById("destination");
+                            const latInput = document.getElementById("lat");
+                            const lngInput = document.getElementById("lng");
 
                             destinationInput.value = name;
-                                latInput.value = lat;
-                                lngInput.value = lng;
+                            latInput.value = lat;
+                            lngInput.value = lng;
 
                         });
                     });

@@ -23,7 +23,6 @@ public class Like {
     private Travel travel;
 
     @ManyToOne
-
     private SiteUser author;
 
     private LocalDateTime createDate;

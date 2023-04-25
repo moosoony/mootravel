@@ -125,16 +125,24 @@ public class UserController {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "삭제권한이 없습니다.");
         }
 
+        // 사용자의 Id
         Long id = Long.valueOf(Math.toIntExact(siteuser.getId()));
 
-        // 사용자가 작성한 게시글 삭제
-        this.travelService.deleteByAuthorId(id);
+//        // 사용자가 좋아요 한 게시글 좋아요 취소
+//        this.likeService.deleteByAuthorId(id);
+//
+//        // 사용자가 작성한 게시글 삭제
+//        this.travelService.deleteByAuthorId(id);
+//
+//        // 사용자가 작성한 문의글 삭제
+//        this.questionService.deleteByAuthorId(id);
 
-        // 사용자가 작성한 문의글 삭제
-        this.questionService.deleteByAuthorId(id);
+        // 사용자가 작성한 문의글의 Id 리스트
+        List<Integer> QuestionIdList = this.questionService.findByQuestionId(id);
 
+        System.out.println("사용자가 작성한 문의글의 Id 리스트"+QuestionIdList);
 
-        this.userService.delete(siteuser);
+//        this.userService.delete(siteuser);
 
         return "redirect:/user/logout";
     }

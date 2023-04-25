@@ -45,8 +45,16 @@ public class AnswerService {
 
 
 
-    public void vote(Answer answer, SiteUser siteUser){
-        answer.getVoter().add(siteUser);
-        this.answerRepository.save(answer);
+//    public void vote(Answer answer, SiteUser siteUser){
+//        answer.getVoter().add(siteUser);
+//        this.answerRepository.save(answer);
+//    }
+
+    public void deleteByAuthorId(Long id) {
+        this.answerRepository.deleteByAuthorId(id);
+    }
+
+    public void deleteByQuestionId(Integer id){
+        this.answerRepository.deleteByQuestionId(id);
     }
 }

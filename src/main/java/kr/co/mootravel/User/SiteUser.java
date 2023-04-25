@@ -13,12 +13,12 @@ import javax.persistence.*;
 @Data
 @Entity
 public class SiteUser {
-
+    //    사용자 ID
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    //    사용자 ID
+
     @Column(unique = true) // 유일한 값만 저장할 수 있음
     private String username;
 
