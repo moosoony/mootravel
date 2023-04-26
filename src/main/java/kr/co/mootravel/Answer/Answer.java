@@ -3,10 +3,11 @@ package kr.co.mootravel.Answer;
 import kr.co.mootravel.Question.Question;
 import kr.co.mootravel.User.SiteUser;
 import lombok.Data;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.Set;
 
 @Data
 @Entity
@@ -20,7 +21,9 @@ public class Answer {
 
     private LocalDateTime createDate;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
+    @JoinColumn(name = "question_id", referencedColumnName = "id", nullable = false, foreignKey = @ForeignKey(name = "FK_answer_question_id"))
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Question question;
 
     @ManyToOne

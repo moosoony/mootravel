@@ -5,6 +5,8 @@ import kr.co.mootravel.File.FileEntity;
 import kr.co.mootravel.User.SiteUser;
 import lombok.Data;
 import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;

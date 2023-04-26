@@ -142,7 +142,7 @@ public class UserController {
 
         System.out.println("사용자가 작성한 문의글의 Id 리스트"+QuestionIdList);
 
-//        this.userService.delete(siteuser);
+        this.userService.delete(siteuser);
 
         return "redirect:/user/logout";
     }
