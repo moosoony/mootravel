@@ -7,7 +7,7 @@
     <h2 class="border-bottom py-2" th:text="${travel.subject}">
     </h2>
     <div class="d-flex justify-content-end">
-        <div th:text="${travel.author.username}"></div>
+<!--        <div th:text="${travel.author.username}"></div>-->
         <div class=" text-start mx-3" th:text="|view ${travel.viewcnt}|"></div>
         <div th:if="${travel.modifyDate != null}" class="text-start mx-3">
             <div th:text="|Modify : ${#temporals.format(travel.modifyDate, 'yyyy-MM-dd HH:mm')}|"></div>

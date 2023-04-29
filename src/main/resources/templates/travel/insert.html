@@ -53,38 +53,22 @@
             <input type="text" name="file" class="form-control" th:value="${file}">
         </div>
 
-        <div class="mb-3">
-            <label class="form-label" th:for="destination">지역명</label>
-            <input type="text" name="destination" class="form-control" id="destination">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label" th:for="lat">위도</label>
-            <input type="text" name="lat" class="form-control" id="lat">
-        </div>
-
-        <div class="mb-3">
-            <label class="form-label" th:for="lng">경도</label>
-            <input type="text" name="lng" class="form-control" id="lng">
-        </div>
-
-        <div class="card border-warning mb-3" style="max-width: 18rem;">
-            <div class="card-header">Header</div>
-            <div class="card-body">
-                <h5 class="card-title">Warning card title</h5>
-                <p class="card-text">Some quick example text to build on the card title and make up the bulk of the card's content.</p>
-            </div>
-        </div>
 
         <div class="mb-3">
             <ul class="ul-style" id="cart2">
                 <li id="cart2NoList" class="center">
                     <hs><span data-langnum="27">가고 싶은 장소들을 검색하여 추가해주세요.</span><br><span data-langnum="28">설정하신 일자별 여행시간 내에서 </span><br><span
                             data-langnum="29">하루 평균 최대 8개의 장소까지 선택 가능합니다.</span></hs>
-                    <br><br><i style="cursor: pointer" class="material-icons" onclick="searchSpotKeywordFocus()">add</i>
+                    <br>
                 </li>
             </ul>
         </div>
+
+        <!--마커 선택시, 담기는 여행지 정보 영역 시작-->
+        <div class="mb-3" id="card-container"></div>
+        <!--마커 선택시, 담기는 여행지 정보 영역 끝-->
+
+
 
         <!--        검색어 입력 영역 시작-->
         <div class="mb-3 flex-column">
@@ -196,23 +180,56 @@
                             infowindow.setContent(place.name + "<br>" + place.formatted_address);
                             infowindow.open(map, marker);
 
-                            // 이름, 위도, 경도 추출
+                            // 이름 정보 추출
                             const name = marker.getTitle();
+
+                            // 타입 정보 추출
+                            const types = place.types.join(', ');
+
+                            // 평점 추출
+                            const rating = place.rating;
+
+                            // 전체 주소 정보 추출
+                            const address = place.formatted_address;
+
+                            // 전화번호 추출
+                            const phone_number = place.formatted_phone_number;
+
+                            // 위도 정보 추출
                             const lat = marker.getPosition().lat();
+
+                            // 경도 정보 추출
                             const lng = marker.getPosition().lng();
+
+
 
                             // 콘솔에 이름, 위도, 경도 출력
                             console.log('이름: ' + name);
                             console.log('위도: ' + lat);
                             console.log('경도: ' + lng);
 
-                            const destinationInput = document.getElementById("destination");
-                            const latInput = document.getElementById("lat");
-                            const lngInput = document.getElementById("lng");
+                            // 카드를 담을 div 요소를 만듭니다.
+                            const card = document.createElement("div");
+                            card.classList.add("card");
 
-                            destinationInput.value = name;
-                            latInput.value = lat;
-                            lngInput.value = lng;
+                            // 카드 내용을 만듭니다.
+                            const cardContent = `
+                            <h2 name="name">${name}</h2>
+                            <br>
+                            <p name="address">${types}</p>
+                            <p name="address">${rating}</p>
+                            <p name="address">${address}</p>
+                            <p name="address">${phone_number}</p>
+                            <p name="lat">${lat}</p>
+                            <p name="lng">${lng}</p>
+                            `;
+
+                            card.innerHTML = cardContent;
+
+                            // 카드를 container에 추가합니다.
+                            const container = document.getElementById("card-container");
+                            container.appendChild(card);
+
 
                         });
                     });
@@ -226,3 +243,4 @@
     </form>
 </div>
 </html>
+

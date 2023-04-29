@@ -75,8 +75,8 @@ public class TravelController {
         LocalDate date2 = LocalDate.parse(resultTo);
 
         // 두 날짜의 차 계산 + 1
-        long daysBetween = date1.until(date2, ChronoUnit.DAYS) + 1;
-        System.out.println("두 날짜의 차 : " + daysBetween);
+        long dayCount = date1.until(date2, ChronoUnit.DAYS) + 1;
+        System.out.println("두 날짜의 차 : " + dayCount);
 
 
         // 입력한 값을 저장하거나 처리하는 코드
@@ -85,7 +85,7 @@ public class TravelController {
         model.addAttribute("travelStart", resultFrom);
         model.addAttribute("travelEnd", resultTo);
         model.addAttribute("file", modalForm.getFile());
-        model.addAttribute("numTabs", daysBetween);
+        model.addAttribute("dayCount", dayCount);
 
         return "travel/insert";
     }
@@ -95,6 +95,13 @@ public class TravelController {
         return "travel/insert";
     }
 
+
+    @GetMapping(value = "/navbar")
+    public String navbar(Model model){
+        long dayCount = 5;
+        model.addAttribute("dayCount", dayCount);
+        return "travel/navbar";
+    }
 
     @PostMapping(value="/insert")
     public String insert(TravelCreateForm travelCreateForm, Model model,BindingResult bindingResult,
@@ -114,6 +121,7 @@ public class TravelController {
         return "redirect:/travel/list";
     }
     //    상세보기
+    @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/detail/{id}")
     public String detail(Model model, Principal principal, @PathVariable("id") Integer id) {
 
@@ -161,12 +169,17 @@ public class TravelController {
         return "travel/map";
     }
 
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/maptest")
+    public String maptest() {
+        return "travel/maptest";
+    }
+
     @PostMapping("/places")
     public void savePlace(@RequestBody Place place) {
         // Place 객체를 이용해 디비에 저장하는 코드
         System.out.println("장소"+place);
     }
-
 
 
     @PreAuthorize("isAuthenticated()")
