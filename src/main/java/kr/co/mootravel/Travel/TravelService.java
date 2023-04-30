@@ -82,7 +82,7 @@ public class TravelService {
     }
 
     //   작성하기 서비스
-    public void create(String subject, MultipartFile file, String content, SiteUser user, String travelStart, String travelEnd, String expenses) throws IOException {
+    public void create(String subject, MultipartFile file, String content, SiteUser user, String travelStart, String travelEnd) throws IOException {
 
         // 원래 파일 이름 추출
         String origName = file.getOriginalFilename();
@@ -112,12 +112,11 @@ public class TravelService {
         t.setCreateDate(LocalDateTime.now());
         t.setTravelStart(travelStart);
         t.setTravelEnd(travelEnd);
-        t.setExpenses(expenses);
         this.travelRepository.save(t);
     }
 
     //   작성하기 서비스2
-    public void create(String subject, String content, SiteUser user, String travelStart, String travelEnd, String expenses) throws IOException {
+    public void create(String subject, String content, SiteUser user, String travelStart, String travelEnd) throws IOException {
 
 //        // 원래 파일 이름 추출
 //        String origName = file.getOriginalFilename();
@@ -147,7 +146,6 @@ public class TravelService {
         t.setCreateDate(LocalDateTime.now());
         t.setTravelStart(travelStart);
         t.setTravelEnd(travelEnd);
-        t.setExpenses(expenses);
         this.travelRepository.save(t);
     }
 
@@ -167,7 +165,7 @@ public class TravelService {
     }
 
     //    수정 서비스
-    public void modify(Travel travel, @NotEmpty(message = "제목은 필수항목입니다.") @Size(max = 200) String travelFormSubject, @NotEmpty(message = "내용은 필수항목입니다.") String travelFormContent, @NotEmpty(message = "일정은 필수항목입니다.") String travelStart, String travelEnd, String expenses, MultipartFile file) throws IOException {
+    public void modify(Travel travel, @NotEmpty(message = "제목은 필수항목입니다.") @Size(max = 200) String travelFormSubject, @NotEmpty(message = "내용은 필수항목입니다.") String travelFormContent, @NotEmpty(message = "일정은 필수항목입니다.") String travelStart, String travelEnd, MultipartFile file) throws IOException {
         // 원래 파일 이름 추출
         String origName = file.getOriginalFilename();
 
@@ -190,7 +188,6 @@ public class TravelService {
         travel.setContent(travelFormContent);
         travel.setTravelStart(travelStart);
         travel.setTravelEnd(travelEnd);
-        travel.setExpenses(expenses);
         travel.setOrgNm(origName);
         travel.setSavedNm(savedName);
         travel.setSavedPath(savedPath);

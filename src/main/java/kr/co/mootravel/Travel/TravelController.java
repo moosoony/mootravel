@@ -4,6 +4,7 @@ import kr.co.mootravel.Like.LikeService;
 import kr.co.mootravel.User.SiteUser;
 import kr.co.mootravel.User.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -25,6 +26,8 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class TravelController {
+//    @Value("${api.key}")
+//    private String api;
 
     private final UserService userService;
     private final TravelService travelService;
@@ -50,6 +53,7 @@ public class TravelController {
         return "travel/list";
     }
 
+
     // 모달창에 있는 값 PostMapping
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/list")
@@ -59,7 +63,6 @@ public class TravelController {
                                   BindingResult bindingResult,
                                   Model model) {
         System.out.println("모달창 POST 컨트롤러");
-
 
         //        유효성 검사 실패 시
 //        if (bindingResult.hasErrors()) {
@@ -87,24 +90,28 @@ public class TravelController {
         model.addAttribute("file", modalForm.getFile());
         model.addAttribute("dayCount", dayCount);
 
+        // api key
+//        model.addAttribute("api", api);
+
+
         return "travel/insert";
     }
 
     @GetMapping(value = "/insert")
-    public String insert(TravelCreateForm travelCreateForm){
+    public String insert(TravelCreateForm travelCreateForm) {
         return "travel/insert";
     }
 
 
     @GetMapping(value = "/navbar")
-    public String navbar(Model model){
+    public String navbar(Model model) {
         long dayCount = 5;
         model.addAttribute("dayCount", dayCount);
         return "travel/navbar";
     }
 
-    @PostMapping(value="/insert")
-    public String insert(TravelCreateForm travelCreateForm, Model model,BindingResult bindingResult,
+    @PostMapping(value = "/insert")
+    public String insert(TravelCreateForm travelCreateForm, Model model, BindingResult bindingResult,
                          Principal principal) throws IOException {
 //        if (travelCreateForm.getFile().isEmpty()) {
 //            String file = "썸네일은 필수항목입니다.";
@@ -117,9 +124,10 @@ public class TravelController {
 //        }
 
         SiteUser siteUser = this.userService.getUser(principal.getName());
-        this.travelService.create(travelCreateForm.getSubject(), travelCreateForm.getContent(), siteUser, travelCreateForm.getTravelStart(), travelCreateForm.getTravelEnd(), travelCreateForm.getExpenses());
+        this.travelService.create(travelCreateForm.getSubject(), travelCreateForm.getContent(), siteUser, travelCreateForm.getTravelStart(), travelCreateForm.getTravelEnd());
         return "redirect:/travel/list";
     }
+
     //    상세보기
     @PreAuthorize("isAuthenticated()")
     @GetMapping(value = "/detail/{id}")
@@ -163,6 +171,7 @@ public class TravelController {
 
         return "travel/index";
     }
+
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/map")
     public String map() {
@@ -178,7 +187,7 @@ public class TravelController {
     @PostMapping("/places")
     public void savePlace(@RequestBody Place place) {
         // Place 객체를 이용해 디비에 저장하는 코드
-        System.out.println("장소"+place);
+        System.out.println("장소" + place);
     }
 
 
@@ -204,7 +213,7 @@ public class TravelController {
             return "travel/travel_form";
         }
         SiteUser siteUser = this.userService.getUser(principal.getName());
-        this.travelService.create(travelForm.getSubject(), travelForm.getFile(), travelForm.getContent(), siteUser, travelForm.getTravelStart(), travelForm.getTravelEnd(), travelForm.getExpenses());
+        this.travelService.create(travelForm.getSubject(), travelForm.getFile(), travelForm.getContent(), siteUser, travelForm.getTravelStart(), travelForm.getTravelEnd());
         return "redirect:/travel/list";
     }
 
@@ -221,7 +230,6 @@ public class TravelController {
         travelForm.setContent(travel.getContent());
         travelForm.setTravelStart(travel.getTravelStart());
         travelForm.setTravelEnd(travel.getTravelEnd());
-        travelForm.setExpenses(travel.getExpenses());
         return "travel/travel_form";
     }
 
@@ -238,7 +246,7 @@ public class TravelController {
         if (!travel.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-        this.travelService.modify(travel, travelForm.getSubject(), travelForm.getContent(), travelForm.getTravelStart(), travelForm.getTravelEnd(), travelForm.getExpenses(), travelForm.getFile());
+        this.travelService.modify(travel, travelForm.getSubject(), travelForm.getContent(), travelForm.getTravelStart(), travelForm.getTravelEnd(), travelForm.getFile());
         return String.format("redirect:/travel/detail/%s", id);
     }
 

@@ -8,7 +8,7 @@
             integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
             crossorigin="anonymous"></script>
 
-    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyB41DRUbKWJHPxaFjMAwdrzWzbVKartNGg&libraries=places&callback=initMap"
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDK3x6PWOe-7FZNKHUJsJFShioh6vgVGG8&libraries=places&callback=initMap"
             async defer></script>
 
     <link href="https://cdn.jsdelivr.net/npm/summernote@0.8.18/dist/summernote-lite.min.css" rel="stylesheet">
@@ -57,17 +57,18 @@
         <div class="mb-3">
             <ul class="ul-style" id="cart2">
                 <li id="cart2NoList" class="center">
-                    <hs><span data-langnum="27">가고 싶은 장소들을 검색하여 추가해주세요.</span><br><span data-langnum="28">설정하신 일자별 여행시간 내에서 </span><br><span
-                            data-langnum="29">하루 평균 최대 8개의 장소까지 선택 가능합니다.</span></hs>
+                    <hs><span data-langnum="27">가고 싶은 장소들을 검색하여 마커를 선택하여 장소를 추가해주세요.</span>
+                        <br>
+                        <span data-langnum="28">설정하신 일자별 여행시간 내에서 </span><br><span
+                                data-langnum="29">하루 평균 최대 8개의 장소까지 선택 가능합니다.</span></hs>
                     <br>
                 </li>
             </ul>
         </div>
 
         <!--마커 선택시, 담기는 여행지 정보 영역 시작-->
-        <div class="mb-3" id="card-container"></div>
+        <div class="mb-3 justify-content-center" id="card-container"></div>
         <!--마커 선택시, 담기는 여행지 정보 영역 끝-->
-
 
 
         <!--        검색어 입력 영역 시작-->
@@ -196,32 +197,52 @@
                             const phone_number = place.formatted_phone_number;
 
                             // 위도 정보 추출
-                            const lat = marker.getPosition().lat();
+                            const latitude = marker.getPosition().lat();
 
                             // 경도 정보 추출
-                            const lng = marker.getPosition().lng();
+                            const longitude = marker.getPosition().lng();
 
+                            // place_id 추출
+                            const place_id = place.place_id;
 
 
                             // 콘솔에 이름, 위도, 경도 출력
                             console.log('이름: ' + name);
-                            console.log('위도: ' + lat);
-                            console.log('경도: ' + lng);
+                            console.log('타입: ' + types);
+                            console.log('평점: ' + rating);
+                            console.log('주소: ' + address);
+                            console.log('전화번호: ' + phone_number);
+                            console.log('위도: ' + latitude);
+                            console.log('경도: ' + longitude);
+                            console.log('place_id: ' + place_id);
 
                             // 카드를 담을 div 요소를 만듭니다.
                             const card = document.createElement("div");
                             card.classList.add("card");
 
+                            // 여행지 수를 저장할 변수 초기화
+                            let destinationCount = 0;
+
+                            // 여행지 수를 증가시키면서 인덱스 값 설정
+                            const index = destinationCount++;
+
                             // 카드 내용을 만듭니다.
                             const cardContent = `
-                            <h2 name="name">${name}</h2>
-                            <br>
-                            <p name="address">${types}</p>
-                            <p name="address">${rating}</p>
-                            <p name="address">${address}</p>
-                            <p name="address">${phone_number}</p>
-                            <p name="lat">${lat}</p>
-                            <p name="lng">${lng}</p>
+                            <div class="card position-relative shadow" style="max-width: 700px;">
+                            <div class="position-absolute z-index--1 me-10 me-xxl-0" style="right:-160px;top:-210px;"></div>
+                            <div class="card-body p-3">
+                            <input type="hidden" name="destinations[${index}].place_id" value="${place_id}"/>
+                            <h5 class="fw-medium" name="destinations[${index}].name" value="${name}">${name}</h5>
+                            <p class="fs--1 mb-3 fw-medium">14-29 June | by Robbin joseph</p>
+                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].types" value="${types}">${types}</p>
+                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].rating" value="${rating}">${rating}</p>
+                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].address" value="${address}">${address}</p>
+                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].phone_number" value="${phone_number}">${phone_number}</p>
+                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].latitude" value="${latitude}">${latitude}</p>
+                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].longitude" value="${longitude}">${longitude}</p>
+                            </div>
+                            </div>
+                            </div>
                             `;
 
                             card.innerHTML = cardContent;
@@ -237,9 +258,7 @@
                 });
             }
         </script>
-
         <input type="submit" value="Submit" class="btn btn-primary my-2">
-
     </form>
 </div>
 </html>

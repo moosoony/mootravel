@@ -26,8 +26,4 @@ public class TravelForm {
 
     @NotEmpty(message = "일정은 필수항목입니다.")
     private String travelEnd;
-
-    @NotEmpty(message = "경비는 필수항목입니다.")
-    @PositiveOrZero(message = "경비는 숫자 0 이상이어야 합니다.")
-    private String expenses;
 }

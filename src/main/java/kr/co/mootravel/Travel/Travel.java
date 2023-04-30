@@ -1,5 +1,6 @@
 package kr.co.mootravel.Travel;
 
+import kr.co.mootravel.Destination;
 import kr.co.mootravel.Reply.Reply;
 import kr.co.mootravel.User.SiteUser;
 import kr.co.mootravel.Like.Like;
@@ -10,6 +11,7 @@ import org.hibernate.annotations.DynamicInsert;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -63,9 +65,9 @@ public class Travel {
     //    여행 종료일
     private String travelEnd;
 
-    //    여행 경비
-    @Column(columnDefinition = "integer default 0", nullable = false)
-    private String expenses;
+    // 여행지 정보
+    @OneToMany(mappedBy = "travel", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Destination> destinations = new ArrayList<>();
 
     //    댓글
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE)

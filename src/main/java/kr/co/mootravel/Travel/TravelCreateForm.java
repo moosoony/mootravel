@@ -38,9 +38,4 @@ public class TravelCreateForm {
 
     @NotEmpty(message = "내용은 필수항목입니다.")
     private String content;
-
-
-    @NotEmpty(message = "경비는 필수항목입니다.")
-    @PositiveOrZero(message = "경비는 숫자 0 이상이어야 합니다.")
-    private String expenses;
 }
