@@ -4,7 +4,6 @@ import kr.co.mootravel.Like.LikeService;
 import kr.co.mootravel.User.SiteUser;
 import kr.co.mootravel.User.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -26,8 +25,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Controller
 public class TravelController {
-//    @Value("${api.key}")
-//    private String api;
 
     private final UserService userService;
     private final TravelService travelService;
@@ -69,10 +66,6 @@ public class TravelController {
 //            return "redirect:/travel/list";
 //        }
 
-        // 받은 값 확인
-//        System.out.println("resultFrom 받은 값 확인 "+resultFrom);
-//        System.out.println("resultTo 받은 값 확인 "+resultTo);
-
         // 달력에 입력받은 값 날짜로 변환
         LocalDate date1 = LocalDate.parse(resultFrom);
         LocalDate date2 = LocalDate.parse(resultTo);
@@ -90,10 +83,6 @@ public class TravelController {
         model.addAttribute("file", modalForm.getFile());
         model.addAttribute("dayCount", dayCount);
 
-        // api key
-//        model.addAttribute("api", api);
-
-
         return "travel/insert";
     }
 
@@ -102,7 +91,6 @@ public class TravelController {
         return "travel/insert";
     }
 
-
     @GetMapping(value = "/navbar")
     public String navbar(Model model) {
         long dayCount = 5;
@@ -110,21 +98,21 @@ public class TravelController {
         return "travel/navbar";
     }
 
+    // 여행 일정 등록하기 PostMapping
     @PostMapping(value = "/insert")
-    public String insert(TravelCreateForm travelCreateForm, Model model, BindingResult bindingResult,
+    public String insert(Model model, @Valid TravelInsertForm travelInsertForm, BindingResult bindingResult,
                          Principal principal) throws IOException {
-//        if (travelCreateForm.getFile().isEmpty()) {
-//            String file = "썸네일은 필수항목입니다.";
-//            model.addAttribute("file", file);
-//            return "travel/travel_form";
-//        }
 
-//        if (bindingResult.hasErrors()) {
-//            return "travel/travel_form";
-//        }
+        if (bindingResult.hasErrors()) {
+            return "travel/travel_form";
+        }
 
         SiteUser siteUser = this.userService.getUser(principal.getName());
-        this.travelService.create(travelCreateForm.getSubject(), travelCreateForm.getContent(), siteUser, travelCreateForm.getTravelStart(), travelCreateForm.getTravelEnd());
+        int index = 0;
+
+        this.travelService.create(travelInsertForm.getSubject(), travelInsertForm.getContent(), siteUser, travelInsertForm.getTravelStart(), travelInsertForm.getTravelEnd(),
+               travelInsertForm.getPlace_id());
+
         return "redirect:/travel/list";
     }
 

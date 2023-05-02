@@ -1,6 +1,5 @@
 package kr.co.mootravel.Travel;
 
-import kr.co.mootravel.Destination;
 import kr.co.mootravel.Reply.Reply;
 import kr.co.mootravel.User.SiteUser;
 import kr.co.mootravel.Like.Like;
@@ -65,10 +64,6 @@ public class Travel {
     //    여행 종료일
     private String travelEnd;
 
-    // 여행지 정보
-    @OneToMany(mappedBy = "travel", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Destination> destinations = new ArrayList<>();
-
     //    댓글
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE)
     private List<Reply> replyList;
@@ -77,4 +72,29 @@ public class Travel {
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE)
     private Set<Like> voter;
 
+    // 여행지 이름
+    private String name;
+
+    // 여행지 타입
+    private String type;
+
+
+    // 여행지 평점
+    private double rating;
+
+
+    // 여행지 주소
+    private String address;
+
+    // 여행지 번호
+    private String phone_number;
+
+    // 여행지 위도
+    private double latitude;
+
+    // 여행지 경도
+    private double longitude;
+
+    // 여행지 place_id
+    private String place_id;
 }

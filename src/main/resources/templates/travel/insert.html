@@ -80,15 +80,7 @@
                         <input id="search-box" type="text" class="center" data-attrnum="10" data-attrtype="placeholder"
                                placeholder="검색어를 입력하세요." autocomplete="off">
                     </div>
-
-                    <button class="mappage-search-button" id="searchSpotsOrHotelsButton"
-                            onclick="searchSpotsOrHotels()">
-                        <i class="material-icons mappage-search-button-icon">search</i>
-                    </button>
                 </div>
-                <!--        검색어 입력 영역 끝-->
-
-                <!--            <button type="button" onclick="savePlace()">검색</button>-->
             </div>
         </div>
 
@@ -228,21 +220,25 @@
 
                             // 카드 내용을 만듭니다.
                             const cardContent = `
-                            <div class="card position-relative shadow" style="max-width: 700px;">
+
+
+                            <div class="mb-3 card position-relative shadow" style="max-width: 700px;">
                             <div class="position-absolute z-index--1 me-10 me-xxl-0" style="right:-160px;top:-210px;"></div>
                             <div class="card-body p-3">
-                            <input type="hidden" name="destinations[${index}].place_id" value="${place_id}"/>
-                            <h5 class="fw-medium" name="destinations[${index}].name" value="${name}">${name}</h5>
-                            <p class="fs--1 mb-3 fw-medium">14-29 June | by Robbin joseph</p>
-                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].types" value="${types}">${types}</p>
-                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].rating" value="${rating}">${rating}</p>
-                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].address" value="${address}">${address}</p>
-                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].phone_number" value="${phone_number}">${phone_number}</p>
-                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].latitude" value="${latitude}">${latitude}</p>
-                            <p class="fs--1 mb-3 fw-medium" name="destinations[${index}].longitude" value="${longitude}">${longitude}</p>
+
+                            <input type="hidden" name="place_id" value="${place_id}"/>
+
+                            <h5 class="fw-medium" name="name" value="${name}">${name}</h5>
+                            <p class="fs--1 mb-3 fw-medium" name="type" value="${types}">${types}</p>
+                            <p class="fs--1 mb-3 fw-medium" name="rating" value="${rating}">${rating}</p>
+                            <p class="fs--1 mb-3 fw-medium" name="address" value="${address}">${address}</p>
+                            <p class="fs--1 mb-3 fw-medium" name="phone_number" value="${phone_number}">${phone_number}</p>
+                            <p class="fs--1 mb-3 fw-medium" name="latitude" value="${latitude}">${latitude}</p>
+                            <p class="fs--1 mb-3 fw-medium" name="longitude" value="${longitude}">${longitude}</p>
                             </div>
                             </div>
                             </div>
+
                             `;
 
                             card.innerHTML = cardContent;
