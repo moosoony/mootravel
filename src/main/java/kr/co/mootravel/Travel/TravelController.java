@@ -1,5 +1,10 @@
 package kr.co.mootravel.Travel;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.maps.PlacesApi;
+import com.google.maps.errors.ApiException;
+import com.google.maps.model.PlaceDetails;
 import kr.co.mootravel.Like.LikeService;
 import kr.co.mootravel.User.SiteUser;
 import kr.co.mootravel.User.UserService;
@@ -11,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 import org.springframework.web.server.ResponseStatusException;
 
 import javax.validation.Valid;
@@ -18,8 +24,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 
 @RequestMapping("/travel")
 @RequiredArgsConstructor
@@ -111,7 +116,7 @@ public class TravelController {
         int index = 0;
 
         this.travelService.create(travelInsertForm.getSubject(), travelInsertForm.getContent(), siteUser, travelInsertForm.getTravelStart(), travelInsertForm.getTravelEnd(),
-               travelInsertForm.getPlace_id());
+                travelInsertForm.getPlace_id());
 
         return "redirect:/travel/list";
     }
@@ -147,10 +152,74 @@ public class TravelController {
             model.addAttribute("message", message);
         }
 
+        System.out.println("상세보기" + travel);
+
+        // place_id 추출
+        String place_id = travel.getPlace_id();
+        System.out.println("place_id" + place_id);
+
+        // place_id 담을 list 생성
+        List<String> place_idList = Arrays.asList(place_id.split(","));
+        System.out.println("place_id List : " + place_idList);
+
+        // 각 place_id에 대한 정보를 저장할 리스트 생성
+        List<Map<String, String>> placeList = new ArrayList<>();
+
+// 각 place_id에 대한 정보를 Google Places API를 이용하여 가져옴
+        for (String pid : place_idList) {
+            Map<String, String> placeInfo = new HashMap<>();
+
+            String apiKey = "AIzaSyDK3x6PWOe-7FZNKHUJsJFShioh6vgVGG8"; // 구글 맵스 API 키
+            String apiUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pid + "&key=" + apiKey;
+
+            RestTemplate restTemplate = new RestTemplate();
+            String result = restTemplate.getForObject(apiUrl, String.class);
+
+            // JSON 데이터를 객체로 변환합니다.
+            Gson gson = new Gson();
+            JsonObject jsonObject = gson.fromJson(result, JsonObject.class);
+            JsonObject resultObject = jsonObject.getAsJsonObject("result");
+
+            // 필요한 정보를 추출합니다.
+            String name = resultObject.get("name").getAsString();
+            String typesJson = resultObject.get("types").toString();
+            typesJson = typesJson.replace("[", "");
+            typesJson = typesJson.replace("]", "");
+            typesJson = typesJson.replace("\"", "");
+            String[] typesArr = typesJson.split(",");
+            String types = String.join(", ", typesArr);
+            Double rating = resultObject.get("rating").getAsDouble();
+            String address = resultObject.get("formatted_address").getAsString();
+            String phone_number = resultObject.get("formatted_phone_number").getAsString();
+            Double latitude = resultObject.getAsJsonObject("geometry").getAsJsonObject("location").get("lat").getAsDouble();
+            Double longitude = resultObject.getAsJsonObject("geometry").getAsJsonObject("location").get("lng").getAsDouble();
+
+            // 각 place_id에 대한 정보를 placeInfo에 추가합니다.
+            placeInfo.put("place_id", pid);
+            placeInfo.put("name", name);
+            placeInfo.put("types", types);
+            placeInfo.put("rating", rating.toString());
+            placeInfo.put("address", address);
+            placeInfo.put("phone_number", phone_number);
+            placeInfo.put("latitude", latitude.toString());
+            placeInfo.put("longitude", longitude.toString());
+
+            System.out.println("name" + name);
+            System.out.println("types" + types);
+            System.out.println("rating" + rating);
+
+            // 각 place_id에 대한 정보를 placeList에 추가합니다.
+            placeList.add(placeInfo);
+        }
+
+        // model 객체에 필요한 정보를 담아서 view로 전달합니다.
+
         model.addAttribute("travel", travel);
+        model.addAttribute("placeList", placeList);
 
         return "travel/detail";
     }
+
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/index")

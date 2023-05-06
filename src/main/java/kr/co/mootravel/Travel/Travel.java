@@ -72,29 +72,6 @@ public class Travel {
     @OneToMany(mappedBy = "travel", cascade = CascadeType.REMOVE)
     private Set<Like> voter;
 
-    // 여행지 이름
-    private String name;
-
-    // 여행지 타입
-    private String type;
-
-
-    // 여행지 평점
-    private double rating;
-
-
-    // 여행지 주소
-    private String address;
-
-    // 여행지 번호
-    private String phone_number;
-
-    // 여행지 위도
-    private double latitude;
-
-    // 여행지 경도
-    private double longitude;
-
     // 여행지 place_id
     private String place_id;
 }
