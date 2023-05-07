@@ -3,131 +3,97 @@
       xmlns:th="http://thymeleaf.org"
       xmlns:layout="http://www.w3.org/1999/xhtml">
 
-<th:block layout:fragment="script">
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
-            integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
-            crossorigin="anonymous"></script>
-</th:block>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
 
-
-<div layout:fragment="content" class="container mt-10 justify-content-center">
-
-    <div>
-
-        <div class="mb-3">
-            <h2 class="border-bottom py-2" th:text="${travel.subject}"/>
+<div layout:fragment="content" class="container my-3 mt-10">
+    <h2 class="border-bottom py-2" th:text="${travel.subject}">
+    </h2>
+    <div class="d-flex justify-content-end">
+        <div th:text="${travel.author.username}"></div>
+        <div class=" text-start mx-3" th:text="|view ${travel.viewcnt}|"></div>
+        <div th:if="${travel.modifyDate != null}" class="text-start mx-3">
+            <div th:text="|Modify : ${#temporals.format(travel.modifyDate, 'yyyy-MM-dd HH:mm')}|"></div>
         </div>
+        <div class=" text-start" th:text="|Create : ${#temporals.format(travel.createDate, 'yyyy-MM-dd HH:mm')}|"></div>
+    </div>
 
-        <div class="mb-3 d-flex justify-content-end">
-            <div th:text="${travel.author.username}"></div>
-            <div class=" text-start mx-3" th:text="|view ${travel.viewcnt}|"></div>
-            <div th:if="${travel.modifyDate != null}" class="text-start mx-3">
-                <div th:text="|Modify : ${#temporals.format(travel.modifyDate, 'yyyy-MM-dd HH:mm')}|"></div>
-            </div>
-            <div class=" text-start"
-                 th:text="|Create : ${#temporals.format(travel.createDate, 'yyyy-MM-dd HH:mm')}|"></div>
+    <!--여행지 반복 부분 시작-->
+    <div class="mb-3 card position-relative shadow" th:each="place : ${placeList}">
+        <div class="position-absolute z-index--1 me-10 me-xxl-0" style="right:-160px;top:-210px;"></div>
+        <div class="card-body p-3">
+
+            <p id="place_id" th:text="${place['place_id']}"></p>
+
+            <h5 class="fw-medium" id="name" name="name" th:text="${place['name']}">name</h5>
+            <p class="fs--1 mb-3 fw-medium" id="types" name="types" th:text="${place['types']}">types</p>
+            <p class="fs--1 mb-3 fw-medium" id="rating" name="rating" th:text="${place['rating']}">rating</p>
+            <p class="fs--1 mb-3 fw-medium" id="address" name="address" th:text="${place['address']}">
+                address</p>
+            <p class="fs--1 mb-3 fw-medium" id="phone_number" name="phone_number"
+               th:text="${place['phone_number']}">
+                phone_number</p>
+            <p class="fs--1 mb-3 fw-medium" id="latitude" name="latitude" th:text="${place['latitude']}">
+                latitude</p>
+            <p class="fs--1 mb-3 fw-medium" id="longitude" name="longitude" th:text="${place['longitude']}">
+                longitude</p>
         </div>
-        <h1>
-            <div class="badge bg-light text-dark">
-                <div class="card-text" style="white-space: pre-line;"
-                     th:text="|${travel.travelStart} ~ ${travel.travelEnd}|"></div>
-            </div>
-        </h1>
+    </div>
+    <!--여행지 반복 부분 끝-->
 
-        <!--여행 일정 반복 부분 시작-->
-        <div class="mb-3 card position-relative shadow" th:each="place : ${placeList}">
-            <div class="position-absolute z-index--1 me-10 me-xxl-0" style="right:-160px;top:-210px;"></div>
-            <div class="card-body p-3">
+    <span class="text-dark mb-0" th:utext="${travel.content}"/>
+    <hr>
 
-                <p id="place_id" th:text="${place['place_id']}"></p>
+    <div class="my-3">
 
-                <h5 class="fw-medium" id="name" name="name" th:text="${place['name']}">name</h5>
-                <p class="fs--1 mb-3 fw-medium" id="types" name="types" th:text="${place['types']}">types</p>
-                <p class="fs--1 mb-3 fw-medium" id="rating" name="rating" th:text="${place['rating']}">rating</p>
-                <p class="fs--1 mb-3 fw-medium" id="address" name="address" th:text="${place['address']}">address</p>
-                <p class="fs--1 mb-3 fw-medium" id="phone_number" name="phone_number" th:text="${place['phone_number']}">phone_number</p>
-                <p class="fs--1 mb-3 fw-medium" id="latitude" name="latitude" th:text="${place['latitude']}">latitude</p>
-                <p class="fs--1 mb-3 fw-medium" id="longitude" name="longitude" th:text="${place['longitude']}">longitude</p>
-            </div>
-        </div>
-        <!--여행 일정 반복 부분 끝-->
+        <!--    추천 버튼 시작-->
+        <a href="javascript:void(0);" th:data-uri="@{|/vote/create/${travel.id}|}"
+           class="recommend btn btn-sm btn-outline-primary" sec:authorize="isAuthenticated()"
+        >
+            추천
+            <span class="badge rounded-pill bg-success" th:text="${#lists.size(travel.voter)}"></span>
+        </a>
+        <!--    추천 버튼 끝-->
 
+        <!--    수정 버튼 시작-->
+        <a href="javascript:void(0);" th:data-uri="@{|/travel/modify/${travel.id}|}"
+           class="modify btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+           th:if="${travel.author != null and #authentication.getPrincipal().getUsername() == travel.author.username}"
+           th:text="수정">
+        </a>
+        <!--    수정 버튼 끝-->
 
-                <!--여행 일정 반복 부분 시작-->
-<!--        <div class="mb-3 card position-relative shadow" th:each="place_id : ${place_id}">-->
-<!--            <div class="position-absolute z-index&#45;&#45;1 me-10 me-xxl-0" style="right:-160px;top:-210px;"></div>-->
-<!--            <div class="card-body p-3">-->
+        <!--    삭제 버튼 시작-->
+        <a href="javascript:void(0);" th:data-uri="@{|/travel/delete/${travel.id}|}"
+           class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
+           th:if="${travel.author != null and #authentication.getPrincipal().getUsername() == travel.author.username}"
+           th:text="삭제">
+        </a>
+        <!--    삭제 버튼 끝-->
 
-<!--                <p id="place_id" th:text="${place_id}"></p>-->
+    </div>
 
-<!--                <h5 class="fw-medium" id="name" name="name">name</h5>-->
-<!--                <p class="fs&#45;&#45;1 mb-3 fw-medium" id="type" name="type">types</p>-->
-<!--                <p class="fs&#45;&#45;1 mb-3 fw-medium" id="rating" name="rating">rating</p>-->
-<!--                <p class="fs&#45;&#45;1 mb-3 fw-medium" id="address" name="address">address</p>-->
-<!--                <p class="fs&#45;&#45;1 mb-3 fw-medium" id="phone_number" name="phone_number">phone_number</p>-->
-<!--                <p class="fs&#45;&#45;1 mb-3 fw-medium" id="latitude" name="latitude">latitude</p>-->
-<!--                <p class="fs&#45;&#45;1 mb-3 fw-medium" id="longitude" name="longitude">longitude</p>-->
-<!--            </div>-->
-<!--        </div>-->
-        <!--여행 일정 반복 부분 끝-->
+    <!--    댓글의 갯수 표시-->
+    <h5 th:text="|${#lists.size(travel.replyList)}개의 답변이 있습니다.|"></h5>
 
-        <span class="text-dark mb-3" th:utext="${travel.content}"/>
-        <hr>
-
-        <div class="my-3">
-
-            <!--    추천 버튼 시작-->
-            <a href="javascript:void(0);" th:data-uri="@{|/vote/create/${travel.id}|}"
-               class="recommend btn btn-sm btn-outline-primary" sec:authorize="isAuthenticated()"
-            >
-                추천
-                <span class="badge rounded-pill bg-success" th:text="${#lists.size(travel.voter)}"></span>
-            </a>
-            <!--    추천 버튼 끝-->
-
-            <!--    수정 버튼 시작-->
-            <a href="javascript:void(0);" th:data-uri="@{|/travel/modify/${travel.id}|}"
-               class="modify btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
-               th:if="${travel.author != null and #authentication.getPrincipal().getUsername() == travel.author.username}"
-               th:text="수정">
-            </a>
-            <!--    수정 버튼 끝-->
-
-            <!--    삭제 버튼 시작-->
-            <a href="javascript:void(0);" th:data-uri="@{|/travel/delete/${travel.id}|}"
-               class="delete btn btn-sm btn-outline-secondary" sec:authorize="isAuthenticated()"
-               th:if="${travel.author != null and #authentication.getPrincipal().getUsername() == travel.author.username}"
-               th:text="삭제">
-            </a>
-            <!--    삭제 버튼 끝-->
-
-        </div>
-
-        <!--    댓글의 갯수 표시-->
-        <h5 th:text="|${#lists.size(travel.replyList)}개의 답변이 있습니다.|"></h5>
-
-        <!--    답변 반복 시작-->
-        <div class="card my-3" th:each="reply : ${travel.replyList}">
-            <div class="card-body">
-                <div class="card-text" style="white-space: pre-line;" th:text="${reply.content}"></div>
-                <div class="d-flex justify-content-end">
-                    <div class="badge bg-light text-dark p-2 text-start">
-                        <div th:text="${#temporals.format(reply.createDate, 'yyyy-MM-dd HH:mm')}"></div>
-                    </div>
+    <!--    답변 반복 시작-->
+    <div class="card my-3" th:each="reply : ${travel.replyList}">
+        <div class="card-body">
+            <div class="card-text" style="white-space: pre-line;" th:text="${reply.content}"></div>
+            <div class="d-flex justify-content-end">
+                <div class="badge bg-light text-dark p-2 text-start">
+                    <div th:text="${#temporals.format(reply.createDate, 'yyyy-MM-dd HH:mm')}"></div>
                 </div>
             </div>
         </div>
-        <!--    답변 반복 끝-->
-
-        <!--    답변 작성 시작-->
-        <form th:action="@{|/reply/create/${travel.id}|}" method="post" class="my-3">
-            <textarea name="content" id="content" rows="10" class="form-control"></textarea>
-            <input type="submit" value="답변등록" class="btn btn-primary my-2">
-        </form>
-        <!--    답변 작성 끝-->
-
     </div>
+    <!--    답변 반복 끝-->
+
+    <!--    답변 작성 시작-->
+    <form th:action="@{|/reply/create/${travel.id}|}" method="post" class="my-3">
+        <textarea name="content" id="content" rows="10" class="form-control"></textarea>
+        <input type="submit" value="답변등록" class="btn btn-primary my-2">
+    </form>
+    <!--    답변 작성 끝-->
 
     <script layout:fragment="script" type="text/javascript">
 

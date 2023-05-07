@@ -26,7 +26,7 @@ public class Reply {
 
     private String TravelSubject;
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.REMOVE)
     private Travel travel;
 
     @ManyToOne

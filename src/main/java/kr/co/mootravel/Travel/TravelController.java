@@ -35,6 +35,7 @@ public class TravelController {
     private final TravelService travelService;
     private final LikeService likeService;
 
+    // 전체 목록보기
     @GetMapping("/list")
     public String list(ModalForm modalForm, Model model, @RequestParam(value = "page", defaultValue = "0") int page,
                        @RequestParam(value = "kw", defaultValue = "") String kw) {
@@ -51,7 +52,6 @@ public class TravelController {
         List<String> options = Arrays.asList("Option 1", "Option 2", "Option 3");
         model.addAttribute("options", options);
 
-
         return "travel/list";
     }
 
@@ -64,7 +64,6 @@ public class TravelController {
                                   @Valid ModalForm modalForm,
                                   BindingResult bindingResult,
                                   Model model) {
-        System.out.println("모달창 POST 컨트롤러");
 
         //        유효성 검사 실패 시
 //        if (bindingResult.hasErrors()) {
@@ -79,7 +78,6 @@ public class TravelController {
         long dayCount = date1.until(date2, ChronoUnit.DAYS) + 1;
         System.out.println("두 날짜의 차 : " + dayCount);
 
-
         // 입력한 값을 저장하거나 처리하는 코드
         model.addAttribute("subject", modalForm.getSubject());
         model.addAttribute("category", modalForm.getCategory());
@@ -91,6 +89,7 @@ public class TravelController {
         return "travel/insert";
     }
 
+    // 여행 일정 등록하기 GetMapping
     @GetMapping(value = "/insert")
     public String insert(TravelCreateForm travelCreateForm) {
         return "travel/insert";
@@ -232,6 +231,7 @@ public class TravelController {
         return "redirect:/travel/list";
     }
 
+    // 수정하기
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
     public String travelModify(TravelForm travelForm, @PathVariable("id")
