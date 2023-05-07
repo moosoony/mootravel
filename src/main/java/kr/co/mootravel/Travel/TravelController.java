@@ -96,13 +96,6 @@ public class TravelController {
         return "travel/insert";
     }
 
-    @GetMapping(value = "/navbar")
-    public String navbar(Model model) {
-        long dayCount = 5;
-        model.addAttribute("dayCount", dayCount);
-        return "travel/navbar";
-    }
-
     // 여행 일정 등록하기 PostMapping
     @PostMapping(value = "/insert")
     public String insert(Model model, @Valid TravelInsertForm travelInsertForm, BindingResult bindingResult,
@@ -156,16 +149,14 @@ public class TravelController {
 
         // place_id 추출
         String place_id = travel.getPlace_id();
-        System.out.println("place_id" + place_id);
 
         // place_id 담을 list 생성
         List<String> place_idList = Arrays.asList(place_id.split(","));
-        System.out.println("place_id List : " + place_idList);
 
         // 각 place_id에 대한 정보를 저장할 리스트 생성
         List<Map<String, String>> placeList = new ArrayList<>();
 
-// 각 place_id에 대한 정보를 Google Places API를 이용하여 가져옴
+        // 각 place_id에 대한 정보를 Google Places API를 이용하여 가져옴
         for (String pid : place_idList) {
             Map<String, String> placeInfo = new HashMap<>();
 
@@ -204,49 +195,16 @@ public class TravelController {
             placeInfo.put("latitude", latitude.toString());
             placeInfo.put("longitude", longitude.toString());
 
-            System.out.println("name" + name);
-            System.out.println("types" + types);
-            System.out.println("rating" + rating);
-
             // 각 place_id에 대한 정보를 placeList에 추가합니다.
             placeList.add(placeInfo);
         }
 
         // model 객체에 필요한 정보를 담아서 view로 전달합니다.
-
         model.addAttribute("travel", travel);
         model.addAttribute("placeList", placeList);
 
         return "travel/detail";
     }
-
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/index")
-    public String index() {
-
-
-        return "travel/index";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/map")
-    public String map() {
-        return "travel/map";
-    }
-
-    @PreAuthorize("isAuthenticated()")
-    @GetMapping("/maptest")
-    public String maptest() {
-        return "travel/maptest";
-    }
-
-    @PostMapping("/places")
-    public void savePlace(@RequestBody Place place) {
-        // Place 객체를 이용해 디비에 저장하는 코드
-        System.out.println("장소" + place);
-    }
-
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/create")
