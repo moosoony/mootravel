@@ -178,9 +178,10 @@ public class TravelController {
             typesJson = typesJson.replace("\"", "");
             String[] typesArr = typesJson.split(",");
             String types = String.join(", ", typesArr);
-            Double rating = resultObject.get("rating").getAsDouble();
+            Double ratingValue = resultObject.get("rating") != null ? resultObject.get("rating").getAsDouble() : null;
+            String rating = ratingValue != null ? String.valueOf(ratingValue) : "없음";
             String address = resultObject.get("formatted_address").getAsString();
-            String phone_number = resultObject.get("formatted_phone_number").getAsString();
+            String phone_number = resultObject.get("formatted_phone_number") == null ? "없음" : resultObject.get("formatted_phone_number").getAsString();
             Double latitude = resultObject.getAsJsonObject("geometry").getAsJsonObject("location").get("lat").getAsDouble();
             Double longitude = resultObject.getAsJsonObject("geometry").getAsJsonObject("location").get("lng").getAsDouble();
 
@@ -188,7 +189,7 @@ public class TravelController {
             placeInfo.put("place_id", pid);
             placeInfo.put("name", name);
             placeInfo.put("types", types);
-            placeInfo.put("rating", rating.toString());
+            placeInfo.put("rating", rating);
             placeInfo.put("address", address);
             placeInfo.put("phone_number", phone_number);
             placeInfo.put("latitude", latitude.toString());
@@ -232,39 +233,140 @@ public class TravelController {
     }
 
     // 수정하기
+//    @PreAuthorize("isAuthenticated()")
+//    @GetMapping("/modify/{id}")
+//    public String travelModify(TravelForm travelForm, @PathVariable("id") Integer id, Principal principal) {
+//        Travel travel = this.travelService.getTravel(id);
+//        if (!travel.getAuthor().getUsername().equals(principal.getName())) {
+//
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+//        }
+//        travelForm.setSubject(travel.getSubject());
+//        travelForm.setContent(travel.getContent());
+//        travelForm.setTravelStart(travel.getTravelStart());
+//        travelForm.setTravelEnd(travel.getTravelEnd());
+//        return "travel/travel_form";
+//    }
+
+    // 수정하기 수정 중
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/modify/{id}")
-    public String travelModify(TravelForm travelForm, @PathVariable("id")
-    Integer id, Principal principal) {
+    public String travelModify(TravelInsertForm travelInsertForm, @PathVariable("id") Integer id, Principal principal, Model model) {
         Travel travel = this.travelService.getTravel(id);
+        System.out.println(travel);
         if (!travel.getAuthor().getUsername().equals(principal.getName())) {
 
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-        travelForm.setSubject(travel.getSubject());
-        travelForm.setContent(travel.getContent());
-        travelForm.setTravelStart(travel.getTravelStart());
-        travelForm.setTravelEnd(travel.getTravelEnd());
-        return "travel/travel_form";
+        travelInsertForm.setSubject(travel.getSubject());
+        travelInsertForm.setContent(travel.getContent());
+        travelInsertForm.setTravelStart(travel.getTravelStart());
+        travelInsertForm.setTravelEnd(travel.getTravelEnd());
+        travelInsertForm.setPlace_id(travel.getPlace_id());
+
+        // place_id 추출
+        String place_id = travel.getPlace_id();
+
+        // place_id 담을 list 생성
+        List<String> place_idList = Arrays.asList(place_id.split(","));
+
+        // 각 place_id에 대한 정보를 저장할 리스트 생성
+        List<Map<String, String>> placeList = new ArrayList<>();
+
+        // 각 place_id에 대한 정보를 Google Places API를 이용하여 가져옴
+        for (String pid : place_idList) {
+            Map<String, String> placeInfo = new HashMap<>();
+
+            String apiKey = "AIzaSyDK3x6PWOe-7FZNKHUJsJFShioh6vgVGG8"; // 구글 맵스 API 키
+            String apiUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pid + "&key=" + apiKey;
+
+            RestTemplate restTemplate = new RestTemplate();
+            String result = restTemplate.getForObject(apiUrl, String.class);
+
+            // JSON 데이터를 객체로 변환합니다.
+            Gson gson = new Gson();
+            JsonObject jsonObject = gson.fromJson(result, JsonObject.class);
+            JsonObject resultObject = jsonObject.getAsJsonObject("result");
+
+            // 필요한 정보를 추출합니다.
+            String name = resultObject.get("name").getAsString();
+            String typesJson = resultObject.get("types").toString();
+            typesJson = typesJson.replace("[", "");
+            typesJson = typesJson.replace("]", "");
+            typesJson = typesJson.replace("\"", "");
+            String[] typesArr = typesJson.split(",");
+            String types = String.join(", ", typesArr);
+            Double ratingValue = resultObject.get("rating") != null ? resultObject.get("rating").getAsDouble() : null;
+            String rating = ratingValue != null ? String.valueOf(ratingValue) : "없음";
+            String address = resultObject.get("formatted_address").getAsString();
+            String phone_number = resultObject.get("formatted_phone_number") == null ? "없음" : resultObject.get("formatted_phone_number").getAsString();
+            Double latitude = resultObject.getAsJsonObject("geometry").getAsJsonObject("location").get("lat").getAsDouble();
+            Double longitude = resultObject.getAsJsonObject("geometry").getAsJsonObject("location").get("lng").getAsDouble();
+
+            // 각 place_id에 대한 정보를 placeInfo에 추가합니다.
+            placeInfo.put("place_id", pid);
+            placeInfo.put("name", name);
+            placeInfo.put("types", types);
+            placeInfo.put("rating", rating.toString());
+            placeInfo.put("address", address);
+            placeInfo.put("phone_number", phone_number);
+            placeInfo.put("latitude", latitude.toString());
+            placeInfo.put("longitude", longitude.toString());
+
+            // 각 place_id에 대한 정보를 placeList에 추가합니다.
+            placeList.add(placeInfo);
+        }
+
+        // model 객체에 필요한 정보를 담아서 view로 전달합니다.
+        model.addAttribute("placeList", placeList);
+
+        System.out.println("placeList"+placeList);
+        return "travel/modify";
     }
 
+//    @PreAuthorize("isAuthenticated()")
+//    @PostMapping("/modify/{id}")
+//    public String travelModify(@Valid TravelForm travelForm, BindingResult bindingResult,
+//                               Principal principal,
+//                               @PathVariable("id") Integer id) throws IOException {
+//
+//        if (bindingResult.hasErrors()) {
+//            return "travel/travel_form";
+//        }
+//        Travel travel = this.travelService.getTravel(id);
+//        if (!travel.getAuthor().getUsername().equals(principal.getName())) {
+//            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
+//        }
+//        this.travelService.modify(travel, travelForm.getSubject(), travelForm.getContent(), travelForm.getTravelStart(), travelForm.getTravelEnd(), travelForm.getFile());
+//        return String.format("redirect:/travel/detail/%s", id);
+//    }
+
+    // 수정하기 수정 중
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
-    public String travelModify(@Valid TravelForm travelForm, BindingResult bindingResult,
+    public String travelModify(@Valid TravelInsertForm travelInsertForm, BindingResult bindingResult,
                                Principal principal,
                                @PathVariable("id") Integer id) throws IOException {
 
+        System.out.println(" // 수정하기 수정 중\n" +
+                "    @PreAuthorize(\"isAuthenticated()\")\n" +
+                "    @PostMapping(\"/modify/{id}\")\n" +
+                "    public String travelModify");
         if (bindingResult.hasErrors()) {
-            return "travel/travel_form";
+            System.out.println("(bindingResult.hasErrors())");
+            return "redirect:/travel/modify/{id}";
         }
+
         Travel travel = this.travelService.getTravel(id);
+
         if (!travel.getAuthor().getUsername().equals(principal.getName())) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "수정권한이 없습니다.");
         }
-        this.travelService.modify(travel, travelForm.getSubject(), travelForm.getContent(), travelForm.getTravelStart(), travelForm.getTravelEnd(), travelForm.getFile());
+
+        System.out.println("수정할 때 place_id 들 어떻게 담기는지"+travelInsertForm.getPlace_id());
+        this.travelService.modify(travel, travelInsertForm.getSubject(), travelInsertForm.getContent(), travelInsertForm.getTravelStart(), travelInsertForm.getTravelEnd(), travelInsertForm.getPlace_id());
         return String.format("redirect:/travel/detail/%s", id);
     }
-
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/delete/{id}")

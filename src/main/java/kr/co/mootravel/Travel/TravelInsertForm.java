@@ -13,7 +13,6 @@ public class TravelInsertForm {
     @Size(max = 200)
     private String subject;
 
-    @NotEmpty(message = "카테고리는 필수항목입니다.")
     private String category;
 
     @NotEmpty(message = "여행 시작일은 필수항목입니다.")

@@ -73,5 +73,6 @@ public class Travel {
     private Set<Like> voter;
 
     // 여행지 place_id
+    @Column(columnDefinition = "LONGTEXT")
     private String place_id;
 }

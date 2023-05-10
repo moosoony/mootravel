@@ -192,5 +192,14 @@ public class TravelService {
     public Long getCount(Long id) {
         return this.travelRepository.getCount(id);
     }
-
+    //    수정 서비스 수정 중
+    public void modify(Travel travel, String subject, String content, String travelStart, String travelEnd, String placeId) {
+        travel.setSubject(subject);
+        travel.setContent(content);
+        travel.setTravelStart(travelStart);
+        travel.setTravelEnd(travelEnd);
+        travel.setModifyDate(LocalDateTime.now());
+        travel.setPlace_id(placeId);
+        this.travelRepository.save(travel);
+    }
 }
