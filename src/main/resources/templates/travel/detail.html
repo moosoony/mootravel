@@ -24,18 +24,11 @@
 
             <input type="hidden" id="place_id" th:value="${place['place_id']}"></input>
 
-            <h5 class="fw-medium" id="name" name="name" th:text="${place['name']}">name</h5>
-            <p class="fs--1 mb-3 fw-medium" id="types" name="types" th:text="${place['types']}">types</p>
-            <p class="fs--1 mb-3 fw-medium" id="rating" name="rating" th:text="${place['rating']}">rating</p>
-            <p class="fs--1 mb-3 fw-medium" id="address" name="address" th:text="${place['address']}">
-                address</p>
-            <p class="fs--1 mb-3 fw-medium" id="phone_number" name="phone_number"
-               th:text="${place['phone_number']}">
-                phone_number</p>
-            <p class="fs--1 mb-3 fw-medium" id="latitude" name="latitude" th:text="${place['latitude']}">
-                latitude</p>
-            <p class="fs--1 mb-3 fw-medium" id="longitude" name="longitude" th:text="${place['longitude']}">
-                longitude</p>
+            <h1 class="fw-medium" id="name" name="name" th:text="${place['name']}"></h1>
+            <p class="fs--1 mb-3 fw-medium" id="types" name="types" th:text="'타입 : ' + ${place['types']}"></p>
+            <p class="fs--1 mb-3 fw-medium" id="rating" name="rating" th:text="'평점 : ' + ${place['rating']}"></p>
+            <p class="fs--1 mb-3 fw-medium" id="address" name="address" th:text="'주소 : ' + ${place['address']}"></p>
+            <p class="fs--1 mb-3 fw-medium" id="phone_number" name="phone_number" th:text="'전화번호 : ' + ${place['phone_number']}"></p>
         </div>
     </div>
     <!--여행지 반복 부분 끝-->

@@ -160,7 +160,7 @@ public class TravelController {
             Map<String, String> placeInfo = new HashMap<>();
 
             String apiKey = "AIzaSyDK3x6PWOe-7FZNKHUJsJFShioh6vgVGG8"; // 구글 맵스 API 키
-            String apiUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pid + "&key=" + apiKey;
+            String apiUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pid + "&key=" + apiKey + "&language=ko";
 
             RestTemplate restTemplate = new RestTemplate();
             String result = restTemplate.getForObject(apiUrl, String.class);
@@ -278,7 +278,7 @@ public class TravelController {
             Map<String, String> placeInfo = new HashMap<>();
 
             String apiKey = "AIzaSyDK3x6PWOe-7FZNKHUJsJFShioh6vgVGG8"; // 구글 맵스 API 키
-            String apiUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pid + "&key=" + apiKey;
+            String apiUrl = "https://maps.googleapis.com/maps/api/place/details/json?place_id=" + pid + "&key=" + apiKey + "&language=ko";
 
             RestTemplate restTemplate = new RestTemplate();
             String result = restTemplate.getForObject(apiUrl, String.class);
@@ -344,14 +344,11 @@ public class TravelController {
     // 수정하기 수정 중
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/modify/{id}")
-    public String travelModify(@Valid TravelInsertForm travelInsertForm, BindingResult bindingResult,
-                               Principal principal,
+    public String travelModify(@Valid TravelInsertForm travelInsertForm, BindingResult bindingResult,Principal principal,
                                @PathVariable("id") Integer id) throws IOException {
 
-        System.out.println(" // 수정하기 수정 중\n" +
-                "    @PreAuthorize(\"isAuthenticated()\")\n" +
-                "    @PostMapping(\"/modify/{id}\")\n" +
-                "    public String travelModify");
+        System.out.println("수정하기 PostMapping");
+
         if (bindingResult.hasErrors()) {
             System.out.println("(bindingResult.hasErrors())");
             return "redirect:/travel/modify/{id}";
